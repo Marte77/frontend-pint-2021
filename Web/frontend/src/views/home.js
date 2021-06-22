@@ -1,5 +1,6 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
+import './style_auxiliar.css';
 // react-bootstrap components
 import {
   Badge,
@@ -21,32 +22,34 @@ function home() {
     <>
       <Container fluid>
         <Row>
-          <Col lg="3" sm="6">
+          <Col lg="3" sm="6">  {/*coluna Estatisticas Diárias*/}
             <Card className="card-stats">
               <Card.Body>
                 <Row>
-                  <Col xs="5">
-                    <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-chart text-warning"></i>
-                    </div>
-                  </Col>
-                  <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">Number</p>
-                      <Card.Title as="h4">150GB</Card.Title>
+                      <p className="first_titulo">Estatísticas Diárias:</p>
+                      
+                      <p className="secound_titulo">Nº de reportes na Instituição: </p>
+                      <Card.Title><h3 className="aligncenter">3</h3></Card.Title>    
+                    <div class="container">
+                    <button class="button">Click Me</button>
                     </div>
-                  </Col>
+                      <p className="secound_titulo">Nº de reportes fora da Instituição: </p>
+                      <Card.Title><h3 className="aligncenter">3</h3></Card.Title>
+                      <div class="container">
+                    <button class="button">Click Me</button>
+                    </div>
+                    </div>
                 </Row>
               </Card.Body>
               <Card.Footer>
                 <hr></hr>
                 <div className="stats">
-                  <i className="fas fa-redo mr-1"></i>
-                  Update Now
+                  Ir para lotação
                 </div>
               </Card.Footer>
             </Card>
-          </Col>
+          </Col>   {/*coluna Estatisticas Diárias*/}
           <Col lg="3" sm="6">
             <Card className="card-stats">
               <Card.Body>

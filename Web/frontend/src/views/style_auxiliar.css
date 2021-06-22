@@ -1,0 +1,53 @@
+.aligncenter{
+  text-align: center;
+}
+.first_titulo{
+	font-size: 18px;
+    font-weight: 400;
+    color: #9A9A9A;
+    margin-bottom: 0px; 
+    text-align: center;
+}
+.secound_titulo{
+	font-size: 12px;
+    font-weight: 400;
+    color: black;
+    margin-bottom: 0px; 
+    text-align: center;
+}
+
+.button {
+  display: inline-block;
+  padding: 7px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;	
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 9px #999;
+  margin: 0;
+  margin-top: -5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.button:hover {background-color: #3e8e41}
+
+.button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+.container { /*para ficar em volta do botão*/
+  height: 50px;
+  margin-bottom: 30px;
+  position: relative;
+  border: 3px ;
+}

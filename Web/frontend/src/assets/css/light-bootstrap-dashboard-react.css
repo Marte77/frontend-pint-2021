@@ -415,6 +415,7 @@ body > .navbar-collapse {
     top: 0;
     left: 0;
     z-index: 2; }
+    /*
   .sidebar:before,
   body > .navbar-collapse:before {
     opacity: .33;
@@ -505,7 +506,7 @@ body > .navbar-collapse {
     background: -ms-linear-gradient(top, #9368E9 0%, #943bea 100%);
     background: linear-gradient(to bottom, #9368E9 0%, #943bea 100%);
     background-size: 150% 150%; }
-
+*/
 .main-panel {
   background: rgba(203, 203, 210, 0.15);
   position: relative;
@@ -2802,6 +2803,7 @@ Copyright (c) 2015 Daniel Eden
 /*          Changes for small display      */
 @media (max-width: 991px) {
   .sidebar {
+    background-color: black;
     right: 0 !important;
     left: auto;
     position: absolute;

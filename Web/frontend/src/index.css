@@ -27,6 +27,9 @@ body, html, .App, #root, .outer {
    
 
 }
+.dropdownalign{ /*caso seja para alinhar o minha conta à direita*/
+  left: 1070px;
+}
 
 .outer {
 display: flex;
