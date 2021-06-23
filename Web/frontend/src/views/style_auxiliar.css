@@ -18,14 +18,14 @@
 
 .button {
   display: inline-block;
-  padding: 7px 30px;
+  padding: 3px 25px;
   font-size: 16px;
   cursor: pointer;
   text-align: center;	
   text-decoration: none;
   outline: none;
   color: #fff;
-  background-color: #4CAF50;
+  background-color: #0086b3;
   border: none;
   border-radius: 10px;
   box-shadow: 0 9px #999;
@@ -38,12 +38,12 @@
   transform: translate(-50%, -50%);
 }
 
-.button:hover {background-color: #3e8e41}
+.button:hover {background-color: #4da6ff}
 
 .button:active {
   background-color: #3e8e41;
-  box-shadow: 0 5px #666;
-  transform: translateY(4px);
+  box-shadow: 0 1px #666;
+  transform: translateY(1px);
 }
 .container { /*para ficar em volta do botão*/
   height: 50px;

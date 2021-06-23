@@ -32,12 +32,12 @@ function home() {
                       <p className="secound_titulo">Nº de reportes na Instituição: </p>
                       <Card.Title><h3 className="aligncenter">3</h3></Card.Title>    
                     <div class="container">
-                    <button class="button">Click Me</button>
+                    <button class="button">Ir para lotação</button>
                     </div>
                       <p className="secound_titulo">Nº de reportes fora da Instituição: </p>
                       <Card.Title><h3 className="aligncenter">3</h3></Card.Title>
                       <div class="container">
-                    <button class="button">Click Me</button>
+                    <button class="button">Ir para lotação</button>
                     </div>
                     </div>
                 </Row>

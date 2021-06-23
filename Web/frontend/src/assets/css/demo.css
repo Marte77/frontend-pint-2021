@@ -169,7 +169,7 @@
     background-color: #1DC7EA;
 }
 .fixed-plugin .badge-green{
-    background-color: #87CB16;
+    background-color: #4c730d;
 }
 .fixed-plugin .badge-orange{
     background-color: #FFA534;
@@ -279,7 +279,7 @@
 .fixed-plugin .btn-social:first-child{
     margin-right: 2%;
 }
-
+*/
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus{
     opacity: 1;
@@ -476,7 +476,7 @@
   color: #ffffff;
   opacity: 1;
 }
-
+*/
 @media (min-width: 992px){
     .typo-line{
         padding-left: 140px;
