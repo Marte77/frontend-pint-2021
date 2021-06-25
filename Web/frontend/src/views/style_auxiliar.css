@@ -1,6 +1,13 @@
 .aligncenter{
   text-align: center;
 }
+.first_titulo_esquerda{
+	font-size: 18px;
+    font-weight: 400;
+    color: #9A9A9A;
+    margin-bottom: 0px; 
+    text-align: left;
+}
 .first_titulo{
 	font-size: 18px;
     font-weight: 400;
@@ -50,4 +57,36 @@
   margin-bottom: 30px;
   position: relative;
   border: 3px ;
+}
+
+.dropdown_style{
+	display: inline-block;
+  padding: 3px 10px;
+	 background-color: green;
+	 color: white;
+	 border-color: white;
+	 position: absolute;
+  top: 70%;
+  left: 80%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
+}
+/*.dropdown_style:hover{
+background-color: green;
+	 color: white;
+	 border-color: white;
+}*/
+.dropdown_style_lotacao{
+	display: inline-block;
+  padding: 3px 10px;
+	 background-color: green;
+	 color: white;
+	 border-color: white;
+	 position: absolute;
+  top: 70%;
+  left: 85%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+
 }
