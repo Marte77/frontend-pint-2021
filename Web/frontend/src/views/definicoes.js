@@ -18,6 +18,100 @@ function User() {
     <>
       <Container fluid>
         <Row>
+          <Col md="6">
+          <Card>
+          <Card.Header>
+                <Card.Title as="h4">Limites de lotação da instituição:</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <Row style={{marginLeft:'18%'}}>
+                  <Col md="3" >
+                      <p3>Pouco</p3>
+                      <br></br>
+                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                  </Col>
+                 
+                  <Col md="3">
+                  <p3>Moderado</p3>
+                      <br></br>
+                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                  </Col>
+                  
+                  <Col md="3">
+                  <p3>Elevado</p3>
+                      <br></br>
+                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                  </Col>
+                </Row>
+                
+              </Card.Body>
+            
+          <Card.Header style={{marginTop:'5%'}}>
+                <Card.Title as="h4">Outras informações:</Card.Title>
+              </Card.Header>
+              <Card.Body>
+              
+              <div class="form-group">
+                  <label class="col-md-4 control-label">First Name</label>  
+                  <div class="col-md-4 inputGroupContainer">
+                  <div class="input-group">
+                  <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                  <input  name="first_name" placeholder="First Name" class="form-control"  type="text"></input>
+              </div>
+        </div>
+      </div>
+     
+
+
+
+
+                <Row style={{paddingTop:'2%'}}>
+                  
+                <button style={{width:'50%', backgroundColor:'green', marginLeft:'25%'}} type="button" class="btn btn-success"><i class="fa fa-save" style={{color:'black'}}></i><b style={{color:'black', paddingLeft:'5%'}} >Gravar</b></button>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          <Col md="6">
+          <Card>
+          <Card.Header>
+                <Card.Title as="h4">Horários de funcionamento:</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <Row style={{marginLeft:'32%'}}>
+                  <p ><i class="fas fa-calendar-alt"></i><b style={{paddingLeft:'5%'}}>Período Manhã</b></p>
+                  <div class="form-group">
+                    <input style={{width:'50%'}} type="text" class="form-control" id="exampleFormControlInput1" placeholder="9:00 - 13:00"></input>
+                  </div>
+                  
+                </Row>
+                <Row style={{paddingTop:'2%',marginLeft:'32%'}}>
+                <p><i class="fas fa-calendar-alt"></i><b style={{paddingLeft:'5%'}}>Período Almoço</b></p>
+                <div class="form-group">
+                    <input style={{width:'50%'}} type="text" class="form-control" id="exampleFormControlInput1" placeholder="13:00 - 14:00"></input>
+                  </div>
+                </Row>
+                <Row style={{paddingTop:'2%',marginLeft:'32%'}}>
+                <p><i class="fas fa-calendar-alt"></i><b style={{paddingLeft:'5%'}}>Período Tarde</b></p>
+                <div class="form-group">
+                    <input style={{width:'50%'}} type="text" class="form-control" id="exampleFormControlInput1" placeholder="14:00 - 18:00"></input>
+                  </div>
+                </Row>
+                <Row style={{paddingTop:'2%'}}>
+                  
+                <button style={{width:'50%', backgroundColor:'green', marginLeft:'25%'}} type="button" class="btn btn-success"><i class="fa fa-save" style={{color:'black'}}></i><b style={{color:'black', paddingLeft:'5%'}} >Gravar</b></button>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+
+
+
+
+        <Row>
           <Col md="8">
             <Card>
               <Card.Header>
