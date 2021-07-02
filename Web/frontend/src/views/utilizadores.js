@@ -693,8 +693,8 @@ function TableList() {
                   </Table>
                 </div>
                 
-                <button class="button_remocao">Remover todos</button>
-                <button class="button_aceitacao">Aceitar todos</button>
+                <button class="button_remocao"><i class="fas fa-trash-alt"></i>Remover </button>
+                <button class="button_aceitacao"><i class="fas fa-check"></i>Aceitar </button>
                 <br/><br/>
               </Card.Body>
               
