@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+/*import React, { Component } from "react";
 import axios from "axios";
 import AuthService from "../auth.service";
 import logo from "./img/logo.png"; // import imagem
@@ -85,3 +85,4 @@ export default class Login extends Component {
         );
     }
 }
+*/

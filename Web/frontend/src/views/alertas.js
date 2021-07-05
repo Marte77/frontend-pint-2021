@@ -301,6 +301,146 @@ function TableList() {
             </Card>
           </Col>
         </Row>
+
+<Row>
+          <Col md="12">
+            <Card className="card-tasks">
+              <Card.Header>
+                <p className="first_titulo_esquerda">Alertar Locais existentes: 
+              <Dropdown>
+  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
+    Ordenar por
+  </Dropdown.Toggle>
+  <Dropdown.Menu>
+    <Dropdown.Item href="#/action-1">Data Asc.</Dropdown.Item>
+    <Dropdown.Item href="#/action-2">Data Desc.</Dropdown.Item>
+  </Dropdown.Menu>
+</Dropdown>    
+</p>
+ 
+                <p className="card-category">Faça a emissão de alertas (densidade / desinfeção)</p>
+
+              </Card.Header>
+
+              <Card.Body>
+                <div id="table-scroll">
+                  <Table id="table-scroll">
+                    <tbody id="table-scroll">
+                    <tr>
+                        <th></th>
+                        <th>Local</th>
+                        <th>Total Alertas</th>
+                        <th>Pouco populado</th>
+                        <th>Muito populado</th>
+                        <th>Extemamente populado</th>
+                        <th>Data última desinfeção</th>
+                        <th></th>
+
+                    </tr>
+                      <tr>
+                        <td>
+                          <Form.Check className="mb-1 pl-0">
+                            <Form.Check.Label>
+                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                            </Form.Check.Label>
+                          </Form.Check>
+                        </td>
+                        <td>
+                          Palácio do gelo
+                        </td>
+                        <td>
+                          1234
+                        </td>
+                        <td>
+                          12
+                        </td>
+                        <td>
+                          3
+                        </td>
+                        <td>
+                          1
+                        </td>
+                         <td>
+                           23/03/2019
+                        </td>
+                        <td></td>
+                       <td></td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Form.Check className="mb-1 pl-0">
+                            <Form.Check.Label>
+                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                            </Form.Check.Label>
+                          </Form.Check>
+                        </td>
+                        <td>
+                          Palácio do gelo
+                        </td>
+                        <td>
+                          1234
+                        </td>
+                        <td>
+                          12
+                        </td>
+                        <td>
+                          3
+                        </td>
+                        <td>
+                          1
+                        </td>
+                         <td>
+                           23/03/2019
+                        </td>
+                       <td></td>
+                       <td></td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Form.Check className="mb-1 pl-0">
+                            <Form.Check.Label>
+                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                            </Form.Check.Label>
+                          </Form.Check>
+                        </td>
+                        <td>
+                          Palácio do gelo
+                        </td>
+                        <td>
+                          1234
+                        </td>
+                        <td>
+                          12
+                        </td>
+                        <td>
+                          3
+                        </td>
+                        <td>
+                          1
+                        </td>
+                         <td>
+                           23/03/2019
+                        </td>
+                       <td></td>
+                       <td></td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+                
+<button class="button_adicionarv2">Alertar zonas selecionadas</button>
+
+
+                <br/><br/>
+              </Card.Body>
+              
+            </Card>
+          </Col>
+          </Row>
+
       </Container>
     </>
   );
