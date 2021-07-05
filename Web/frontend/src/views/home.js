@@ -20,7 +20,73 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
+/*<Col md="6">
+            <Card>
+              <Card.Header>
 
+              <p className="first_titulo_esquerda">&nbsp;&nbsp;&nbsp;&nbsp;Total de Desinfeções:
+              <Dropdown>
+  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style">
+    Periodo de Tempo
+  </Dropdown.Toggle>
+  <Dropdown.Menu>
+    <Dropdown.Item href="#/action-1">Tempo real</Dropdown.Item>
+    <Dropdown.Item href="#/action-2">Hoje</Dropdown.Item>
+    <Dropdown.Item href="#/action-3">Esta semana</Dropdown.Item>
+    <Dropdown.Item href="#/action-3">Este mês</Dropdown.Item>
+    <Dropdown.Item href="#/action-3">Últimos 3 meses</Dropdown.Item>
+  </Dropdown.Menu>
+</Dropdown></p>
+
+                
+                <p className="card-category">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Filtrar por intervalo de tempo)</p>
+              </Card.Header>
+              <Card.Body>
+                <div className="ct-chart" id="chartActivity">
+                  <ChartistGraph
+                    data={{
+                      labels: [
+                        "cantina",
+                        "patio",
+                        "sala12",
+                        "auditorio",
+                       
+                      ],
+                      series: [
+                        [
+                          542,
+                          443,
+                          320,
+                          100,
+                        ],
+                      ],
+                    }}
+                    type="Bar"
+                    options={{
+                      seriesBarDistance: 10,
+                      axisX: {
+                        showGrid: false,
+                      },
+                      height: "245px",
+                    }}
+                    responsiveOptions={[
+                      [
+                        "screen and (max-width: 640px)",
+                        {
+                          seriesBarDistance: 5,
+                          axisX: {
+                            labelInterpolationFnc: function (value) {
+                              return value[0];
+                            },
+                          },
+                        },
+                      ],
+                    ]}
+                  />
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>*/
 function home() {
   return (
     <>
