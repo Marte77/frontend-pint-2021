@@ -1,6 +1,6 @@
-/*import React, { Component } from "react";
+import React, { Component } from "react";
 import axios from "axios";
-import AuthService from "../auth.service";
+import AuthService from "./auth.service";
 import logo from "./img/logo.png"; // import imagem
 //import './App.css';
 import '../index.css';
@@ -62,13 +62,13 @@ export default class Login extends Component {
                 <div className="form-group">
                     <label>Email de Administrador:</label>
                     <input type="email" className="form-control" placeholder="Insira o seu email" 
-                        value={this.state.email} oncChange={this.onChangeUsername} validations={[required]}/>
+                        value={this.state.email} onChange={this.onChangeUsername} validations={[`required`]}/>
                 </div>
 
                 <div className="form-group">
                     <label>Password:</label>
                     <input type="password" className="form-control" placeholder="Insira a sua password "
-                        value={this.state.password} onChange={this.onChangePassword}  validations={[required]}/>
+                        value={this.state.password} onChange={this.onChangePassword}  validations={[`required`]}/>
                 </div>
 
                 <p className="pedir-acesso">
@@ -76,13 +76,12 @@ export default class Login extends Component {
                     </p>
                 <br/>
                 <button type="submit" className="btn btn-dark btn-lg btn-block" disabled={this.state.loading}  onClick={this.raiseInvoiceClicked}> Iniciar sessão </button>  
-                 </div>
+                </div>
             </form>
             </div>
-            </div>
-            </div>
+        </div>
+    </div>
             
         );
     }
 }
-*/
