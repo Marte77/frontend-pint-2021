@@ -9,6 +9,7 @@
     "@visa/bar-chart": "^4.2.3",
     "axios": "^0.21.1",
     "bootstrap": "^5.0.2",
+    "chartist": "^0.11.4",
     "chartist-svg": "^0.1.6",
     "chokidar": "^3.5.2",
     "google-map-react": "^2.1.10",
@@ -19,6 +20,7 @@
     "location": "^0.0.1",
     "map": "^1.0.1",
     "node-sass": "^6.0.0",
+    "popper.js": "^1.16.1",
     "radius": "^1.1.4",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
@@ -30,6 +32,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "react-table": "^7.7.0",
+    "reactstrap": "^8.9.0",
     "utm-latlng": "^1.0.6"
   },
   "scripts": {
