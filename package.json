@@ -1,5 +1,6 @@
 {
     "scripts": {
-        "start": "cd Web/frontend/ && npm start"
+        "starta": "cd Web/frontend/ && npm start",
+        "starta": "n/Web/frontendstart"
     }
 }
