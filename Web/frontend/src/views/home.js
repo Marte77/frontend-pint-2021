@@ -3,7 +3,10 @@ import ChartistGraph from "react-chartist";
 import './style_auxiliar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { Link } from "react-router-dom";
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import axios from 'axios';
 // react-bootstrap components
 import {
   Dropdown,
@@ -20,75 +23,36 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-/*<Col md="6">
-            <Card>
-              <Card.Header>
+class home extends React.Component{
+// lista utilizadores em espera
+constructor(props){
+super(props);
+this.state = {
+listUtilsEspera:[]
+}
+}
+componentDidMount(){
+    this.loadUtilsEspera();
+    }
+    loadUtilsEspera() {
+    const url = "https://pint2021.herokuapp.com/Pessoas/getUtilsEspera";
+    axios.get(url)
+    .then(res => {
+    if(res.data.success){
+    const data = res.data.data;
+    this.setState({ listUtilsEspera:data });
+    }else{
+    alert("Erro dispositivo web");
+    }
+    })
+    .catch(error => {
+    alert(error)
+    });
+    }
+//fim lista de utilizadores em espera
 
-              <p className="first_titulo_esquerda">&nbsp;&nbsp;&nbsp;&nbsp;Total de Desinfeções:
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style">
-    Periodo de Tempo
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Tempo real</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Hoje</Dropdown.Item>
-    <Dropdown.Item href="#/action-3">Esta semana</Dropdown.Item>
-    <Dropdown.Item href="#/action-3">Este mês</Dropdown.Item>
-    <Dropdown.Item href="#/action-3">Últimos 3 meses</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown></p>
-
-                
-                <p className="card-category">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Filtrar por intervalo de tempo)</p>
-              </Card.Header>
-              <Card.Body>
-                <div className="ct-chart" id="chartActivity">
-                  <ChartistGraph
-                    data={{
-                      labels: [
-                        "cantina",
-                        "patio",
-                        "sala12",
-                        "auditorio",
-                       
-                      ],
-                      series: [
-                        [
-                          542,
-                          443,
-                          320,
-                          100,
-                        ],
-                      ],
-                    }}
-                    type="Bar"
-                    options={{
-                      seriesBarDistance: 10,
-                      axisX: {
-                        showGrid: false,
-                      },
-                      height: "245px",
-                    }}
-                    responsiveOptions={[
-                      [
-                        "screen and (max-width: 640px)",
-                        {
-                          seriesBarDistance: 5,
-                          axisX: {
-                            labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
-                    ]}
-                  />
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>*/
-function home() {
-  return (
+ render(){
+ return (
     <>
       <Container fluid>
         <Row>
@@ -291,720 +255,9 @@ function home() {
                 <div id="table-scroll">
                   <Table id="table-scroll">
                     <tbody id="table-scroll">
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input
-                                defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input
-                                defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input
-                                defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input
-                                defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input
-                                defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input
-                                defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input
-                                defaultChecked
-                                defaultValue=""
-                                type="checkbox"
-                              ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Primeiro nome
-                        </td>
-                        <td>
-                          Ultimo nome
-                        </td>
-                        <td>
-                          Email
-                        </td>
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                            >
-                              <i className="fas fa-check"></i>
-                            </Button>
-                          </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
+
+                       {this.loadUtilsEspera()} 
+
                     </tbody>
                   </Table>
                 </div>
@@ -1054,4 +307,66 @@ function home() {
   );
 }
 
+
+
+loadUtilsEspera(){
+    return this.state.listUtilsEspera.map((data, index)=>{
+    return(
+    <tr key={index}>
+    <th>{data.PNome}</th>
+    <td>{data.UNome}</td>
+    <td>{data.Email}</td>
+    <td>
+    <Link class="btn btn-outline-info " to={"/edit/"+data.id}>Editar</Link>
+    </td>
+    <td>
+    <button class="btn btn-outline-danger" onClick={()=>this.onDelete(data.id)}>Apagar</button>
+    </td>
+    </tr>
+    )
+    });
+    }
+    onDelete(id){
+        Swal.fire({
+        title: 'Tem a certeza?',
+        text: 'Se apagar o filme, não o conseguirá recuperar..',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, quero apagar o filme !',
+        cancelButtonText: 'Não, manter o filme !'
+        }).then((result) => {
+        if (result.value) {
+        this.sendDelete(id)
+        } else if (result.dismiss === 
+        Swal.DismissReason.cancel) {
+        Swal.fire(
+        'Cancelado',
+        'O seu filme continua seguro.'
+        )
+        }
+        })
+        }
+        sendDelete(userId)
+        {
+        const baseUrl = "http://localhost:3000/Filme/delete" 
+        axios.post(baseUrl,{
+        id:userId
+        })
+        .then(response =>{
+        if (response.data.success) {
+        Swal.fire(
+        'Apagado!',
+        'O filme foi apagado com sucesso'
+        )
+        this.loadFilme()
+        }
+        })
+        .catch ( error => {
+        alert("Error 325 ")
+        })    
+    } 
+
+
+
+}
 export default home;
