@@ -365,6 +365,7 @@ loadUtilsEspera(){
                               className="btn-simple btn-link p-1"
                               type="button"
                               variant="info"
+                               onClick={()=>this.onAdd(data.id)}
 
                             >
                               <i className="fas fa-check"></i>
@@ -392,11 +393,11 @@ loadUtilsEspera(){
     onDelete(id){
         Swal.fire({
         title: 'Tem a certeza?',
-        text: 'Se apagar o filme, não o conseguirá recuperar..',
+        text: 'O pedido pendente vai ser apagado',
         type: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Sim, quero apagar o filme !',
-        cancelButtonText: 'Não, manter o filme !'
+        confirmButtonText: 'Sim, quero apagar !',
+        cancelButtonText: 'Não, manter o pedido.'
         }).then((result) => {
         if (result.value) {
         this.sendDelete(id)
@@ -404,7 +405,7 @@ loadUtilsEspera(){
         Swal.DismissReason.cancel) {
         Swal.fire(
         'Cancelado',
-        'O seu filme continua seguro.'
+        'O pedido continua seguro.'
         )
         }
         })
@@ -419,7 +420,7 @@ loadUtilsEspera(){
         if (response.data.success) {
         Swal.fire(
         'Apagado!',
-        'O filme foi apagado com sucesso'
+        'O pedido foi apagado com sucesso'
         )
         this.loadFilme()
         }
@@ -428,6 +429,47 @@ loadUtilsEspera(){
         alert("Error 325 ")
         })    
     } 
+
+     onAdd(id){
+        Swal.fire({
+        title: 'Tem a certeza?',
+        text: 'O pedido será aceite',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, aceitar pedido !',
+        cancelButtonText: 'Não, manter o pedido.'
+        }).then((result) => {
+        if (result.value) {
+        this.sendDelete(id)
+        } else if (result.dismiss === 
+        Swal.DismissReason.cancel) {
+        Swal.fire(
+        'Cancelado',
+        'O pedido continua seguro.'
+        )
+        }
+        })
+        }
+        sendDelete(userId)
+        {
+        const baseUrl = "http://localhost:3000/Filme/delete" 
+        axios.post(baseUrl,{
+        id:userId
+        })
+        .then(response =>{
+        if (response.data.success) {
+        Swal.fire(
+        'Apagado!',
+        'O pedido foi apagado com sucesso'
+        )
+        this.loadFilme()
+        }
+        })
+        .catch ( error => {
+        alert("Error 325 ")
+        })    
+    } 
+
 
 
 
