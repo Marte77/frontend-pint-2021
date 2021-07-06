@@ -32,15 +32,17 @@ listUtilsEspera:[]
 }
 }
 componentDidMount(){
-    this.loadUtilsEspera();
+    this.PedidoUtilsEspera();
     }
-    loadUtilsEspera() {
+    PedidoUtilsEspera() {
     const url = "https://pint2021.herokuapp.com/Pessoas/getUtilsEspera";
     axios.get(url)
     .then(res => {
-    if(res.data.success){
-    const data = res.data.data;
+       console.log(res);
+    if(res.status === 200){
+    const data = res.data.Utils;
     this.setState({ listUtilsEspera:data });
+    
     }else{
     alert("Erro dispositivo web");
     }
@@ -313,9 +315,9 @@ loadUtilsEspera(){
     return this.state.listUtilsEspera.map((data, index)=>{
     return(
     <tr key={index}>
-    <th>{data.PNome}</th>
-    <td>{data.UNome}</td>
-    <td>{data.Email}</td>
+    <th>{data.Pessoa.PNome}</th>
+    <td>{data.Pessoa.UNome}</td>
+    <td>{data.Pessoa.Email}</td>
     <td>
     <Link class="btn btn-outline-info " to={"/edit/"+data.id}>Editar</Link>
     </td>
