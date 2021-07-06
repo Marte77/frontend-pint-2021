@@ -68,13 +68,6 @@ const dashboardRoutes = [ //abrir paginas da aplicacao no menu da nossa dashboar
     layout: "/admin",
   },
   {
-    path: "/partilharinfo",
-    name: "Partilhar Info",
-    icon: "nc-icon nc-send",
-    component: PartilharInfo,
-    layout: "/admin",
-  },
-  {
     path: "/utilizadores",
     name: "Utilizadores",
     icon: "nc-icon nc-bell-55",

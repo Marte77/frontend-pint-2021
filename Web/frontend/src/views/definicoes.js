@@ -26,27 +26,70 @@ function User() {
   return (
     <>
       <Container fluid>
-        <Row>
-          <Col md="6">
-          <Card>
-          <Card.Header>
-                <Card.Title as="h4">Limites de lotação da instituição:</Card.Title>
+ <Row>
+          <Col md="12">
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">Atualizar Instituição</Card.Title>
               </Card.Header>
               <Card.Body>
-                <Row style={{marginLeft:'18%'}}>
-                  <Col md="3" >
+                <Form>
+                  <Row>
+                    <Col className="pr-1" md="5">
+                      <Form.Group>
+                        <label>Instituição</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Nome"
+                          type="text"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    
+                  </Row>
+                  <Row>
+                    <Col className="pr-1" md="6">
+                      <Form.Group>
+                        <label>Email</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Email"
+                          type="email"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    <Col className="pl-1" md="6">
+                      <Form.Group>
+                        <label>Telefone</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Número telefone"
+                          type="number"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  <Col md="8">
+           
+                
+              <Card.Body>
+                <Row style={{marginRight:'0%', marginLeft:'-4%'}}>
+                <Col md="5" ><br/><p3>Limites de lotação da instituição:</p3></Col>
+                  <Col md="2" >
                       <p3>Pouco</p3>
                       <br></br>
                       <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+
                   </Col>
                  
-                  <Col md="3">
+                  <Col md="2">
                   <p3>Moderado</p3>
                       <br></br>
                       <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
                   </Col>
                   
-                  <Col md="3">
+                  <Col md="2">
                   <p3>Elevado</p3>
                       <br></br>
                       <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
@@ -54,87 +97,20 @@ function User() {
                 </Row>
                 
               </Card.Body>
-            
-          <Card.Header style={{marginTop:'5%'}}>
-                <Card.Title as="h4">Outras informações:</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <Row style={{paddingLeft:'2%'}}>                 
-                  <form class="row row-cols-lg-auto g-3 align-items-center">
-                    <div class="col-12">
-                      <p>
-                        
-                        <div class="input-group">
-                        <b style={{paddingRight:'5%', paddingTop:'1.5%'}}>Nome:</b>
-                          <div class="input-group-text"><i class="fas fa-user-circle"></i></div>
-                          <input  type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Nome instituição" title="Nome da instituição"/>
-                        </div>
-                        </p>
-                    </div>
-                </form>
-                </Row>
-                <Row style={{paddingLeft:'2%'}}>                 
-                  <form class="row row-cols-lg-auto g-3 align-items-center">
-                    <div class="col-12">
-                      <p>
-                        
-                        <div class="input-group">
-                        <b style={{paddingRight:'5%', paddingTop:'1.5%'}}>Email:</b>
-                          <div class="input-group-text"><i class="fas fa-envelope-open-text"></i></div>
-                          <input  type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Email instituição" title="Email da instituição"/>
-                        </div>
-                        </p>
-                    </div>
-                </form>
-                </Row>
-
-                <Row style={{paddingLeft:'2%'}}>                 
-                  <form class="row row-cols-lg-auto g-3 align-items-center">
-                    <div class="col-12">
-                      <p>
-                        
-                        <div class="input-group">
-                        <b style={{paddingRight:'5%', paddingTop:'1.5%'}}>Telefone:</b>
-                       
-                            <div class="input-group-text"><i class="fas fa-phone"></i></div>
-                            <input  type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Telefone da instituição" title="Telefone da instituição"/>
-                          
-                        </div>
-                        </p>
-                    </div>
-                </form>
-                </Row>
-              
-                <Row style={{paddingLeft:'2%'}}>                 
-                  <form class="row row-cols-lg-auto g-3 align-items-center">
-                    <div class="col-12">
-                      <p>
-                        
-                        <div class="input-group">
-                        <b style={{paddingRight:'5%', paddingTop:'1.5%'}}>Telemóvel:</b>
-                          <div class="input-group-text"><i class="fas fa-mobile-alt"></i></div>
-                          <input  type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Telemóvel da instituição" title="Telemóvel da instituição"/>
-                        </div>
-                        </p>
-                    </div>
-                </form>
-                </Row>
-
-                <Row style={{paddingLeft:'2%'}}>                 
-                  <form class="row row-cols-lg-auto g-3 align-items-center">
-                    <div class="col-12">
-                      <p>
-                        
-                        <div class="input-group">
-                        <b style={{paddingRight:'5%', paddingTop:'1.5%'}}>Detalhes:</b>
-                          <div class="input-group-text"><i class="fas fa-info-circle"></i></div>
-                          <textarea class="form-control" id="exampleFormControlTextarea1" rows="6" cols="10" placeholder="Descrição da instituição" title="Descrição da instituição" ></textarea>
-                        </div>
-                        </p>
-                    </div>
-                </form>
-                </Row>
-                <Row style={{paddingLeft:'2%'}}>                 
+                </Col>
+                  <Row>
+                    <Col md="12">
+                      <Form.Group>
+                        <label>Descrição</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Texto"
+                          type="text"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row style={{paddingLeft:'2%'}}>                 
                   <form class="row row-cols-lg-auto g-3 align-items-center">
                     <div class="col-12">
                       <p>
@@ -149,51 +125,31 @@ function User() {
                     </div>
                 </form>
                 </Row>
-
-
-
-                <Row style={{paddingTop:'2%'}}>
-                  
-                <button style={{width:'50%', backgroundColor:'green', marginLeft:'25%'}} type="button" class="btn btn-success"><i class="fa fa-save" style={{color:'black'}}></i><b style={{color:'black', paddingLeft:'5%'}} >Gravar Alterações</b></button>
-                </Row>
+               
+                  <br/>
+                  <Button
+                    className="btn-fill pull-right"
+                    type="submit"
+                    variant="info"
+                  >
+                    Atualizar Dados
+                  </Button>
+                  <div className="clearfix"></div>
+                </Form>
               </Card.Body>
             </Card>
           </Col>
 
-
-          <Col md="6">
-          <Card>
-          <Card.Header>
-                <Card.Title as="h4">Horários de funcionamento:</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <Row style={{marginLeft:'32%'}}>
-                  <p ><i class="fas fa-calendar-alt"></i><b style={{paddingLeft:'5%'}}>Período Manhã</b></p>
-                  <div class="form-group">
-                    <input style={{width:'50%'}} type="text" class="form-control" id="exampleFormControlInput1" placeholder="9:00 - 13:00"></input>
-                  </div>
-                  
-                </Row>
-                <Row style={{paddingTop:'2%',marginLeft:'32%'}}>
-                <p><i class="fas fa-calendar-alt"></i><b style={{paddingLeft:'5%'}}>Período Almoço</b></p>
-                <div class="form-group">
-                    <input style={{width:'50%'}} type="text" class="form-control" id="exampleFormControlInput1" placeholder="13:00 - 14:00"></input>
-                  </div>
-                </Row>
-                <Row style={{paddingTop:'2%',marginLeft:'32%'}}>
-                <p><i class="fas fa-calendar-alt"></i><b style={{paddingLeft:'5%'}}>Período Tarde</b></p>
-                <div class="form-group">
-                    <input style={{width:'50%'}} type="text" class="form-control" id="exampleFormControlInput1" placeholder="14:00 - 18:00"></input>
-                  </div>
-                </Row>
-                <Row style={{paddingTop:'2%'}}>
-                  
-                <button style={{width:'50%', backgroundColor:'green', marginLeft:'25%'}} type="button" class="btn btn-success"><i class="fa fa-save" style={{color:'black'}}></i><b style={{color:'black', paddingLeft:'5%'}} >Gravar</b></button>
-                </Row>
-              </Card.Body>
-            </Card>
-          </Col>
+ 
+       
         </Row>
+
+
+
+      
+
+
+        
 
 
         <Row>
