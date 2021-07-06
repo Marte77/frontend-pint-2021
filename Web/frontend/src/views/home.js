@@ -5,8 +5,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Link } from "react-router-dom";
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import axios from 'axios';
+
 // react-bootstrap components
 import {
   Dropdown,
@@ -257,7 +259,20 @@ componentDidMount(){
                 <div id="table-scroll">
                   <Table id="table-scroll">
                     <tbody id="table-scroll">
-
+ <th/>
+                        <th>
+                          Tipo Utilizador  &nbsp;&nbsp;
+                        </th>
+                        <th>
+                          Primeiro nome
+                        </th>
+                        <th>
+                          Ultimo nome &nbsp;&nbsp;
+                        </th>
+                        <th>
+                          Email
+                        </th>
+                       
                        {this.loadUtilsEspera()} 
 
                     </tbody>
@@ -313,17 +328,63 @@ componentDidMount(){
 
 loadUtilsEspera(){
     return this.state.listUtilsEspera.map((data, index)=>{
+    var tipo;
+    console.log(data.ID_Admin);
+    if(data.ID_Admin === undefined)
+    {
+      tipo="Utilizador";
+    }
+    else{
+      tipo="Admin";
+    }
     return(
     <tr key={index}>
-    <th>{data.Pessoa.PNome}</th>
+    <td>
+                          <Form.Check className="mb-1 pl-0">
+                            <Form.Check.Label>
+                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                            </Form.Check.Label>
+                          </Form.Check>
+                        </td>
+    <td>{tipo}</td>
+    <td>{data.Pessoa.PNome}</td>
     <td>{data.Pessoa.UNome}</td>
     <td>{data.Pessoa.Email}</td>
-    <td>
-    <Link class="btn btn-outline-info " to={"/edit/"+data.id}>Editar</Link>
-    </td>
-    <td>
-    <button class="btn btn-outline-danger" onClick={()=>this.onDelete(data.id)}>Apagar</button>
-    </td>
+
+
+<td className="td-actions text-right">
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-537440761">
+                                Aceitar
+                              </Tooltip>
+                            }
+                          >
+                            <Button
+                              className="btn-simple btn-link p-1"
+                              type="button"
+                              variant="info"
+
+                            >
+                              <i className="fas fa-check"></i>
+                            </Button>
+                          </OverlayTrigger>
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
+                            }
+                          >
+                            <Button
+                              className="btn-simple btn-link p-1"
+                              type="button"
+                              variant="danger"
+                              onClick={()=>this.onDelete(data.id)}
+                            >
+                              <i className="fas fa-times"></i>
+                            </Button>
+                          </OverlayTrigger>
+                        </td>
     </tr>
     )
     });
