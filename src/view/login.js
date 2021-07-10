@@ -35,7 +35,7 @@ export default class Login extends Component {
         (data) => {
                 console.log(true)
                 localStorage.setItem('tokenauth',data.token)
-                window.open(window.location.href+'admin/home','_self')
+                window.open(window.location.origin+'/admin/home','_self')
             }
         ).catch(()=>{console.log(false)});
         this.setState({

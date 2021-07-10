@@ -55,7 +55,12 @@ function Sidebar({ color, image, routes }) {
       </div>
     );
   }else{
-    return <h1> nao esta autenticado </h1>
+    if(location.pathname !== '/login')
+{
+  window.open(window.location.origin+'/login','_self');
+  console.log(window.location);
+}
+   
   }
   /*if(data.token === localStorage.getItem('tokenauth'))
         return (
