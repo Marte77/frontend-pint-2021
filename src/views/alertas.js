@@ -1,9 +1,13 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
 import './style_auxiliar.css';
+import './style_popup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
+import axios from 'axios';
 // react-bootstrap components
 import {
  Dropdown,
@@ -23,6 +27,46 @@ import {
 
 
 class alertas extends React.Component{
+
+   onDelete(id){
+        Swal.fire({
+        title: 'Tem a certeza?',
+        text: 'O alerta vai ser apagado',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, quero apagar !',
+        cancelButtonText: 'Não, manter o alerta.'
+        }).then((result) => {
+        if (result.value) {
+        this.sendDelete(id)
+        } else if (result.dismiss === 
+        Swal.DismissReason.cancel) {
+        Swal.fire(
+        'Cancelado',
+        'O alerta continua seguro.'
+        )
+        }
+        })
+        }
+        sendDelete(userId)
+        {
+        const baseUrl = "http://localhost:3000/Filme/delete" 
+        axios.post(baseUrl,{
+        id:userId
+        })
+        .then(response =>{
+        if (response.data.success) {
+        Swal.fire(
+        'Apagado!',
+        'O pedido foi apagado com sucesso'
+        )
+        this.loadFilme()
+        }
+        })
+        .catch ( error => {
+        alert("Error 325 ")
+        })    
+    } 
    render(){
   return (
     <>
@@ -161,10 +205,13 @@ class alertas extends React.Component{
                     </tbody>
                   </Table>
                 </div>
-                <button class="button_criaralerta">Criar Alerta</button>
-                <button class="button_alteraralerta">Alterar Alerta</button>
-                <button class="button_removeralerta">Remover Alerta</button>
+                <a class="button2" href="#popup1">Criar Alerta</a>
+                <a class="button4" href="#popup2">Alterar Alerta</a>
+
+                <button class="button_removeralerta" onClick={()=>this.onDelete()}>Remover Alerta</button>
+
                 <br/><br/>
+                
               </Card.Body>
               
             </Card>
@@ -432,11 +479,128 @@ class alertas extends React.Component{
                     </tbody>
                   </Table>
                 </div>
-                
-<button class="button_adicionarv2">Alertar zonas selecionadas</button>
-
-
+                 <a class="button_adicionarv2" href="#popup3">Alertar zonas selecionadas</a>
                 <br/><br/>
+
+
+      <div id="popup1" class="overlay">
+  <div class="popup">
+    <h2>Tipo de alerta</h2>
+    <a class="close" href="#">&times;</a>
+    <div class="content">
+      <p>Adicionar um novo tipo de alerta:</p>
+    </div>
+    <Form>
+                  <Row>
+                    <Col className="pr-1" md="10">
+                      <Form.Group>
+                        <label>Tipo de alerta</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Nome tipo de alerta"
+                          type="text"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+               <br/>
+                  <Button
+                    className="btn-fill pull-left" 
+                    type="submit"
+                    variant="info"
+                  >
+                    Inserir
+                  </Button>
+                  
+                  </Form>
+  </div>
+</div>
+<div id="popup2" class="overlay">
+  <div class="popup">
+    <h2>Atualizar alerta</h2>
+    <a class="close" href="#">&times;</a>
+    <div class="content">
+      <p>Altere o nome do alerta:</p>
+    </div>
+    <Form>
+                  <Row>
+                    <Col className="pr-1" md="10">
+                      <Form.Group>
+                        <label>Tipo de alerta</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Nome tipo de alerta"
+                          type="text"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+               <br/>
+                  <Button
+                    className="btn-fill pull-left" 
+                    type="submit"
+                    variant="info"
+                  >
+                    Atualizar
+                  </Button>
+                  
+                  </Form>
+  </div>
+</div>
+<div id="popup3" class="overlay">
+  <div class="popup">
+    <h2>Alertar locais</h2>
+    <a class="close" href="#">&times;</a>
+    <div class="content">
+      <p>Alertar zonas selecionadas:</p>
+    </div>
+    <Form>
+                 
+                   <Row>
+                    <Col className="pr-1" md="10">
+                    <Form.Group>
+                        <label>Tipo de alertas:</label>
+                        <br/>
+                   <select>
+                     <option value="1">Alerta baixa lotacao</option>
+                    <option  value="2">Alerta baixa lotacao</option>
+                    <option  value="3">Alerta baixa lotacao</option>
+                  </select>
+                
+                      </Form.Group>
+
+                    </Col>
+                  </Row>
+                   <Row>
+                    <Col className="pr-1" md="10">
+                      <Form.Group>
+                        <label>Descricao</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Descricao do alerta"
+                          type="text"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+
+               <br/>
+                  <Button
+                    className="btn-fill pull-left" 
+                    type="submit"
+                    variant="info"
+                  >
+                    Alertar locais
+                  </Button>
+                  
+                  </Form>
+  </div>
+</div>
+
+
               </Card.Body>
               
             </Card>
@@ -444,6 +608,7 @@ class alertas extends React.Component{
           </Row>
 
       </Container>
+
     </>
   );
 }

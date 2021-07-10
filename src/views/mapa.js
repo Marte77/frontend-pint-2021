@@ -5,7 +5,6 @@ import './style_popup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import DropdownButton from 'react-bootstrap/DropdownButton'
-import './style_auxiliar.css';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 import axios from 'axios';
@@ -206,7 +205,7 @@ function Maps() {
                 </div>
 
  <a class="button2" href="#popup1">Adicionar local</a>
-<a class="button3" href="#popup1">Alterar local selecionado</a>
+<a class="button3" href="#popup2">Alterar local selecionado</a>
 
 
 <div id="popup1" class="overlay">
@@ -214,29 +213,16 @@ function Maps() {
     <h2>Adicionar local</h2>
     <a class="close" href="#">&times;</a>
     <div class="content">
-      <p>Preencha os dados:</p>
+      <p>Preencha os dados do local interior :</p>
     </div>
     <Form>
                   <Row>
                     <Col className="pr-1" md="10">
                       <Form.Group>
-                        <label>Local</label>
+                        <label>Local Interior</label>
                         <Form.Control
                           defaultValue=""
-                          placeholder="Nome local indoor"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="10">
-                      <Form.Group>
-                        <label>Código Postal</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="ex: 3640-410"
+                          placeholder="Nome local interior"
                           type="text"
                         ></Form.Control>
                       </Form.Group>
@@ -268,18 +254,90 @@ function Maps() {
                       </Form.Group>
                     </Col>
                   </Row>
+
                   <Row>
                     <Col className="pr-1" md="10">
-                    <select />
+                    <Form.Group>
+                        <label>Pertence ao local Exterior :</label>
+                        <br/>
+                   <select>
+                     <option value="1">palacio do gelo</option>
+                    <option  value="2">visabeira</option>
+                    <option  value="3">parque</option>
+                  </select>
+                
+                      </Form.Group>
+
                     </Col>
                   </Row>
+               <br/>
                   <Button
-                    className="btn-fill pull-right"
+                    className="btn-fill pull-left" 
                     type="submit"
                     variant="info"
                   >
-                    Guardar local
+                    Guardar local interior 
                   </Button>
+                  
+                  </Form>
+  </div>
+</div>
+<div id="popup2" class="overlay">
+  <div class="popup">
+    <h2>Alterar Local</h2>
+    <a class="close" href="#">&times;</a>
+    <div class="content">
+      <p>Altere os dados do local interior :</p>
+    </div>
+    <Form>
+                  <Row>
+                    <Col className="pr-1" md="10">
+                      <Form.Group>
+                        <label>Local Interior</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Nome local interior"
+                          type="text"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    
+                  </Row>
+                  <Row>
+                    <Col className="pr-1" md="10">
+                      <Form.Group>
+                        <label>Descrição</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Descricao"
+                          type="text"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    
+                  </Row>
+                  <Row>
+                    <Col className="pr-1" md="10">
+                      <Form.Group>
+                        <label>Piso</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Ex. 1,2"
+                          type="text"
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+               <br/>
+                  <Button
+                    className="btn-fill pull-left" 
+                    type="submit"
+                    variant="info"
+                  >
+                    Efetuar alteração
+                  </Button>
+                  
                   </Form>
   </div>
 </div>

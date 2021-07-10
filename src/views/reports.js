@@ -1,9 +1,13 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
 import './style_auxiliar.css';
+import './style_popup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
+import axios from 'axios';
 // react-bootstrap components
 import {
  Dropdown,
@@ -22,6 +26,45 @@ import {
 } from "react-bootstrap";
 
 class reports extends React.Component{
+  onDelete(id){
+        Swal.fire({
+        title: 'Tem a certeza?',
+        text: 'O report vai ser apagado',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, quero apagar !',
+        cancelButtonText: 'Não, manter o report.'
+        }).then((result) => {
+        if (result.value) {
+        this.sendDelete(id)
+        } else if (result.dismiss === 
+        Swal.DismissReason.cancel) {
+        Swal.fire(
+        'Cancelado',
+        'O report continua seguro.'
+        )
+        }
+        })
+        }
+        sendDelete(userId)
+        {
+        const baseUrl = "http://localhost:3000/Filme/delete" 
+        axios.post(baseUrl,{
+        id:userId
+        })
+        .then(response =>{
+        if (response.data.success) {
+        Swal.fire(
+        'Apagado!',
+        'O pedido foi apagado com sucesso'
+        )
+        this.loadFilme()
+        }
+        })
+        .catch ( error => {
+        alert("Error 325 ")
+        })    
+    } 
    render(){
   return (
     <>
@@ -63,16 +106,15 @@ class reports extends React.Component{
                       <p className="secound_titulo">Nº total de  reportes na Instituição: </p>
                       <Card.Title><h3 className="aligncenter">20001</h3></Card.Title>    
                     <div class="container">
-                    <button class="buttonv2">Alterar limites de lotação</button>
+                     <a class="button6" href="#popup1">Alterar limites de lotação</a>
                     </div>
                     <hr/>
-                      <p className="secound_titulo">Zona com mais reports: </p>
+                      <p className="first_titulo">Zona com mais reports: </p>
                       <p className="secound_titulo">Cantina </p>
                       <Card.Title><h3 className="aligncenter">140</h3></Card.Title>
-                      <div class="container">
-                    <button class="buttonv2">Alerta de desinfeção</button>
+                      <br/>
                     </div>
-                    </div>
+
                 </Row>
               </Card.Body>  
             </Card>
@@ -218,6 +260,7 @@ class reports extends React.Component{
                               className="btn-simple btn-link p-1"
                               type="button"
                               variant="danger"
+                              onClick={()=>this.onDelete()}
                             >
                               <i className="fas fa-times"></i>
                             </Button>
@@ -259,6 +302,7 @@ class reports extends React.Component{
                               className="btn-simple btn-link p-1"
                               type="button"
                               variant="danger"
+                              onClick={()=>this.onDelete()}
                             >
                               <i className="fas fa-times"></i>
                             </Button>
@@ -299,6 +343,7 @@ class reports extends React.Component{
                               className="btn-simple btn-link p-1"
                               type="button"
                               variant="danger"
+                              onClick={()=>this.onDelete()}
                             >
                               <i className="fas fa-times"></i>
                             </Button>
@@ -310,6 +355,52 @@ class reports extends React.Component{
                 </div>
 
                 <br/><br/>
+
+
+      <div id="popup1" class="overlay">
+  <div class="popup">
+    <h2>Limite de lotação</h2>
+    <a class="close" href="#">&times;</a>
+    <div class="content">
+      <p>Alterar limite de lotação da Instituição:</p>
+    </div>
+    <Form>
+    <Row>
+    
+                  <Col md="3" >
+                      <p3>Pouco</p3>
+                      <br></br>
+                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+
+                  </Col>
+                 
+                  <Col md="3">
+                  <p3>Moderado</p3>
+                      <br></br>
+                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                  </Col>
+                  
+                  <Col md="3">
+                  <p3>Elevado</p3>
+                      <br></br>
+                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                  </Col>
+
+                  </Row>
+                  
+
+               <br/>
+                  <Button
+                    className="btn-fill pull-left" 
+                    type="submit"
+                    variant="info"
+                  >
+                    Alterar lotação
+                  </Button>
+                  
+                  </Form>
+  </div>
+</div>
               </Card.Body>
               
             </Card>

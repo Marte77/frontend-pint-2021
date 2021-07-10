@@ -1,9 +1,13 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
 import './style_auxiliar.css';
+import './style_popup.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+import 'sweetalert2/src/sweetalert2.scss';
+import axios from 'axios';
 // react-bootstrap components
 import {
  Dropdown,
@@ -21,7 +25,47 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
+
 class opinioes extends React.Component{
+   onDelete(id){
+        Swal.fire({
+        title: 'Tem a certeza?',
+        text: 'A opinião vai ser eliminada',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, quero apagar !',
+        cancelButtonText: 'Não, manter a opinião.'
+        }).then((result) => {
+        if (result.value) {
+        this.sendDelete(id)
+        } else if (result.dismiss === 
+        Swal.DismissReason.cancel) {
+        Swal.fire(
+        'Cancelado',
+        'A opinião continua segura.'
+        )
+        }
+        })
+        }
+        sendDelete(userId)
+        {
+        const baseUrl = "http://localhost:3000/Filme/delete" 
+        axios.post(baseUrl,{
+        id:userId
+        })
+        .then(response =>{
+        if (response.data.success) {
+        Swal.fire(
+        'Apagado!',
+        'A opinião foi apagada com sucesso'
+        )
+        this.loadFilme()
+        }
+        })
+        .catch ( error => {
+        alert("Error 325 ")
+        })    
+    } 
    render(){
   return (
     <>
@@ -73,6 +117,7 @@ class opinioes extends React.Component{
                               className="btn-simple btn-link p-1"
                               type="button"
                               variant="danger"
+                              onClick={()=>this.onDelete()}
                             >
                               <i className="fas fa-times"></i>
                             </Button>
@@ -104,6 +149,7 @@ class opinioes extends React.Component{
                               className="btn-simple btn-link p-1"
                               type="button"
                               variant="danger"
+                              onClick={()=>this.onDelete()}
                             >
                               <i className="fas fa-times"></i>
                             </Button>
@@ -134,6 +180,7 @@ class opinioes extends React.Component{
                               className="btn-simple btn-link p-1"
                               type="button"
                               variant="danger"
+                              onClick={()=>this.onDelete()}
                             >
                               <i className="fas fa-times"></i>
                             </Button>
