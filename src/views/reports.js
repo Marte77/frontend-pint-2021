@@ -21,7 +21,8 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-function TableList() {
+class reports extends React.Component{
+   render(){
   return (
     <>
 
@@ -319,5 +320,5 @@ function TableList() {
     </>
   );
 }
-
-export default TableList;
+}
+export default reports;

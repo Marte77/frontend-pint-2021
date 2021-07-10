@@ -21,7 +21,6 @@ import Lotacao from "views/lotacao.js";
 import Alertas from "views/alertas.js";
 import Report from "views/reports.js";
 import Opinioes from "views/opinioes.js";
-import PartilharInfo from "views/partilharInfo.js";
 import Utilizadores from "views/utilizadores.js";
 import Definicoes from "views/definicoes.js";
 const dashboardRoutes = [ //abrir paginas da aplicacao no menu da nossa dashboard

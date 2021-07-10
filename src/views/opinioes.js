@@ -20,11 +20,12 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
-function TableList() {
+
+class opinioes extends React.Component{
+   render(){
   return (
     <>
-      <Container fluid>
-        
+      <Container fluid>      
 <Row>
           <Col md="12">
             <Card className="card-tasks">
@@ -248,15 +249,10 @@ function TableList() {
               
             </Card>
           </Col>
-
-
-
-
 </Row>
-
       </Container>
     </>
   );
 }
-
-export default TableList;
+}
+export default opinioes;

@@ -17,7 +17,8 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-function TableList() {
+class utilizadores extends React.Component{
+   render(){
   return (
     <>
       <Container fluid>
@@ -702,81 +703,176 @@ function TableList() {
           </Col>
           </Row>
 
-
-          {/*Linha 2 Lista de todos os utilizadores*/} 
-          <Row>
+<Row>
           <Col md="12">
-            <Card className="strpied-tabled-with-hover">
+            <Card className="card-tasks">
               <Card.Header>
-                <Card.Title as="h4">Utilizadores</Card.Title>
-                <Dropdown>
+                <p className="first_titulo_esquerda">Utilizadores da Instituição:
+              <Dropdown>
   <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
     Ordenar por
   </Dropdown.Toggle>
   <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Mais Recente</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Mais Antigo</Dropdown.Item>
+    <Dropdown.Item href="#/action-1">Data Asc.</Dropdown.Item>
+    <Dropdown.Item href="#/action-2">Data Desc.</Dropdown.Item>
   </Dropdown.Menu>
-</Dropdown>
-                
+</Dropdown>    
+</p>
+ 
+                <br/>
+                <div class="input-group">
+                      <div class="form-outline">
+                        <input id="search-input" type="search" id="form1" class="form-control" placeholder="Search"></input>
+                     </div>
+                      <button id="search-button" type="button" class="btn btn-primary">
+                        <i class="fas fa-search"></i>
+                     </button>
+                    </div>
               </Card.Header>
-              <Card.Body className="table-full-width table-responsive px-0">
-                <Table className="table-hover">
-                  <thead>
+
+              <Card.Body>
+                <div id="table-scroll">
+                  <Table id="table-scroll">
+                    <tbody id="table-scroll">
                     <tr>
-                      <th className="border-0">ID</th>
-                      <th className="border-0">Name</th>
-                      <th className="border-0">Salary</th>
-                      <th className="border-0">Country</th>
-                      <th className="border-0">City</th>
+                        <th></th>
+                        <th>Nome</th>
+                        <th>Pontuação</th>
+                        <th>Ranking</th>
+                        <th>Email</th>
+                        <th>Cidade</th>
+                        <th>Excluir</th>
+
                     </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>$36,738</td>
-                      <td>Niger</td>
-                      <td>Oud-Turnhout</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>$23,789</td>
-                      <td>Curaçao</td>
-                      <td>Sinaai-Waas</td>
-                    </tr>
-                    <tr>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>$56,142</td>
-                      <td>Netherlands</td>
-                      <td>Baileux</td>
-                    </tr>
-                    <tr>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>$38,735</td>
-                      <td>Korea, South</td>
-                      <td>Overland Park</td>
-                    </tr>
-                    <tr>
-                      <td>5</td>
-                      <td>Doris Greene</td>
-                      <td>$63,542</td>
-                      <td>Malawi</td>
-                      <td>Feldkirchen in Kärnten</td>
-                    </tr>
-                    <tr>
-                      <td>6</td>
-                      <td>Mason Porter</td>
-                      <td>$78,615</td>
-                      <td>Chile</td>
-                      <td>Gloucester</td>
-                    </tr>
-                  </tbody>
-                </Table>
+                      <tr>
+                        <td>
+                          <Form.Check className="mb-1 pl-0">
+                            <Form.Check.Label>
+                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                            </Form.Check.Label>
+                          </Form.Check>
+                        </td>
+                        <td>
+                          Palácio do gelo
+                        </td>
+                        <td>
+                          1234
+                        </td>
+                        <td>
+                          12
+                        </td>
+                        <td>
+                          3
+                        </td>
+                        <td>
+                          1
+                        </td>
+                         
+                        <td className="td-actions text-right">
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
+                            }
+                          >
+                            <Button
+                              className="btn-simple btn-link p-1"
+                              type="button"
+                              variant="danger"
+                            >
+                              <i className="fas fa-times"></i>
+                            </Button>
+                          </OverlayTrigger>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          <Form.Check className="mb-1 pl-0">
+                            <Form.Check.Label>
+                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                            </Form.Check.Label>
+                          </Form.Check>
+                        </td>
+                        <td>
+                          Palácio do gelo
+                        </td>
+                        <td>
+                          1234
+                        </td>
+                        <td>
+                          12
+                        </td>
+                        <td>
+                          3
+                        </td>
+                        <td>
+                          1
+                        </td>
+                         
+                        <td className="td-actions text-right">
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
+                            }
+                          >
+                            <Button
+                              className="btn-simple btn-link p-1"
+                              type="button"
+                              variant="danger"
+                            >
+                              <i className="fas fa-times"></i>
+                            </Button>
+                          </OverlayTrigger>
+                        </td>
+                      </tr><tr>
+                        <td>
+                          <Form.Check className="mb-1 pl-0">
+                            <Form.Check.Label>
+                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                            </Form.Check.Label>
+                          </Form.Check>
+                        </td>
+                        <td>
+                          Palácio do gelo
+                        </td>
+                        <td>
+                          1234
+                        </td>
+                        <td>
+                          12
+                        </td>
+                        <td>
+                          3
+                        </td>
+                        <td>
+                          1
+                        </td>
+                         
+                        <td className="td-actions text-right">
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
+                            }
+                          >
+                            <Button
+                              className="btn-simple btn-link p-1"
+                              type="button"
+                              variant="danger"
+                            >
+                              <i className="fas fa-times"></i>
+                            </Button>
+                          </OverlayTrigger>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+
+                <br/><br/>
               </Card.Body>
+              
             </Card>
           </Col>
           </Row>
@@ -785,4 +881,5 @@ function TableList() {
   );
 }
 
-export default TableList;
+}
+export default utilizadores;

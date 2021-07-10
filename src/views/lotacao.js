@@ -18,7 +18,9 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
-function TableList() {
+
+class lotacao extends React.Component{
+   render(){
   return (
     <>
       <Container fluid>
@@ -324,5 +326,5 @@ function TableList() {
     </>
   );
 }
-
-export default TableList;
+}
+export default lotacao;
