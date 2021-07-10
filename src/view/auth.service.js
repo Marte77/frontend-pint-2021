@@ -1,8 +1,9 @@
 import axios from "axios";
+import authHeader from "./auth-header";
 class AuthService {
         login(email, password) {
             return axios
-            .post("http://localhost:3000/Pessoas/login", {email, password})
+            .post("https://pint2021.herokuapp.com/Pessoas/login", {Email:email, Password:password},{headers:{authorization:'chavesecreta'}})
             .then(res => {
                 if (res.data.token) {
                     localStorage.setItem("user", JSON.stringify(res.data));

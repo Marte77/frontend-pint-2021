@@ -7,18 +7,15 @@ import Login from "./view/login";
 import SignUp from "./view/registar";
 import AdminLayout from "layouts/Admin.js";
 function App() {
-  return (<Router>
-
-          <Switch>
-            <Route exact path='/' component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/registar" component={SignUp} />
-            <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
-            //após o login, entra na aba
-          </Switch>
-
-    
-    </Router>
-  );
+  return (
+  <Router>
+    <Switch>
+      <Route exact path='/' component={Login} />
+      <Route path="/login" component={Login} />
+      <Route path="/registar" component={SignUp} />
+      <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+    </Switch>
+  </Router>
+  );//após o login, entra na aba
 }
 export default App;
