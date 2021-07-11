@@ -220,7 +220,7 @@ class definicoes extends React.Component{
           </Col>
         </Row>
         <Row>
-          <Col md="6">
+          <Col md="12">
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
                 <Card.Title as="h4">Locais Exterior</Card.Title>
@@ -246,6 +246,10 @@ class definicoes extends React.Component{
                       <th className="border-0">Local</th>
                       <th className="border-0">cod_postal</th>
                       <th className="border-0">Desc</th>
+                      <th className="border-0">URL Imagem</th>
+                      <th className="border-0">Localização</th>
+                      <th className="border-0">Longitude</th>
+                      <th className="border-0">Latitude</th>
 
                     </tr>
                   </thead>
@@ -263,9 +267,9 @@ class definicoes extends React.Component{
               </Card.Body>
             </Card>
           </Col>
-          
-    
-                   <Col md="6">
+          </Row>
+    <Row>
+                   <Col md="12">
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
                 <Card.Title as="h4">Locais Interior</Card.Title>
@@ -896,6 +900,10 @@ loadFillDataLocaisExt()
         <td>{data.Nome}</td>
         <td>{data.Codigo_Postal}</td>
         <td>{data.Descricao}</td>
+        <td>{data.URL_Imagem}</td>
+        <td>{data.Localizacao}</td>
+        <td>{data.Longitude}</td>
+        <td>{data.Latitude}</td>
     </tr>
     )
     });
