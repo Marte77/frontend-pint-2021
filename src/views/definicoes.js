@@ -27,6 +27,12 @@ import {
 } from "react-bootstrap";
 
 class definicoes extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+    listlocaisoutdoor:[]
+    }
+  }
   onDelete(id){
         Swal.fire({
         title: 'Tem a certeza?',
@@ -66,7 +72,34 @@ class definicoes extends React.Component{
         alert("Error 325 ")
         })    
     } 
+
+    componentDidMount(){
+      const idlocal=localStorage.getItem('idinstituicao');
+      const idad=localStorage.getItem('idadmin');
+      const idinst=localStorage.getItem('idinstituicao');
+      console.log("idlocal",idlocal);
+      console.log("idadmin",idad);
+      console.log("idinst",idinst);
+
+
+      const url = "https://pint2021.herokuapp.com/Locais/listlocaisout/"+idinst;
+      axios.get(url).then(res => {
+      if(res.data.status==200){
+      const data = res.data.LocaisInst;
+      this.setState({ listlocaisoutdoor:data });
+      }else{
+      alert("Error Web Service!");
+      }
+      console.log(res)
+      })
+      .catch(error => {
+      alert(error)
+      });
+      }
+
    render(){
+    
+
   return (
     <>
       <Container fluid>
@@ -84,7 +117,7 @@ class definicoes extends React.Component{
                         <label>Instituição</label>
                         <Form.Control
                           defaultValue=""
-                          placeholder="Nome"
+                          placeholder="Nome" 
                           type="text"
                         ></Form.Control>
                       </Form.Group>
@@ -211,89 +244,13 @@ class definicoes extends React.Component{
                       <th></th>
                       <th className="border-0">Nº Local</th>
                       <th className="border-0">Local</th>
-                      <th className="border-0">Total Reports</th>
-                      
+                      <th className="border-0">cod_postal</th>
+                      <th className="border-0">Desc</th>
+
                     </tr>
                   </thead>
                    <tbody id="table-scroll">
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>738</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>789</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>142</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input  defaultValue=""   type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>735</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>5</td>
-                      <td>Doris Greene</td>
-                      <td>542</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>6</td>
-                      <td>Mason Porter</td>
-                      <td>615</td>
-                    </tr>
+                   {this.loadFillDataLocaisExt()}
                   </tbody>
                 </Table>
                 </div>
@@ -920,5 +877,29 @@ class definicoes extends React.Component{
     </>
   );
 }
+
+
+loadFillDataLocaisExt()
+{
+  return this.state.listlocaisoutdoor.map((data, index)=>{
+    return(
+    <tr key={index}>
+       <td>
+                          <Form.Check className="mb-1 pl-0">
+                            <Form.Check.Label>
+                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                            </Form.Check.Label>
+                          </Form.Check>
+                      </td>
+        <th>{data.ID_Local}</th>
+        <td>{data.Nome}</td>
+        <td>{data.Codigo_Postal}</td>
+        <td>{data.Descricao}</td>
+    </tr>
+    )
+    });
+    }
 }
+
 export default definicoes;
