@@ -36,6 +36,9 @@ export default class Login extends Component {
                 console.log(data)
                 if(data.status!==500){
                     localStorage.setItem('tokenauth',data.token)
+                    localStorage.setItem('idinstituicao',data.PessoaLogin.InstituicaoIDInstituicao)
+                    localStorage.setItem('idpessoa',data.PessoaLogin.PessoaIDPessoa)
+                    localStorage.setItem('idadmin',data.PessoaLogin.ID_Admin)
                     window.open(window.location.origin+'/admin/home','_self')
                 }else{
                     alert(data.data.err)
