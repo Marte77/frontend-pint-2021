@@ -5,11 +5,13 @@ class AuthService {
             return axios
             .post("https://pint2021.herokuapp.com/Pessoas/login", {Email:email, Password:password},{headers:{authorization:'chavesecreta'}})
             .then(res => {
-                if (res.data.token) {
-                    localStorage.setItem("user", JSON.stringify(res.data));
+                if(res.status !== 500){
+                        if (res.data.token) {
+                        localStorage.setItem("user", JSON.stringify(res.data));
+                    }
+                    return res.data;
                 }
-                return res.data;
-            }, reason => { throw new Error('Utilizador Inválido');});
+            }, reason => {return reason.response;});
         }
         logout() { localStorage.removeItem("user"); }
         getCurrentUser() { return JSON.parse(localStorage.getItem('user'));}

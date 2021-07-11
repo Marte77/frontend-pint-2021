@@ -33,11 +33,15 @@ export default class Login extends Component {
         //this.form.validateAll();
         AuthService.login(this.state.email, this.state.password).then(
         (data) => {
-                console.log(true)
-                localStorage.setItem('tokenauth',data.token)
-                window.open(window.location.origin+'/admin/home','_self')
+                console.log(data)
+                if(data.status!==500){
+                    localStorage.setItem('tokenauth',data.token)
+                    window.open(window.location.origin+'/admin/home','_self')
+                }else{
+                    alert(data.data.err)
+                }
             }
-        ).catch(()=>{console.log(false)});
+        )
         this.setState({
             loading: false,
             message: "Login Errado"
