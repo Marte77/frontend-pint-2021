@@ -30,7 +30,10 @@ class definicoes extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-    listlocaisoutdoor:[]
+    listlocaisoutdoor:[],
+    listlocaisindoor:[],
+    listaalertas:[],
+    listainstituicoes:[],
     }
   }
   onDelete(id){
@@ -81,7 +84,9 @@ class definicoes extends React.Component{
       console.log("idadmin",idad);
       console.log("idinst",idinst);
 
-
+      const url4="https://pint2021.herokuapp.com/Instituicao/get_instituicoes/"+idinst;
+      const url3="https://pint2021.herokuapp.com/Alertas/listalertas/"+idinst;
+      const url2 = "https://pint2021.herokuapp.com/Locais/listlocaisindoor/"+idinst;
       const url = "https://pint2021.herokuapp.com/Locais/listlocaisout/"+idinst;
       axios.get(url).then(res => {
       if(res.data.status==200){
@@ -95,6 +100,53 @@ class definicoes extends React.Component{
       .catch(error => {
       alert(error)
       });
+
+      //lista de locais indoor
+        axios.get(url2).then(res => {
+        if(res.data.status==200){  
+        const data2=res.data.LocaisIndor;
+        this.setState({ listlocaisindoor:data2});
+        }else{
+        alert("Error Web Service!");
+        
+        }
+        console.log(res)
+        })
+        .catch(error => {
+        alert(error)
+        });
+
+        
+    //lista de alertas
+      axios.get(url3).then(res => {
+        if(res.data.status==200){  
+        const data3=res.data.Alertas;
+        this.setState({ listaalertas:data3});
+      }else{
+      alert("Error Web Service!");
+      }
+      console.log(res)
+      })
+      .catch(error => {
+      alert(error)
+      });
+        
+    
+      // Instituição pelo ID
+      /*axios.get(url4).then(res => {
+        if(res.data.status==200){  
+        const data4=res.data.Instituicoes;
+        this.setState({ listainstituicoes:data4});
+      }else{
+      alert("Error Web Service!");
+      }
+      console.log(res)
+      })
+      .catch(error => {
+      alert(error)
+      });*/
+
+
       }
 
    render(){
@@ -223,7 +275,7 @@ class definicoes extends React.Component{
           <Col md="12">
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
-                <Card.Title as="h4">Locais Exterior</Card.Title>
+                <Card.Title as="h4">Locais </Card.Title>
                 <Dropdown>
                   <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
                     Ordenar &nbsp;
@@ -292,90 +344,16 @@ class definicoes extends React.Component{
                     <tr>
                       <th></th>
                       <th className="border-0">Nº Local</th>
+                      <th className="border-0">Nome</th>
+                      <th className="border-0">Descrição</th>
+                      <th className="border-0">Piso</th>
                       <th className="border-0">Local</th>
-                      <th className="border-0">Total Reports</th>
+
                       
                     </tr>
                   </thead>
                    <tbody id="table-scroll">
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>738</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>789</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>142</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input  defaultValue=""   type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>735</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>5</td>
-                      <td>Doris Greene</td>
-                      <td>542</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>6</td>
-                      <td>Mason Porter</td>
-                      <td>615</td>
-                    </tr>
+                   {this.loadFillDataLocaiInt()}
                   </tbody>
                 </Table>
                 </div>
@@ -412,112 +390,17 @@ class definicoes extends React.Component{
                 <Table className="table-hover" id="table-scroll">
                   <thead>
                     <tr>
-                      <th></th>
+                      
                       <th className="border-0">ID Alerta</th>
-                      <th className="border-0">ID Admin</th>
-                      <th className="border-0">Local Exterior</th>
-                      <th className="border-0">Tipo de Alerta</th>
                       <th className="border-0">Descrição</th>
-                      <th className="border-0">Excluir</th>
+                      <th className="border-0">Data</th>
+                      <th className="border-0">Local</th>
+                      <th className="border-0">Admin</th>
+                      <th className="border-0">Tipo de Alerta</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                    <td></td>
-                      <td>1</td>
-                       <td>2</td>
-                      <td>palacio gelo</td>
-                      <td>Desinfecao</td>
-                       <td>nada</td>
-                       <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                    </tr>
-                    <tr>
-                    <td></td>
-                      <td>1</td>
-                       <td>2</td>
-                      <td>palacio gelo</td>
-                      <td>Desinfecao</td>
-                       <td>nada</td>
-                       <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                    </tr>
-                    <tr>
-                    <td></td>
-                      <td>1</td>
-                       <td>2</td>
-                      <td>palacio gelo</td>
-                      <td>Desinfecao</td>
-                       <td>nada</td>
-                       <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                    </tr>
-                    <tr>
-                    <td></td>
-                      <td>1</td>
-                       <td>2</td>
-                      <td>palacio gelo</td>
-                      <td>Desinfecao</td>
-                       <td>nada</td>
-                       <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                    </tr>
+                  {this.loadalertas()}
 
                     
                   </tbody>
@@ -907,6 +790,49 @@ loadFillDataLocaisExt()
     </tr>
     )
     });
+    }
+
+    loadFillDataLocaiInt()
+    {
+      return this.state.listlocaisindoor.map((data2, index)=>{
+        return(
+        <tr key={index}>
+           <td>
+                              <Form.Check className="mb-1 pl-0">
+                                <Form.Check.Label>
+                                <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
+                                  <span className="form-check-sign"></span>
+                                </Form.Check.Label>
+                              </Form.Check>
+                          </td>
+            <th>{data2.ID_Local_Indoor}</th>
+            <td>{data2.Nome}</td>
+            <td>{data2.Descricao}</td>
+            <td>{data2.Piso}</td>
+            <td>{data2.Local.Nome}</td>
+            
+        </tr>
+        )
+        });
+      
+    }
+
+    loadalertas()
+    {
+      return this.state.listaalertas.map((data2, index)=>{
+        return(
+        <tr key={index}>
+            <th>{data2.ID_alerta}</th>
+            <td>{data2.Descricao}</td>
+            <td>{data2.Data}</td>
+            <td>{data2.Local.Nome}</td>
+            <td>{data2.AdminIDAdmin}</td>
+            <td>{data2.Tipo_Alerta.Tipo_Alerta}</td>
+            
+        </tr>
+        )
+        });
+      
     }
 }
 
