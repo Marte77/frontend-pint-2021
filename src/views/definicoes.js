@@ -30,10 +30,18 @@ class definicoes extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+    camponome:"",
+    campoemail:"",
+    campotelefone:"",
+    campopoucoinst:"",
+    campomoderadoinst:"",
+    campoelevadoinst:"",
+    campodescricao:"",
     listlocaisoutdoor:[],
     listlocaisindoor:[],
     listaalertas:[],
     listainstituicoes:[],
+    
     }
   }
   onDelete(id){
@@ -77,6 +85,9 @@ class definicoes extends React.Component{
     } 
 
     componentDidMount(){
+
+   
+    
       const idlocal=localStorage.getItem('idinstituicao');
       const idad=localStorage.getItem('idadmin');
       const idinst=localStorage.getItem('idinstituicao');
@@ -88,6 +99,7 @@ class definicoes extends React.Component{
       const url3="https://pint2021.herokuapp.com/Alertas/listalertas/"+idinst;
       const url2 = "https://pint2021.herokuapp.com/Locais/listlocaisindoor/"+idinst;
       const url = "https://pint2021.herokuapp.com/Locais/listlocaisout/"+idinst;
+      console.log('url4',url4);
       axios.get(url).then(res => {
       if(res.data.status==200){
       const data = res.data.LocaisInst;
@@ -134,7 +146,8 @@ class definicoes extends React.Component{
     
       // Instituição pelo ID
       /*axios.get(url4).then(res => {
-        if(res.data.status==200){  
+        if(res.status==200){  
+        console.log("Entrou",1);
         const data4=res.data.Instituicoes;
         this.setState({ listainstituicoes:data4});
       }else{
@@ -146,7 +159,31 @@ class definicoes extends React.Component{
       alert(error)
       });*/
 
-
+        //apresentar definições da instituição
+        axios.get(url4).then(res => {
+          if(res.status==200){ 
+             const data=res.data.Instituicoes[0];
+             
+             this.setState({
+               
+               camponome:data.Nome,
+               campoemail:data.Email,
+               campotelefone:data.Telefone,
+               campopoucoinst:data.Lotacao_Pouco,
+               campomoderadoinst:data.Lotacao_Moderado,
+               campoelevadoinst:data.Lotacao_Elevado,
+               campodescricao:data.Descricao,
+               
+             })
+             console.log('camponome',this.state.camponome);
+          }
+          else {
+            alert("Error web service")
+            }
+        })
+        .catch(error=>{
+          alert("Error server: "+error)
+          })
       }
 
    render(){
@@ -167,11 +204,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Instituição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome" 
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control value={this.state.camponome} placeholder="Nome" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -180,21 +213,13 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="6">
                       <Form.Group>
                         <label>Email</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Email"
-                          type="email"
-                        ></Form.Control>
+                        <Form.Control value={this.state.campoemail} placeholder="Email" type="email"></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pl-1" md="6">
                       <Form.Group>
                         <label>Telefone</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Número telefone"
-                          type="number"
-                        ></Form.Control>
+                        <Form.Control value={this.state.campotelefone} placeholder="Número telefone" type="number"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -208,20 +233,20 @@ class definicoes extends React.Component{
                   <Col md="2" >
                       <p3>Pouco</p3>
                       <br></br>
-                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                      <input style={{width:'115%'}} value={this.state.campopoucoinst} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
 
                   </Col>
                  
                   <Col md="2">
                   <p3>Moderado</p3>
                       <br></br>
-                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                      <input style={{width:'115%'}} value={this.state.campomoderadoinst} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
                   </Col>
                   
                   <Col md="2">
                   <p3>Elevado</p3>
                       <br></br>
-                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                      <input style={{width:'115%'}}  value={this.state.campoelevadoinst} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
                   </Col>
                 </Row>
                 
@@ -231,11 +256,7 @@ class definicoes extends React.Component{
                     <Col md="12">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Texto"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control value={this.state.campodescricao} placeholder="Texto" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -816,6 +837,7 @@ loadFillDataLocaisExt()
         });
       
     }
+
 
     loadalertas()
     {
