@@ -41,6 +41,14 @@ class definicoes extends React.Component{
     listlocaisindoor:[],
     listaalertas:[],
     listainstituicoes:[],
+
+    camponomeCriar:"",
+    campocodpostalCriar:"",
+    campodescricaoCriar:"",
+    campourlimgCriar:"",
+    campolocaliCriar:"",
+    campolongitude:"",
+    campolatitude:"",
     
     }
   }
@@ -577,11 +585,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Local Exterior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local exterior"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.camponomeCriar} onChange={(value)=>this.setState({camponomeCriar:value.target.value})} placeholder="Nome local exterior" type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -590,21 +594,13 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Código Postal</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="ex: 2340200"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue=""  value={this.state.campocodpostalCriar} onChange={(value)=>this.setState({campocodpostalCriar:value.target.value})} placeholder="ex: 2340200" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.campodescricaoCriar} onChange={(value)=>this.setState({campodescricaoCriar:value.target.value})} placeholder="Descricao" type="text"></Form.Control>
                       </Form.Group>
                     </Col>  
                   </Row>
@@ -612,11 +608,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>URL Imagem</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="http://imagem.com"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campourlimgCriar} onChange={(value)=>this.setState({campourlimgCriar:value.target.value})} placeholder="http://imagem.com" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -624,11 +616,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Localização</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="ex: viseu"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue=""  value={this.state.campolocaliCriar} onChange={(value)=>this.setState({campolocaliCriar:value.target.value})} placeholder="ex: viseu" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -636,33 +624,19 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Longitude</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="-7.9128371289"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campolongitude} onChange={(value)=>this.setState({campolongitude:value.target.value})} placeholder="-7.9128371289" type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Latitude</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="40.3871233"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campolatitude} onChange={(value)=>this.setState({campolatitude:value.target.value})} placeholder="40.3871233" type="text"   ></Form.Control>
                       </Form.Group>
                     </Col>  
                     
                   </Row>
                <br/>
-                  <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
-                    Guardar local exterior 
-                  </Button>
+                  <Button className="btn-fill pull-left"   type="submit"  variant="info" onClick={()=>this.sendSaveLocais()}>Guardar local exterior </Button>
                   
                   </Form>
   </div>
@@ -785,6 +759,67 @@ class definicoes extends React.Component{
     </>
   );
 }
+
+
+
+sendSaveLocais()
+{
+  if(this.state.camponomeCriar==="")
+  {
+    alert("Insira o nome do local")
+  }
+  if(this.state.campocodpostalCriar==="")
+  {
+    alert("Insira o código postal do local")
+  }
+  if(this.state.campodescricaoCriar==="")
+  {
+    alert("Insira a descrição do local")
+  }
+  if(this.state.campourlimgCriar==="")
+  {
+    alert("Insira o url da imagem do local")
+  }
+  if(this.state.campolocaliCriar==="")
+  {
+    alert("Insira a localização do local")
+  }
+  if(this.state.campolongitude==="")
+  {
+    alert("Insira a longitude do local")
+  }
+  if(this.state.campolatitude==="")
+  {
+    alert("Insira a latitude do local")
+  }
+  else{
+    const idinst=localStorage.getItem('idinstituicao');
+    const url="https://pint2021.herokuapp.com/Locais/criarLocalWeb"
+    const datapost={
+      nome:this.state.camponomeCriar,
+      codigopostal:this.state.campocodpostalCriar,
+      descricao:this.state.campodescricaoCriar,
+      urlimagem:this.state.campourlimgCriar,
+      localizacao:this.state.campolocaliCriar,
+      longitude:this.state.campolongitude,
+      latitude:this.state.campolatitude,
+      idinstituicao:idinst
+    }
+     axios.post(url,datapost)
+      .then(response=>{
+      if (response.data.success===true) {
+      alert(response.data.message)
+      window.location.replace("http://localhost:3001/admin/definicoes")
+      }
+      else {
+      alert(response.data.message)
+      }
+      }).catch(error=>{
+      alert("Error 34 "+error)
+      })
+      }
+  }
+
 
 
 loadFillDataLocaisExt()
