@@ -31,11 +31,12 @@ function Maps() {
   React.useEffect(() => {
     let google = window.google;
     let map = mapRef.current;
+    //rota para a lat e long ser a central / principal
     let lat = "40.662425";
     let lng = "-7.914154";
     const myLatlng = new google.maps.LatLng(lat, lng);
     const mapOptions = {
-      zoom: 13,
+      zoom: 16,
       center: myLatlng,
       scrollwheel: false,
       zoomControl: true,
@@ -43,13 +44,80 @@ function Maps() {
 
     map = new google.maps.Map(map, mapOptions);
 
+const citymap = {
+  palacio : {
+    center: { lat: 40.662425, lng: -7.914154 },
+    densidademedia: 1,
+  },
+  parque: {
+    center: { lat: 40.662425, lng: -7.91 },
+    densidademedia: 1,
+  },
+  losangeles: {
+    center: { lat: 40.66, lng: -7.91 },
+    densidademedia: 3,
+  },
+  vancouver: {
+    center: { lat: 40.662425, lng: -7.916 },
+    densidademedia: 2,
+  },
+};
+for (const city in citymap) {
+
     const marker = new google.maps.Marker({
-      position: myLatlng,
+      position: citymap[city].center,
       map: map,
       animation: google.maps.Animation.DROP,
       title: "Light Bootstrap Dashboard PRO React!",
     });
-
+    if(citymap[city].densidademedia == 1)
+      {
+     const cityCircle = new google.maps.Circle({
+      
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillOpacity: 0.35,
+      map: map,
+      center: citymap[city].center,
+      radius: 50,     
+      fillColor: "#00ff00",
+      strokeColor: "#00ff00",
+      
+    });
+   }
+   else if(citymap[city].densidademedia == 2)
+      {
+     const cityCircle = new google.maps.Circle({
+      
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      
+      fillOpacity: 0.35,
+      map: map,
+      center: citymap[city].center,
+      radius: 50,     
+      fillColor: "#ffff00",
+      strokeColor: "#ffff00",
+      
+    });
+   }
+   else if(citymap[city].densidademedia == 3)
+      {
+     const cityCircle = new google.maps.Circle({
+      
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      
+      fillOpacity: 0.35,
+      map: map,
+      center: citymap[city].center,
+      radius: 50,     
+      fillColor: "#e60000",
+      strokeColor: "#e60000",
+      
+    });
+   }
+}
     const contentString =
       '<div class="info-window-content"><h2>Light Bootstrap Dashboard PRO React</h2>' +
       "<p>A premium Admin for React-Bootstrap, Bootstrap, React, and React Hooks.</p></div>";
@@ -58,9 +126,7 @@ function Maps() {
       content: contentString,
     });
 
-    google.maps.event.addListener(marker, "click", function () {
-      infowindow.open(map, marker);
-    });
+   
   }, []);
   return (
     <>
