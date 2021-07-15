@@ -56,12 +56,14 @@ class home extends React.Component{
     this.state = {
       listUtilsEspera:[],
       listaDiasNumeroReports:[],
-      labels : [arraylabelsmeses, arraylabelsdias]
+      labels : [arraylabelsmeses, arraylabelsdias],
+      percentagem:0,nutilsinstituicao:0,npessoastodas:0
     }
   }
   componentDidMount(){
     this.PedidoUtilsEspera();
-    this.obterReportsEmCadaDia()
+    this.obterReportsEmCadaDia();
+    this.obterPercentagem()
   }
   PedidoUtilsEspera() {
     const url = "https://pint2021.herokuapp.com/Pessoas/getUtilsEspera";
@@ -97,6 +99,21 @@ class home extends React.Component{
     })
   
   }
+  obterPercentagem(){
+    let url = 'http://pint2021.herokuapp.com/Instituicao/percentagem_util_por_inst/' + localStorage.getItem('idinstituicao')
+    axios.get(url).then(res =>{
+      console.log(res.data)
+      this.setState({
+        percentagem:res.data.percentagem*100,
+        nutilsinstituicao:res.data.ntotalPessoasInst,
+        npessoastodas:res.data.ntotalPessoas
+      })
+    }).catch(err=>{
+      console.log(err)
+      alert(err)
+    })
+  }
+
   loadGraficoNumeroReports(){
     let array = this.state.listaDiasNumeroReports
     if(array.length === 0)
@@ -117,6 +134,21 @@ class home extends React.Component{
       arrayfinal.push(array[obj].densidademedia)
     }
     return [arrayfinal]
+  }
+
+  loadGraficoPercentagem(){
+    /*
+    labels: ["90%", "10%"],
+                      series: [90, 10],*/
+    let jsonreturn = {
+      labels:[],
+      series:[]
+    }
+    jsonreturn.series.push(100-(this.state.percentagem))
+    jsonreturn.series.push(this.state.percentagem)
+    jsonreturn.labels.push((100-(this.state.percentagem)).toString()+"%")
+    jsonreturn.labels.push((this.state.percentagem).toString()+"%")
+    return jsonreturn
   }
 
   render(){
@@ -315,7 +347,7 @@ class home extends React.Component{
               <Card.Header>
               
               <p className="first_titulo">Estatística global da Instituição:</p>
-               
+              
                 <hr></hr>
                 
               </Card.Header>
@@ -325,10 +357,7 @@ class home extends React.Component{
                   id="chartPreferences"
                 >
                   <ChartistGraph
-                    data={{
-                      labels: ["90%", "10%"],
-                      series: [90, 10],
-                    }}
+                    data={this.loadGraficoPercentagem()}
                     type="Pie"
                   />
                 </div>
