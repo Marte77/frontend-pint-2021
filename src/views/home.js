@@ -146,17 +146,14 @@ if(this.state.listaDiasNumeroReports.length !==0)
   }
 
   loadGraficoPercentagem(){
-    /*
-    labels: ["90%", "10%"],
-                      series: [90, 10],*/
     let jsonreturn = {
       labels:[],
       series:[]
     }
     jsonreturn.series.push(100-(this.state.percentagem))
     jsonreturn.series.push(this.state.percentagem)
-    jsonreturn.labels.push((100-(this.state.percentagem)).toString()+"%")
-    jsonreturn.labels.push((this.state.percentagem).toString()+"%")
+ jsonreturn.labels.push((Math.trunc((100-(this.state.percentagem)))).toString()+"%")
+    jsonreturn.labels.push((Math.trunc(this.state.percentagem)).toString()+"%")
     return jsonreturn
   }
 
@@ -178,9 +175,12 @@ if(this.state.listaDiasNumeroReports.length !==0)
                        {this.obterReportshoje()}
                       </h3></Card.Title>    
                       <br/>
-                   
-                      
-                    </div>
+                    <div class="container">
+<a href="http://www.stackoverflow.com/">
+   <button class="button" onclick="location.href='http://www.example.com'" type="submit">Ir para lotação</button>
+</a>
+     </div>
+                </div>
                 </Row>
               </Card.Body>  
             </Card>
