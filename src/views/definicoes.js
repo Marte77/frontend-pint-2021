@@ -44,7 +44,7 @@ class definicoes extends React.Component{
     listlocaisindoor:[],
     listaalertas:[],
     listainstituicoes:[],
-
+    listatipoalertas:[],
     
     //Criar local exterior
     camponomeCriar:"",
@@ -93,6 +93,7 @@ class definicoes extends React.Component{
       const url3="https://pint2021.herokuapp.com/Alertas/listalertas/"+idinst;
       const url2 = "https://pint2021.herokuapp.com/Locais/listlocaisindoor/"+idinst;
       const url = "https://pint2021.herokuapp.com/Locais/listlocaisout/"+idinst;
+      const url5="http://localhost:3000/Alertas/gettipoalerta";
       console.log('url4',url4);
       axios.get(url).then(res => {
       if(res.data.status==200){
@@ -136,7 +137,20 @@ class definicoes extends React.Component{
       .catch(error => {
       alert(error)
       });
-        
+      
+      //Lista tipo alertas
+      axios.get(url5).then(res => {
+        if(res.status==200){  
+        const data5=res.data.ListipoAlertas;
+        this.setState({ listatipoalertas:data5});
+      }else{
+      alert("Error Web Service!");
+      }
+      console.log(res)
+      })
+      .catch(error => {
+      alert(error)
+      });
 
     
       // Instituição pelo ID
@@ -411,6 +425,9 @@ class definicoes extends React.Component{
                       <th className="border-0">Local</th>
                       <th className="border-0">Admin</th>
                       <th className="border-0">Tipo de Alerta</th>
+                      <th className="border-0">Alterar</th>
+                      <th className="border-0">Remover</th>
+
                     </tr>
                   </thead>
                   <tbody>
@@ -421,6 +438,8 @@ class definicoes extends React.Component{
                 </Table>
                 <br/>
                 </div>
+                <a class="button7" href="#popupalertaCriar"><i class="fas fa-plus-circle" ></i>Adicionar</a>
+
 
 <div id="popup1" class="overlay">
   <div class="popup">
@@ -593,6 +612,67 @@ class definicoes extends React.Component{
                   </Form>
   </div>
 </div>
+
+<div id="popupalertaCriar" class="overlay">
+  <div class="popup">
+    <h2>Adicionar Alerta</h2>
+    <a class="close" href="#">&times;</a>
+    <div class="content">
+      <p>Preencha os dados do alerta :</p>
+    </div>
+    <Form>
+                  <Row>
+                    <Col className="pr-1" md="10">
+                      <Form.Group>
+                        <label>Descrição</label>
+                        <Form.Control defaultValue=""  placeholder="Nome local exterior" type="text" ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                    
+                  </Row> 
+                 
+                  
+                  <Row>
+                  <Col className="pr-1" md="10">
+                    <Form.Group>
+                        <label>Local do alerta :</label>
+                        <br/>
+                  <select id="optionlocalindoor">
+                  {this.loadFillDataalertaLocal_option()}
+
+                  </select>
+                 
+                
+                      </Form.Group>
+
+                    </Col>
+                    
+                  </Row>
+
+                  <Row>
+                  <Col className="pr-1" md="10">
+                    <Form.Group>
+                        <label>Tipo do alerta :</label>
+                        <br/>
+                  <select id="optionlocalindoor">
+                    {this.loadFillDatatipoalerta_option()}
+
+                  </select>
+                  
+                
+                      </Form.Group>
+
+                    </Col>
+                    
+                  </Row>
+               <br/>
+                  <Button className="btn-fill pull-left"   type="submit"  variant="info" onClick={()=>this.sendSaveLocais()}>Guardar Alerta </Button>
+                  
+                  </Form>
+  </div>
+</div>
+
+
 
 
 <div id="popup4" class="overlay">
@@ -827,6 +907,29 @@ sendSaveLocais()
       )
       });
       }
+      loadFillDatatipoalerta_option()
+      {
+        return this.state.listatipoalertas.map((data, index)=>{
+          return(
+            
+              <option  key={index} value={data.ID_TipoAlerta}>{data.Tipo_Alerta}</option>
+            
+          )
+          });
+          }
+
+ loadFillDataalertaLocal_option()
+      {
+        return this.state.listlocaisoutdoor.map((data, index)=>{
+          return(
+            
+              <option  key={index} value={data.ID_Local}>{data.Nome}</option>
+            
+          )
+          });
+          }
+
+
 
 loadFillDataLocaisExt()
 {
@@ -1113,6 +1216,8 @@ loadFillDataLocaisExt()
             <td>{data2.Local.Nome}</td>
             <td>{data2.AdminIDAdmin}</td>
             <td>{data2.Tipo_Alerta.Tipo_Alerta}</td>
+            <td><a class="" href=""  ><i class="fas fa-edit"></i></a></td>
+           <td><a class="" ><i class="far fa-trash-alt"></i></a></td>   
             
         </tr>
         )
