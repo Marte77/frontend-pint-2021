@@ -27,181 +27,262 @@ import {
 
 
 class opinioes extends React.Component{
-   onDelete(id){
-        Swal.fire({
+  constructor(props){
+    super(props);
+    this.state = {
+      listcomentarios:[],
+      valor5:0,
+      valor4:0,
+      valor3:0,
+      valor2:0,
+      valor1:0,
+      segunda:0,
+      terça:0,
+      quarta:0,
+      quinta:0,
+      sexta:0,
+      sabado:0,
+      domingo:0
+    }
+  }
+
+  onDelete(iduser, idlocal){
+      Swal.fire({
         title: 'Tem a certeza?',
         text: 'A opinião vai ser eliminada',
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Sim, quero apagar !',
         cancelButtonText: 'Não, manter a opinião.'
-        }).then((result) => {
+      })
+      .then((result) => {
         if (result.value) {
-        this.sendDelete(id)
-        } else if (result.dismiss === 
-        Swal.DismissReason.cancel) {
-        Swal.fire(
-        'Cancelado',
-        'A opinião continua segura.'
-        )
+          this.sendDelete(iduser, idlocal)
+        } 
+        else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+          'Cancelado',
+          'A opinião continua segura.'
+          )
         }
-        })
-        }
-        sendDelete(userId)
-        {
-        const baseUrl = "http://localhost:3000/Filme/delete" 
-        axios.post(baseUrl,{
-        id:userId
-        })
-        .then(response =>{
-        if (response.data.success) {
+      })
+  } 
+
+
+  sendDelete(userId, localId) {
+    const baseUrl = "http://localhost:3000/Comentarios/delete_comentario/"+localId+"/"+userId 
+    axios.delete(baseUrl,{
+      IDPessoa:userId,
+      IDLocal: localId
+    })
+    .then(response =>{
+      if (response.data.success) {
         Swal.fire(
         'Apagado!',
         'A opinião foi apagada com sucesso'
         )
-        this.loadFilme()
-        }
-        })
-        .catch ( error => {
-        alert("Error 325 ")
-        })    
+        this.loadlData();
+      }
+    })
+    .catch ( error => {
+      alert("Error 325 ")
+    })    
+  }
+
+  componentDidMount(){
+    this.loadlData();
+  }
+
+  loadlData(){
+    const idinst=localStorage.getItem('idinstituicao');
+
+    const url = "http://localhost:3000/Comentarios/opinioes/"+idinst;
+    axios.get(url).then(res => {
+      if(res.data){
+        const data = res.data.data;
+        this.setState({ listcomentarios:data });
+      }
+      else{
+        alert("No data");
+      }
+      console.log(res)
+    })
+    .catch(error => {
+      alert(error)
+    });
+  }
+
+  loadFillData(){
+    return this.state.listcomentarios.map((data, index)=>{
+        return(
+            <tr key={index}>
+                <td>{data.Pessoa.PNome} {data.Pessoa.UNome}</td>  
+                <td>{data.Local.Nome}</td>
+                <td>{data.Classificacao}</td>
+                <td>{data.Descricao}</td>
+                <td className="td-actions text-right">
+                    <OverlayTrigger
+                      overlay={
+                        <Tooltip id="tooltip-21130535">Remover</Tooltip>
+                      }
+                    >
+                      <Button
+                        className="btn-simple btn-link p-1"
+                        type="button"
+                        variant="danger"
+                        onClick={()=>this.onDelete(data.PessoaIDPessoa, data.LocalIDLocal )}
+                      >
+                        <i className="fas fa-times"></i>
+                      </Button>
+                    </OverlayTrigger>
+                </td>
+            </tr>
+        )
+    });
+  }
+
+  cont(){
+    var valor5 = 0;
+    var valor4 = 0;
+    var valor3 = 0;
+    var valor2 = 0;
+    var valor1 = 0;
+    var total=0;
+
+    for(const p of this.state.listcomentarios){
+      if(p.Classificacao === 5){
+        valor5 = valor5 +  1;
+      }
+      else if(p.Classificacao === 4){
+        valor4 = valor4 +  1;
+      }
+      else if(p.Classificacao === 3){
+        valor3 = valor3 +  1;
+      }
+      else if(p.Classificacao === 2){
+        valor2 = valor2 +  1;
+      }
+      else if(p.Classificacao === 1){
+        valor1 = valor1 +  1;
+      } 
     } 
-   render(){
+
+    if (this.state.listcomentarios.length != 0)
+      total = this.state.listcomentarios.length
+
+    return(
+      this.state.valor5 = (valor5*100)/total,
+      this.state.valor4 = (valor4*100)/total,
+      this.state.valor3 = (valor3*100)/total,
+      this.state.valor2 = (valor2*100)/total,
+      this.state.valor1 = (valor1*100)/total
+    )
+  }
+
+  dias(){
+    var domingo = 0;
+    var segunda = 0;
+    var terça = 0;
+    var quarta =0;
+    var quinta =0;
+    var sexta = 0;
+    var sabado = 0;
+    var seg=0, terç= 0,  quart=0, quint=0, sext=0, sab=0, doming = 0;
+
+    for(const p of this.state.listcomentarios){
+      if(new Date(p.Data).getDay() === 0){
+        domingo += p.Classificacao
+        doming +=1
+      } 
+      else if (new Date(p.Data).getDay() === 1)
+      {
+        segunda += p.Classificacao
+        seg +=1
+      }
+      else if (new Date(p.Data).getDay() === 2){
+        terça += p.Classificacao
+        terç +=1
+      }  
+      else if ((new Date(p.Data).getDay()) === 3){
+        quarta = quarta + p.Classificacao;
+        quart = quart + 1;
+      }
+      else if (new Date(p.Data).getDay() === 4){
+        quinta += p.Classificacao
+        quint +=1
+      }
+      else if (new Date(p.Data).getDay() === 5){
+        sexta += p.Classificacao
+        sext +=1
+      }  
+      else if (new Date(p.Data).getDay() === 6){
+        sabado += p.Classificacao
+        sab +=1
+      }     
+    }
+    
+    if (doming ==0)
+      doming=1
+    if (seg ==0)
+      seg=1
+    if (terç ==0)
+      terç =1
+    if (quart ==0)
+      quart=1
+    if (quint==0)
+      quint=1
+    if (sext ==0)
+      sext=1
+    if (sab==0)
+      sab =1
+
+    return(
+      this.state.domingo = domingo/doming,
+      this.state.segunda = segunda/seg,
+      this.state.terça = terça/terç,
+      this.state.quarta = quarta/quart,
+      this.state.quinta = quinta/quint,
+      this.state.sexta = sexta/sext,
+      this.state.sabado = sabado/sab
+    )
+  }
+
+  render(){
   return (
     <>
       <Container fluid>      
-<Row>
+        <Row>
           <Col md="12">
             <Card className="card-tasks">
               <Card.Header>
                 <p className="first_titulo_esquerda">Lista de Opiniões:
-</p>
+                </p>
               </Card.Header>
 
               <Card.Body>
                 <div id="table-scroll">
                   <Table id="table-scroll">
                     <tbody id="table-scroll">
-                    <tr>
-                        
-                        <th>Utilizador</th>
-                        <th>Total Pontos</th>
-                        <th>Classificação (<i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>)</th>
-                        <th>Comentário</th>
-
-                        <th>Excluir Opinião</th>
-
+                    <tr>                       
+                      <th>Utilizador</th>
+                      <th>Local</th>
+                      <th>Classificação (<i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>)</th>
+                      <th>Comentário</th>
+                      <th>Excluir</th>
                     </tr>
-                      <tr>
-                       
-                        <td>
-                          hugo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          2
-                        </td>
-                        <td>
-                          não gostei
-                        </td>
-                         
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                       
-                        <td>
-                          hugo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          2
-                        </td>
-                        <td>
-                          não gostei
-                        </td>
-                         
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr><tr>
-                      
-                        <td>
-                          hugo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                       <td>
-                          2
-                        </td>
-                        <td>
-                          não gostei
-                        </td>
-                         
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
+                    {this.loadFillData()}
                     </tbody>
                   </Table>
                 </div>
-
                 <br/><br/>
               </Card.Body>
-              
             </Card>
           </Col>
-          </Row>
+        </Row>
+        <Row>
 
-<Row>
 
-
-<Col md="4">
+        <Col md="4">
             <Card>
               <Card.Header>
               
@@ -209,21 +290,18 @@ class opinioes extends React.Component{
                 <hr></hr>
               </Card.Header>
               <Card.Body>
-                <div
-                  className="ct-chart ct-perfect-fourth"
-                  id="chartPreferences"
-                >
+                <div className="ct-chart ct-perfect-fourth" id="chartPreferences" >
+                  {this.cont()}
                   <ChartistGraph
                     data={{
                       labels: ["5", "4","3","2","1"],
-                      series: [50, 20,20,5,5],
+                      series: [this.state.valor5, this.state.valor4,this.state.valor3,this.state.valor2,this.state.valor1],
                     }}
                     type="Pie"
                   />
                 </div>
                   <div className="legend">
                   
-
                   5<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>&nbsp;&nbsp;
                   4<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><br/>
                   3<i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>&nbsp;&nbsp;
@@ -239,11 +317,12 @@ class opinioes extends React.Component{
           <Col md="6">
             <Card>
               <Card.Header>
-               <p className="first_titulo_esquerda">Opiniões médias desta semana:</p>
+               <p className="first_titulo_esquerda">Opiniões médias dias da semana:</p>
 
               </Card.Header>
               <Card.Body>
                 <div className="ct-chart" /*id="chartHours"*/>
+                  {this.dias()}
                   <ChartistGraph
                     data={{
                       labels: [
@@ -256,7 +335,7 @@ class opinioes extends React.Component{
                         "D",
                       ],
                       series: [
-                        [3, 2.5, 2, 1, 4, , 3],
+                        [this.state.segunda, this.state.terça, this.state.quarta, this.state.quinta, this.state.sexta, this.state.sabado, this.state.domingo],
                         
                       ],
                     }}
@@ -293,13 +372,12 @@ class opinioes extends React.Component{
                   />
                 </div>
               </Card.Body>
-              
             </Card>
           </Col>
-</Row>
+        </Row>
       </Container>
     </>
   );
-}
+  }
 }
 export default opinioes;

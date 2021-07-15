@@ -1,6 +1,8 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
 import './style_auxiliar.css';
+import axios from 'axios';
+
 // react-bootstrap components
 import {
   Dropdown,
@@ -20,6 +22,64 @@ import {
 
 
 class lotacao extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      listindoor:[],
+    }
+  }
+
+  componentDidMount(){
+    const idinst=localStorage.getItem('idinstituicao');
+
+    const url = "http://localhost:3000/Locais/get_lista_locais_indoor_local/"+idinst;
+    axios.get(url).then(res => {
+      if(res.data){
+        const data = res.data.data;
+        this.setState({ listindoor:data });
+      }
+      else{
+        alert("No data");
+      }
+      console.log(res)
+    })
+    .catch(error => {
+      alert(error)
+    });
+  }
+
+  loadFillData(){
+    return this.state.listcomentarios.map((data, index)=>{
+        return(
+            <tr key={index}>
+                <td>{data.Pessoa.PNome} {data.Pessoa.UNome}</td>  
+                <td>{data.Local.Nome}</td>
+                <td>{data.Classificacao}</td>
+                <td>{data.Descricao}</td>
+                <td className="td-actions text-right">
+                    <OverlayTrigger
+                      overlay={
+                        <Tooltip id="tooltip-21130535">Remover</Tooltip>
+                      }
+                    >
+                      <Button
+                        className="btn-simple btn-link p-1"
+                        type="button"
+                        variant="danger"
+                        onClick={()=>this.onDelete()}
+                      >
+                        <i className="fas fa-times"></i>
+                      </Button>
+                    </OverlayTrigger>
+                </td>
+            </tr>
+        )
+    });
+  }
+
+
+
    render(){
   return (
     <>
