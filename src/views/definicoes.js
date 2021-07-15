@@ -9,6 +9,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 // react-bootstrap components
 import {
  Dropdown,
@@ -30,6 +31,8 @@ class definicoes extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+    idatualizarlocal:0,
+    
     camponome:"",
     campoemail:"",
     campotelefone:"",
@@ -42,6 +45,8 @@ class definicoes extends React.Component{
     listaalertas:[],
     listainstituicoes:[],
 
+    
+    //Criar local exterior
     camponomeCriar:"",
     campocodpostalCriar:"",
     campodescricaoCriar:"",
@@ -50,55 +55,32 @@ class definicoes extends React.Component{
     campolongitude:"",
     campolatitude:"",
 
+    //Criar local interior
     camponomeCriarindoor:"",
     campodescricaoCriarindoor:"",
     campopisocriar:"",
     
+
+    //editar local exterior
+    camponomeedit:"",
+    campocodpostaledit:"",
+    campodescricaoedit:"",
+    campourlimgedit:"",
+    campolocaliedit:"",
+    campolongitudeedit:"",
+    campolatitudeedit:"",
+
+     //editar local interior
+     camponomeeditint:"",
+     campodescricaoeditint:"",
+     campopisoeditint:"",
+     
     }
   }
-  onDelete(id){
-        Swal.fire({
-        title: 'Tem a certeza?',
-        text: 'O alerta vai ser apagado',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, quero apagar !',
-        cancelButtonText: 'Não, manter o alerta.'
-        }).then((result) => {
-        if (result.value) {
-        this.sendDelete(id)
-        } else if (result.dismiss === 
-        Swal.DismissReason.cancel) {
-        Swal.fire(
-        'Cancelado',
-        'O alerta continua seguro.'
-        )
-        }
-        })
-        }
-        sendDelete(userId)
-        {
-        const baseUrl = "http://localhost:3000/Filme/delete" 
-        axios.post(baseUrl,{
-        id:userId
-        })
-        .then(response =>{
-        if (response.data.success) {
-        Swal.fire(
-        'Apagado!',
-        'O alerta foi apagado com sucesso'
-        )
-        this.loadFilme()
-        }
-        })
-        .catch ( error => {
-        alert("Error 325 ")
-        })    
-    } 
-
+ 
     componentDidMount(){
 
-   
+      this.LoadLocaisDelete()
     
       const idlocal=localStorage.getItem('idinstituicao');
       const idad=localStorage.getItem('idadmin');
@@ -155,6 +137,7 @@ class definicoes extends React.Component{
       alert(error)
       });
         
+
     
       // Instituição pelo ID
       /*axios.get(url4).then(res => {
@@ -216,7 +199,8 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Instituição</label>
-                        <Form.Control value={this.state.camponome} placeholder="Nome" type="text"></Form.Control>
+                        <Form.Control value={this.state.camponome} onChange={(value)=>this.setState({camponome:value.target.value})} placeholder="Nome" type="text"></Form.Control>
+
                       </Form.Group>
                     </Col>
                     
@@ -326,7 +310,6 @@ class definicoes extends React.Component{
                
                   <thead>
                     <tr>
-                      <th></th>
                       <th className="border-0">Nº Local</th>
                       <th className="border-0">Local</th>
                       <th className="border-0">cod_postal</th>
@@ -335,6 +318,8 @@ class definicoes extends React.Component{
                       <th className="border-0">Localização</th>
                       <th className="border-0">Longitude</th>
                       <th className="border-0">Latitude</th>
+                      <th>Editar</th>
+                      <th>Eliminar</th>
 
                     </tr>
                   </thead>
@@ -344,7 +329,7 @@ class definicoes extends React.Component{
                 </Table>
                 </div>
                 <a class="button7" href="#popup3"><i class="fas fa-plus-circle" ></i>Adicionar</a>
-                  <a class="button8" href="#popup4"><i class="fas fa-edit"></i>Alterar</a>
+                 
                 <br/>
                 <br/>
                 
@@ -375,12 +360,14 @@ class definicoes extends React.Component{
                
                   <thead>
                     <tr>
-                      <th></th>
+                      
                       <th className="border-0">Nº Local</th>
                       <th className="border-0">Nome</th>
                       <th className="border-0">Descrição</th>
                       <th className="border-0">Piso</th>
                       <th className="border-0">Local</th>
+                      <th className="border-0">Editar</th>
+                      <th className="border-0">Eliminar</th>
 
                       
                     </tr>
@@ -391,7 +378,7 @@ class definicoes extends React.Component{
                 </Table>
                 </div>
                 <a class="button7" href="#popup1"><i class="fas fa-plus-circle" ></i>Adicionar</a>
-                  <a class="button8" href="#popup2"><i class="fas fa-edit"></i>Alterar</a>
+                  
                 <br/>
                 <br/>
 
@@ -509,11 +496,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Local Interior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local interior"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" defaultValue="" value={this.state.camponomeeditint} onChange={(value)=>this.setState({camponomeeditint:value.target.value})} placeholder="Nome local interior"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -522,11 +505,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" defaultValue="" value={this.state.campodescricaoeditint} onChange={(value)=>this.setState({campodescricaoeditint:value.target.value})} placeholder="Descricao"   type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -535,21 +514,14 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Piso</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Ex. 1,2"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" defaultValue="" value={this.state.campopisoeditint} onChange={(value)=>this.setState({campopisoeditint:value.target.value})} placeholder="Ex. 1,2" type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
 
                <br/>
                   <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
+                    className="btn-fill pull-left" onClick={()=>this.saveAtualizarLocalInt()}  type="submit"  variant="info" >
                     Efetuar alteração
                   </Button>
                   
@@ -641,11 +613,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Local Exterior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local exterior"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.camponomeedit} onChange={(value)=>this.setState({camponomeedit:value.target.value})}  placeholder="Nome local exterior"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -654,21 +622,13 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Código Postal</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="ex: 2340200"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campocodpostaledit} onChange={(value)=>this.setState({campocodpostaledit:value.target.value})}  placeholder="ex: 2340200"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control    defaultValue="" value={this.state.campodescricaoedit} onChange={(value)=>this.setState({campodescricaoedit:value.target.value})}  placeholder="Descricao"     type="text" ></Form.Control>
                       </Form.Group>
                     </Col>  
                   </Row>
@@ -676,11 +636,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>URL Imagem</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="http://imagem.com"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campourlimgedit} onChange={(value)=>this.setState({campourlimgedit:value.target.value})} placeholder="http://imagem.com" type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -688,11 +644,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Localização</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="ex: viseu"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.campolocaliedit} onChange={(value)=>this.setState({campolocaliedit:value.target.value})}  placeholder="ex: viseu"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -700,33 +652,19 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Longitude</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="-7.9128371289"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campolongitudeedit} onChange={(value)=>this.setState({campolongitudeedit:value.target.value})}  placeholder="-7.9128371289"  type="text"  ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Latitude</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="40.3871233"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campolatitudeedit} onChange={(value)=>this.setState({campolatitudeedit:value.target.value})}  placeholder="40.3871233"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>  
                     
                   </Row>
                <br/>
-                  <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
-                    Atualizar local exterior 
-                  </Button>
+                  <Button  className="btn-fill pull-left"    type="submit" variant="info" onClick={()=>this.saveAtualizarLocal()} >  Atualizar local exterior   </Button>
                   
                   </Form>
   </div>
@@ -865,14 +803,7 @@ loadFillDataLocaisExt()
   return this.state.listlocaisoutdoor.map((data, index)=>{
     return(
     <tr key={index}>
-       <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
+        
         <th>{data.ID_Local}</th>
         <td>{data.Nome}</td>
         <td>{data.Codigo_Postal}</td>
@@ -881,29 +812,197 @@ loadFillDataLocaisExt()
         <td>{data.Localizacao}</td>
         <td>{data.Longitude}</td>
         <td>{data.Latitude}</td>
+        <td><a class="" href="#popup4" onClick={()=>this.getlocal(data.ID_Local)} ><i class="fas fa-edit"></i></a></td>
+        <td><a class=""  onClick={()=>this.onDeleteLocal(data.ID_Local)}><i class="far fa-trash-alt"></i></a></td>      
+
     </tr>
     )
     });
     }
+    onDeleteLocal(id)
+    {
+      Swal.fire({ title: 'Tem a certeza?',  text: 'Não poderá voltar a recuperar o Local',  type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, Apagar !',
+        cancelButtonText: 'Não, Manter!'
+        }).then((result) => {
+          if (result.value) {
+          this.sendDeleteLocal(id)
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+              'Cancelado',
+               'O Local não foi apagado',
+              'error'
+              )
+              }
+              })
+    }
+    sendDeleteLocal(userId)
+    {
+          // url do backend
+          const baseUrl = "http://localhost:3000/Locais/deleteLocal"
+          // network
+          axios.post(baseUrl,{id:userId })
+          .then(response =>{
+          if (response.data.success) {
+          Swal.fire(
+          'Apagado!',
+          'O Local foi apagado com sucesso',
+          'success'
+          )
+          this.LoadLocaisDelete();
+
+          }
+          })
+          .catch ( error => {
+          alert("Error 325 ")
+          })
+    }
+    
+    LoadLocaisDelete()
+    {
+      const idlocal=localStorage.getItem('idinstituicao');
+      const idad=localStorage.getItem('idadmin');
+      const idinst=localStorage.getItem('idinstituicao');
+      console.log("idlocal",idlocal);
+      console.log("idadmin",idad);
+      console.log("idinst",idinst);
+      const url = "https://pint2021.herokuapp.com/Locais/listlocaisout/"+idinst;
+      axios.get(url).then(res => {
+        if(res.data.status==200){
+        const data = res.data.LocaisInst;
+        this.setState({ listlocaisoutdoor:data });
+        }else{
+        alert("Error Web Service!");
+        }
+        console.log(res)
+        })
+        .catch(error => {
+        alert(error)
+        });
+    }
+    saveAtualizarLocal()
+    {
+      let id=this.state.idatualizarlocal;
+      const url="https://pint2021.herokuapp.com/Locais/updatelocais/"+id
+      const datapost = {
+        nome : this.state.camponomeedit,
+        cp : this.state.campocodpostaledit,
+        descri : this.state.campodescricaoedit,
+        urlimg : this.state.campourlimgedit,
+        locali : this.state.campolocaliedit,
+        long : this.state.campolongitudeedit,
+        lati : this.state.campolatitudeedit,
+        }
+        axios.post(url,datapost)
+        .then(response=>{
+          if (response.data.success===true) {
+          alert(response.data.message)
+          window.location.replace("http://localhost:3001/admin/definicoes")
+
+        }
+        else {
+          alert("Error")
+        }
+        }).catch(error=>{
+          alert("Error 34 "+error)
+        })
+    }
+
+    saveAtualizarLocalInt()
+    {
+      let id=this.state.idatualizarlocal;
+      const url="https://pint2021.herokuapp.com/Locais/updatelocaisindoor/"+id
+      const datapost = {
+        nome : this.state.camponomeeditint,
+        descri : this.state.campodescricaoeditint,
+        piso:this.state.campopisoeditint,
+        }
+        axios.post(url,datapost)
+        .then(response=>{
+          if (response.data.success===true) {
+          alert(response.data.message)
+          window.location.replace("http://localhost:3001/admin/definicoes")
+
+        }
+        else {
+          alert("Error")
+        }
+        }).catch(error=>{
+          alert("Error 34 "+error)
+        })
+    }
+
+    getlocal(idlocal)
+    {
+        this.state.idatualizarlocal=idlocal;
+        const url="https://pint2021.herokuapp.com/Locais/getlocal/"+idlocal
+        axios.get(url)
+          .then(res=>{
+          if (res.data.success) {
+              const data = res.data.data[0]
+              this.setState({
+              datalocal:data,
+              camponomeedit: data.Nome,
+              campocodpostaledit:data.Codigo_Postal,
+              campodescricaoedit:data.Descricao,
+              campourlimgedit:data.URL_Imagem,
+              campolocaliedit:data.Localizacao,
+              campolongitudeedit:data.Longitude,
+              campolatitudeedit:data.Latitude
+          })
+            console.log(JSON.stringify(data))
+          }
+          else {
+            alert("Error web service")
+          }
+          })
+            .catch(error=>{
+            alert("Error server: "+error)
+          })
+    }
+    getlocalint(idlocal)
+    {
+      this.state.idatualizarlocal=idlocal;
+      const url="https://pint2021.herokuapp.com/Locais/getlocalint/"+idlocal
+      console.log("url int",url)
+      axios.get(url)
+        .then(res=>{
+        if (res.data.success) {
+            const data = res.data.data[0]
+
+            this.setState({
+            datalocal:data,
+            camponomeeditint:data.Nome,
+            campodescricaoeditint:data.Descricao,
+            campopisoeditint:data.Piso,
+        })
+          console.log(JSON.stringify(data))
+        }
+        else {
+          alert("Error web service")
+        }
+        })
+          .catch(error=>{
+          alert("Error server: "+error)
+        })
+    }
+
+
 
     loadFillDataLocaiInt()
     {
       return this.state.listlocaisindoor.map((data2, index)=>{
         return(
         <tr key={index}>
-           <td>
-                              <Form.Check className="mb-1 pl-0">
-                                <Form.Check.Label>
-                                <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                                  <span className="form-check-sign"></span>
-                                </Form.Check.Label>
-                              </Form.Check>
-                          </td>
+           
             <th>{data2.ID_Local_Indoor}</th>
             <td>{data2.Nome}</td>
             <td>{data2.Descricao}</td>
             <td>{data2.Piso}</td>
             <td>{data2.Local.Nome}</td>
+            <td><a class="" href="#popup2" onClick={()=>this.getlocalint(data2.ID_Local_Indoor)}  ><i class="fas fa-edit"></i></a></td>
+           <td><a class="" ><i class="far fa-trash-alt"></i></a></td>   
             
         </tr>
         )
