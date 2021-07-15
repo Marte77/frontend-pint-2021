@@ -49,6 +49,10 @@ class definicoes extends React.Component{
     campolocaliCriar:"",
     campolongitude:"",
     campolatitude:"",
+
+    camponomeCriarindoor:"",
+    campodescricaoCriarindoor:"",
+    campopisocriar:"",
     
     }
   }
@@ -449,11 +453,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Local Interior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local interior"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.camponomeCriarindoor} onChange={(value)=>this.setState({camponomeCriarindoor:value.target.value})}   placeholder="Nome local interior"    type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -462,11 +462,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.campodescricaoCriarindoor} onChange={(value)=>this.setState({campodescricaoCriarindoor:value.target.value})} placeholder="Descricao"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -475,11 +471,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Piso</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Ex. 1,2"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.campopisocriar} onChange={(value)=>this.setState({campopisocriar:value.target.value})} placeholder="Ex. 1,2" type="text"   ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -489,24 +481,18 @@ class definicoes extends React.Component{
                     <Form.Group>
                         <label>Pertence ao local Exterior :</label>
                         <br/>
-                   <select>
-                     <option value="1">palacio do gelo</option>
-                    <option  value="2">visabeira</option>
-                    <option  value="3">parque</option>
+                  <select id="optionlocalindoor">
+                  {this.loadFillDataLocaisExt_option()}
+
                   </select>
+                 
                 
                       </Form.Group>
 
                     </Col>
                   </Row>
                <br/>
-                  <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
-                    Guardar local interior 
-                  </Button>
+                  <Button className="btn-fill pull-left"   type="submit" variant="info" onClick={()=>this.sendSaveLocaisIndoor()}>Guardar local interior </Button>
                   
                   </Form>
   </div>
@@ -762,6 +748,49 @@ class definicoes extends React.Component{
 
 
 
+sendSaveLocaisIndoor()
+{
+  console.log("testebutton")
+  var e=document.getElementById("optionlocalindoor");
+  var idlocalis=e.value;
+  if(this.state.camponomeCriarindoor==="")
+  {
+    alert("Insira o nome do local indoor")
+  }
+  if(this.state.campodescricaoCriarindoor==="")
+  {
+    alert("Insira a descrição do local indoor")
+  }
+  if(this.state.campopoucoinst==="")
+  {
+    alert("Insira o piso do local indoor")
+  }
+  else{
+
+    const idinst=localStorage.getItem('idinstituicao');
+    const url="https://pint2021.herokuapp.com/Locais/criarLocalWebINDOOR"
+    const datapost={
+      nome:this.state.camponomeCriarindoor,
+      descricao:this.state.campodescricaoCriarindoor,
+      piso:this.state.campopisocriar,
+      idlocal:idlocalis
+
+    }
+     axios.post(url,datapost)
+      .then(response=>{
+      if (response.data.success===true) {
+      alert(response.data.message)
+      window.location.replace("http://localhost:3001/admin/definicoes")
+      }
+      else {
+      alert(response.data.message)
+      }
+      }).catch(error=>{
+      alert("Error 34 "+error)
+      })
+      }
+}
+
 sendSaveLocais()
 {
   if(this.state.camponomeCriar==="")
@@ -820,7 +849,16 @@ sendSaveLocais()
       }
   }
 
-
+  loadFillDataLocaisExt_option()
+  {
+    return this.state.listlocaisoutdoor.map((data, index)=>{
+      return(
+        
+          <option  key={index} value={data.ID_Local}>{data.Nome}</option>
+        
+      )
+      });
+      }
 
 loadFillDataLocaisExt()
 {
