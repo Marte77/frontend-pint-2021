@@ -44,13 +44,13 @@ class home extends React.Component{
       "Dec",
     ]
     var arraylabelsdias = [
-      "Sun",
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat"
+      "Dom",
+      "Seg",
+      "Ter",
+      "Quar",
+      "Quin",
+      "Sext",
+      "Sab"
     ]
     this.labels = [arraylabelsmeses, arraylabelsdias]
     this.state = {
@@ -63,7 +63,7 @@ class home extends React.Component{
   componentDidMount(){
     this.PedidoUtilsEspera();
     this.obterReportsEmCadaDia();
-    this.obterPercentagem()
+    this.obterPercentagem();
   }
   PedidoUtilsEspera() {
     const url = "https://pint2021.herokuapp.com/Pessoas/getUtilsEspera";
@@ -99,6 +99,15 @@ class home extends React.Component{
     })
   
   }
+   obterReportshoje(){
+      
+     console.log(this.state.listaDiasNumeroReports[0]);
+
+if(this.state.listaDiasNumeroReports.length !==0)
+           return this.state.listaDiasNumeroReports[0].NReports
+  }
+
+  
   obterPercentagem(){
     let url = 'http://pint2021.herokuapp.com/Instituicao/percentagem_util_por_inst/' + localStorage.getItem('idinstituicao')
     axios.get(url).then(res =>{
@@ -164,15 +173,13 @@ class home extends React.Component{
                       <p className="first_titulo">Estatísticas Diárias:</p>
                       
                       <p className="secound_titulo">Nº de reportes na Instituição: </p>
-                      <Card.Title><h3 className="aligncenter">3</h3></Card.Title>    
-                    <div class="container">
-                    <button class="button">Ir para lotação</button>
-                    </div>
-                      <p className="secound_titulo">Nº de reportes fora da Instituição: </p>
-                      <Card.Title><h3 className="aligncenter">3</h3></Card.Title>
-                      <div class="container">
-                    <button class="button">Ir para lotação</button>
-                    </div>
+                      <Card.Title><h3 className="aligncenter">
+                      <br/>
+                       {this.obterReportshoje()}
+                      </h3></Card.Title>    
+                      <br/>
+                   
+                      
                     </div>
                 </Row>
               </Card.Body>  
@@ -183,16 +190,7 @@ class home extends React.Component{
 
               <Card.Header>
                 <p className="first_titulo_esquerda">Reportes:
-                {/*<Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style">
-                      Periodo de Tempo
-                  </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item href="#/action-1">Tempo real</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">Hoje</Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">Esta semana</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>*/}
+           
                 </p>
                 <p className="card-category">Todos os reportes do local:</p>
               </Card.Header>
@@ -237,16 +235,6 @@ class home extends React.Component{
             <Card>
               <Card.Header>
               <p className="first_titulo_esquerda">Lotação:
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_lotacao">
-                    Local Indoor
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Cantina</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">BAR</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">bla bla</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
               </p>
               <p className="card-category">Dados dos últimos 7 dias</p>
               </Card.Header>
@@ -256,7 +244,7 @@ class home extends React.Component{
                     data={{
                       labels: this.state.labels[1],
                       series: this.loadGraficoLotacaoReports()
-                    }}
+                    }} 
                     type="Line"
                     options={{
                       
@@ -298,17 +286,7 @@ class home extends React.Component{
           <Col md="8">
             <Card className="card-tasks">
               <Card.Header>
-                <p className="first_titulo_esquerda">Utilizadores em espera
-               
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-    Ordenar por
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Mais Recente</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Mais Antigo</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown></p>
+                <p className="first_titulo_esquerda">Utilizadores em espera</p>
                 <p className="card-category">Faça a gestão de novos utilizadores</p>
               </Card.Header>
               <Card.Body>

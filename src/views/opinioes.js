@@ -70,7 +70,7 @@ class opinioes extends React.Component{
 
 
   sendDelete(ID) {
-    const baseUrl = "http://localhost:3000/Comentarios/deletecomentario/"+ID
+    const baseUrl = "http://pint2021.herokuapp.com/Comentarios/deletecomentario/"+ID
     axios.post(baseUrl,{
       ID:ID
     })
@@ -95,7 +95,7 @@ class opinioes extends React.Component{
   loadlData(){
     const idinst=localStorage.getItem('idinstituicao');
 
-    const url = "http://localhost:3000/Comentarios/opinioes/"+idinst;
+    const url = "http://pint2021.herokuapp.com/Comentarios/opinioes/"+idinst;
     axios.get(url).then(res => {
       if(res.data){
         const data = res.data.data;
