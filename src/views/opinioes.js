@@ -46,7 +46,7 @@ class opinioes extends React.Component{
     }
   }
 
-  onDelete(iduser, idlocal){
+  onDelete(ID){
       Swal.fire({
         title: 'Tem a certeza?',
         text: 'A opinião vai ser eliminada',
@@ -57,7 +57,7 @@ class opinioes extends React.Component{
       })
       .then((result) => {
         if (result.value) {
-          this.sendDelete(iduser, idlocal)
+          this.sendDelete(ID)
         } 
         else if (result.dismiss === Swal.DismissReason.cancel) {
           Swal.fire(
@@ -69,11 +69,10 @@ class opinioes extends React.Component{
   } 
 
 
-  sendDelete(userId, localId) {
-    const baseUrl = "http://localhost:3000/Comentarios/delete_comentario/"+localId+"/"+userId 
-    axios.delete(baseUrl,{
-      IDPessoa:userId,
-      IDLocal: localId
+  sendDelete(ID) {
+    const baseUrl = "http://localhost:3000/Comentarios/deletecomentario/"+ID
+    axios.post(baseUrl,{
+      ID:ID
     })
     .then(response =>{
       if (response.data.success) {
@@ -113,13 +112,19 @@ class opinioes extends React.Component{
   }
 
   loadFillData(){
+    var date= ""
+    var mes=0
     return this.state.listcomentarios.map((data, index)=>{
         return(
+           date = data.Data,
+           mes = new Date(date).getMonth()+1,
+           date = new Date(date).getDate() + "-" + mes + "-"+ new Date(date).getFullYear(),
             <tr key={index}>
                 <td>{data.Pessoa.PNome} {data.Pessoa.UNome}</td>  
                 <td>{data.Local.Nome}</td>
                 <td>{data.Classificacao}</td>
                 <td>{data.Descricao}</td>
+                <td>{date}</td>
                 <td className="td-actions text-right">
                     <OverlayTrigger
                       overlay={
@@ -130,7 +135,7 @@ class opinioes extends React.Component{
                         className="btn-simple btn-link p-1"
                         type="button"
                         variant="danger"
-                        onClick={()=>this.onDelete(data.PessoaIDPessoa, data.LocalIDLocal )}
+                        onClick={()=>this.onDelete(data.ID_Comentario )}
                       >
                         <i className="fas fa-times"></i>
                       </Button>
@@ -175,7 +180,8 @@ class opinioes extends React.Component{
       this.state.valor4 = (valor4*100)/total,
       this.state.valor3 = (valor3*100)/total,
       this.state.valor2 = (valor2*100)/total,
-      this.state.valor1 = (valor1*100)/total
+      this.state.valor1 = (valor1*100)/total,
+      null
     )
   }
 
@@ -235,6 +241,7 @@ class opinioes extends React.Component{
       sext=1
     if (sab==0)
       sab =1
+      
 
     return(
       this.state.domingo = domingo/doming,
@@ -243,7 +250,8 @@ class opinioes extends React.Component{
       this.state.quarta = quarta/quart,
       this.state.quinta = quinta/quint,
       this.state.sexta = sexta/sext,
-      this.state.sabado = sabado/sab
+      this.state.sabado = sabado/sab,
+     null
     )
   }
 
@@ -268,6 +276,7 @@ class opinioes extends React.Component{
                       <th>Local</th>
                       <th>Classificação (<i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i><i class="far fa-star"></i>)</th>
                       <th>Comentário</th>
+                      <th>Data</th>
                       <th>Excluir</th>
                     </tr>
                     {this.loadFillData()}
