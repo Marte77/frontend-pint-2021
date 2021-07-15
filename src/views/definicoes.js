@@ -81,7 +81,7 @@ class definicoes extends React.Component{
     componentDidMount(){
 
       this.LoadLocaisDelete()
-    
+      this.LoadLocaisintDelete()
       const idlocal=localStorage.getItem('idinstituicao');
       const idad=localStorage.getItem('idadmin');
       const idinst=localStorage.getItem('idinstituicao');
@@ -209,13 +209,13 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="6">
                       <Form.Group>
                         <label>Email</label>
-                        <Form.Control value={this.state.campoemail} placeholder="Email" type="email"></Form.Control>
+                        <Form.Control value={this.state.campoemail} onChange={(value)=>this.setState({campoemail:value.target.value})} placeholder="Email" type="email"></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pl-1" md="6">
                       <Form.Group>
                         <label>Telefone</label>
-                        <Form.Control value={this.state.campotelefone} placeholder="Número telefone" type="number"></Form.Control>
+                        <Form.Control value={this.state.campotelefone} onChange={(value)=>this.setState({campotelefone:value.target.value})} placeholder="Número telefone" type="number"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -229,20 +229,20 @@ class definicoes extends React.Component{
                   <Col md="2" >
                       <p3>Pouco</p3>
                       <br></br>
-                      <input style={{width:'115%'}} value={this.state.campopoucoinst} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                      <input style={{width:'115%'}} value={this.state.campopoucoinst} onChange={(value)=>this.setState({campopoucoinst:value.target.value})} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
 
                   </Col>
                  
                   <Col md="2">
                   <p3>Moderado</p3>
                       <br></br>
-                      <input style={{width:'115%'}} value={this.state.campomoderadoinst} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                      <input style={{width:'115%'}} value={this.state.campomoderadoinst} onChange={(value)=>this.setState({campomoderadoinst:value.target.value})} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
                   </Col>
                   
                   <Col md="2">
                   <p3>Elevado</p3>
                       <br></br>
-                      <input style={{width:'115%'}}  value={this.state.campoelevadoinst} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                      <input style={{width:'115%'}}  value={this.state.campoelevadoinst} onChange={(value)=>this.setState({campoelevadoinst:value.target.value})} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
                   </Col>
                 </Row>
                 
@@ -252,7 +252,7 @@ class definicoes extends React.Component{
                     <Col md="12">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control value={this.state.campodescricao} placeholder="Texto" type="text"></Form.Control>
+                        <Form.Control value={this.state.campodescricao} onChange={(value)=>this.setState({campodescricao:value.target.value})} placeholder="Texto" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -275,13 +275,7 @@ class definicoes extends React.Component{
                 </Row>
                
                   <br/>
-                  <Button
-                    className="btn-fill pull-right"
-                    type="submit"
-                    variant="info"
-                  >
-                    Atualizar Dados
-                  </Button>
+                  <Button  className="btn-fill pull-right" type="submit" variant="info" onClick={()=>this.saveInstituicao()}> Atualizar Dados</Button>
                   <div className="clearfix"></div>
                 </Form>
               </Card.Body>
@@ -685,6 +679,42 @@ class definicoes extends React.Component{
 }
 
 
+saveInstituicao()
+{
+  
+    
+    const idinst=localStorage.getItem('idinstituicao');
+    const url="https://pint2021.herokuapp.com/Instituicao/updateinstituicao/"+idinst
+    const datapost={
+      nomeinst:this.state.camponome,
+      emailinst:this.state.campoemail,
+      telefoneinst:this.state.campotelefone,
+      poucoinst:this.state.campopoucoinst,
+      moderadoinst:this.state.campomoderadoinst,
+      elevadoinst:this.state.campoelevadoinst,
+      descrinst:this.state.campodescricao,
+      
+
+    }
+
+    axios.post(url,datapost)
+    .then(response=>{
+    if (response.data.success===true) {
+    alert(response.data.message)
+    window.location.replace("http://localhost:3001/admin/definicoes")
+    }
+    else {
+    alert(response.data.message)
+    }
+    }).catch(error=>{
+    alert("Error 34 "+error)
+    })
+    
+
+     
+  
+}
+
 
 sendSaveLocaisIndoor()
 {
@@ -837,10 +867,49 @@ loadFillDataLocaisExt()
               }
               })
     }
+    onDeleteLocalint(id)
+    {
+      Swal.fire({ title: 'Tem a certeza?',  text: 'Não poderá voltar a recuperar o Local',  type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, Apagar !',
+        cancelButtonText: 'Não, Manter!'
+        }).then((result) => {
+          if (result.value) {
+          this.sendDeleteLocalint(id)
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+              'Cancelado',
+               'O Local não foi apagado',
+              'error'
+              )
+              }
+              })
+    }
+    sendDeleteLocalint(userId)
+    {
+        // url do backend
+        const baseUrl = "https://pint2021.herokuapp.com/Locais/deleteLocalInt"
+        // network
+        axios.post(baseUrl,{id:userId })
+        .then(response =>{
+        if (response.data.success) {
+        Swal.fire(
+        'Apagado!',
+        'O Local foi apagado com sucesso',
+        'success'
+        )
+        this.LoadLocaisintDelete();
+
+        }
+        })
+        .catch ( error => {
+        alert("Error 325 ")
+        })
+    }
     sendDeleteLocal(userId)
     {
           // url do backend
-          const baseUrl = "http://localhost:3000/Locais/deleteLocal"
+          const baseUrl = "https://pint2021.herokuapp.com/Locais/deleteLocal"
           // network
           axios.post(baseUrl,{id:userId })
           .then(response =>{
@@ -858,7 +927,29 @@ loadFillDataLocaisExt()
           alert("Error 325 ")
           })
     }
-    
+    LoadLocaisintDelete()
+    {
+      const idlocal=localStorage.getItem('idinstituicao');
+      const idad=localStorage.getItem('idadmin');
+      const idinst=localStorage.getItem('idinstituicao');
+      console.log("idlocal",idlocal);
+      console.log("idadmin",idad);
+      console.log("idinst",idinst);
+      const url2 = "https://pint2021.herokuapp.com/Locais/listlocaisindoor/"+idinst;
+      axios.get(url2).then(res => {
+        if(res.data.status==200){  
+        const data2=res.data.LocaisIndor;
+        this.setState({ listlocaisindoor:data2});
+        }else{
+        alert("Error Web Service!");
+        
+        }
+        console.log(res)
+        })
+        .catch(error => {
+        alert(error)
+        });
+    }
     LoadLocaisDelete()
     {
       const idlocal=localStorage.getItem('idinstituicao');
@@ -1002,7 +1093,7 @@ loadFillDataLocaisExt()
             <td>{data2.Piso}</td>
             <td>{data2.Local.Nome}</td>
             <td><a class="" href="#popup2" onClick={()=>this.getlocalint(data2.ID_Local_Indoor)}  ><i class="fas fa-edit"></i></a></td>
-           <td><a class="" ><i class="far fa-trash-alt"></i></a></td>   
+           <td><a class="" onClick={()=>this.onDeleteLocalint(data2.ID_Local_Indoor)}><i class="far fa-trash-alt"></i></a></td>   
             
         </tr>
         )
