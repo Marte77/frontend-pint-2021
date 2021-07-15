@@ -25,31 +25,138 @@ import {
   Tooltip,
 } from "react-bootstrap";
 
+const tempoDensidadeMedia = 5
+const tipoTempoDensidadeMedia = "dd"//tipotempo = hh - horas, mm - minutos, dd - dias
+
+async function obterListaLocaisEDensidadeMedia(){
+  let idinst = localStorage.getItem('idinstituicao')
+  const urlgetlocais = "https://pint2021.herokuapp.com/Locais/listlocaisout/"+idinst;//todo obter id inst
+  const urlgetdensidademedia = "https://pint2021.herokuapp.com/Report/get_densidade_media_local/";
+  const jsonfinal ={}
+  var listalocaisfinal = await axios.get(urlgetlocais).then(async res=>{
+    //console.log(res)
+    if(res.status !== 200){
+      alert('Erro de conexao')
+      return;
+    }
+    var arrayListaLocais = new Array()
+    var arraylocais = res.data.LocaisInst
+    for(let local of arraylocais){
+      let nomelocal, idlocal, latitude,longitude
+      nomelocal = local.Nome;
+      idlocal = local.ID_Local;
+      latitude = local.Latitude;
+      longitude = local.Longitude;
+      arrayListaLocais.push({Nome:nomelocal, IDLocal:idlocal, Latitude:latitude, Longitude:longitude})
+    }
+    for(let local of arrayListaLocais){
+      let resultadodensidade = await axios.put(urlgetdensidademedia+local.IDLocal,{tempo:tempoDensidadeMedia,tipoTempo:tipoTempoDensidadeMedia})
+      if(resultadodensidade.status !==200)
+        break;
+      if(resultadodensidade.data.numeroReports === 0)
+        local.densidadeMedia = 0
+      else local.densidadeMedia = resultadodensidade.data.media
+    }
+    return arrayListaLocais
+  }).catch(err=>{alert("Erro: "+ err);console.log(err)})
+  jsonfinal.Lista = listalocaisfinal
+  return jsonfinal
+}
 
 function Maps() {
   const mapRef = React.useRef(null);
-  React.useEffect(() => {
+  React.useEffect(async () => {
     let google = window.google;
     let map = mapRef.current;
-    let lat = "40.662425";
-    let lng = "-7.914154";
-    const myLatlng = new google.maps.LatLng(lat, lng);
+    //rota para a lat e long ser a central / principal
+
+    
+    
+    var listalocais =await obterListaLocaisEDensidadeMedia();
+    //listalocais.Lista.push({
+    //  IDLocal:11,Latitude:40.6467634,Longitude:-7.9173397, densidadeMedia:1,Nome: "ola"
+    //})
+    //listalocais.Lista.push({
+    //  IDLocal:12,Latitude:40.6454794,Longitude:-7.9151064, densidadeMedia:1,Nome: "ola"
+    //})
+    //listalocais.Lista.push({
+    //  IDLocal:13,Latitude:40.6387692,Longitude:-7.9166592, densidadeMedia:1,Nome: "ola"
+    //})
+    var latitudetotal = 0, longitudetotal=0 //calcular ponto medio entre locais
+    for (let city in listalocais.Lista) {
+      let local = listalocais.Lista[city]
+      latitudetotal = latitudetotal + local.Latitude
+      longitudetotal = longitudetotal + local.Longitude
+    }
+    latitudetotal = latitudetotal / listalocais.Lista.length
+    longitudetotal = longitudetotal / listalocais.Lista.length
+    const myLatlng = new google.maps.LatLng(latitudetotal, longitudetotal);
     const mapOptions = {
-      zoom: 13,
+      zoom: 15,
       center: myLatlng,
       scrollwheel: false,
       zoomControl: true,
     };
 
     map = new google.maps.Map(map, mapOptions);
-
-    const marker = new google.maps.Marker({
-      position: myLatlng,
-      map: map,
-      animation: google.maps.Animation.DROP,
-      title: "Light Bootstrap Dashboard PRO React!",
-    });
-
+    for (let city in listalocais.Lista) {
+      let local = listalocais.Lista[city]
+      const marker = new google.maps.Marker({
+        position: new google.maps.LatLng(local.Latitude,local.Longitude),
+        map:map,
+        animation: google.maps.Animation.DROP,
+        title: local.Nome,
+      })
+      if(local.IDLocal ===4)
+        local.densidadeMedia = 2
+      if(local.densidadeMedia === 1)
+      {
+        const cityCircle = new google.maps.Circle({
+        
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillOpacity: 0.35,
+        map: map,
+        center:  new google.maps.LatLng(local.Latitude,local.Longitude),
+        radius: 50,     
+        fillColor: "#00ff00",
+        strokeColor: "#00ff00",
+        
+      });
+      }
+      else if(local.densidadeMedia === 2)
+        {
+       const cityCircle = new google.maps.Circle({
+        
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        
+        fillOpacity: 0.35,
+        map: map,
+        center: new google.maps.LatLng(local.Latitude,local.Longitude),
+        radius: 50,     
+        fillColor: "#e0e000",
+        strokeColor: "#ffff00",
+        
+      });
+      }
+      else if(local.densidadeMedia == 3)
+        {
+       const cityCircle = new google.maps.Circle({
+        
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        
+        fillOpacity: 0.35,
+        map: map,
+        center:  new google.maps.LatLng(local.Latitude,local.Longitude),
+        radius: 50,     
+        fillColor: "#e60000",
+        strokeColor: "#e60000",
+        
+      });
+      }
+    }
     const contentString =
       '<div class="info-window-content"><h2>Light Bootstrap Dashboard PRO React</h2>' +
       "<p>A premium Admin for React-Bootstrap, Bootstrap, React, and React Hooks.</p></div>";
@@ -57,10 +164,8 @@ function Maps() {
     const infowindow = new google.maps.InfoWindow({
       content: contentString,
     });
-
-    google.maps.event.addListener(marker, "click", function () {
-      infowindow.open(map, marker);
-    });
+    
+   
   }, []);
   return (
     <>

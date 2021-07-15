@@ -25,6 +25,38 @@ import {
   Tooltip,
 } from "react-bootstrap";
 class utilizadores extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+     listautilizadores:[],
+    }
+  }
+  componentDidMount(){
+    const idlocal=localStorage.getItem('idinstituicao');
+    const idad=localStorage.getItem('idadmin');
+    const idinst=localStorage.getItem('idinstituicao');
+    console.log("idlocal",idlocal);
+    console.log("idadmin",idad);
+    console.log("idinst",idinst);
+
+    const url = "https://pint2021.herokuapp.com/Utilizadores/listutilizadores/"+idinst;
+
+    //listar utilizadores
+    axios.get(url).then(res => {
+      if(res.data.status==200){  
+        const data=res.data.ListaUtilizadores;
+        this.setState({ listautilizadores:data});
+      }else{
+        alert("Error Web Service!");
+      
+      }
+        console.log(res)
+      })
+      .catch(error => {
+        alert(error)
+      }); 
+
+  }
      onDelete(id){
         Swal.fire({
         title: 'Tem a certeza?',
@@ -137,143 +169,24 @@ class utilizadores extends React.Component{
               <Card.Body>
                 <div id="table-scroll">
                   <Table id="table-scroll">
-                    <tbody id="table-scroll">
+                  <thead>
                     <tr>
                         <th></th>
                         <th>Nome</th>
-                        <th>Pontuação</th>
-                        <th>Ranking</th>
-                        <th>Email</th>
+                        <th>Data Nasc</th>
+                        <th>Codigo Postal</th>
                         <th>Cidade</th>
+                        <th>Locallização</th>
+                        <th>Email</th>
+                        <th>Pontos</th>
+                        <th>Ranking</th>
                         <th>Excluir</th>
-
-                    </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr><tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                    </tbody>
+                  
+                    </tr> 
+                    </thead>
+                  <tbody id="table-scroll">
+                      {this.loadfillutilizadores()}
+                  </tbody>
                   </Table>
                 </div>
 
@@ -287,6 +200,38 @@ class utilizadores extends React.Component{
     </>
   );
 }
+
+
+
+
+loadfillutilizadores()
+{
+  return this.state.listautilizadores.map((data, index)=>{
+    return(
+    <tr key={index}>
+       <td>
+                          <Form.Check className="mb-1 pl-0">
+                            <Form.Check.Label>
+                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
+                              <span className="form-check-sign"></span>
+                            </Form.Check.Label>
+                          </Form.Check>
+                      </td>
+        <td>{data.Pessoa.PNome + " "+ data.Pessoa.UNome}</td>
+        <td>{data.Pessoa.Data_Nascimento}</td>
+        <td>{data.Pessoa.Codigo_Postal}</td>
+        <td>{data.Pessoa.Cidade}</td>
+        <td>{data.Pessoa.Localização}</td>
+        <td>{data.Pessoa.Email}</td>
+        <td>{data.Pontos}</td>
+        <td>{data.Ranking}</td>
+        <td><Button className="btn-simple btn-link p-1" type="button" variant="danger" onClick={()=>this.onDelete()}> <i className="fas fa-times"></i></Button></td>
+        
+    </tr>
+    )
+    });
+    }
+
 
 }
 export default utilizadores;

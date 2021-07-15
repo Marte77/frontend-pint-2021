@@ -9,6 +9,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import 'sweetalert2/src/sweetalert2.scss';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 // react-bootstrap components
 import {
  Dropdown,
@@ -30,50 +31,57 @@ class definicoes extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-    listlocaisoutdoor:[]
+    idatualizarlocal:0,
+    
+    camponome:"",
+    campoemail:"",
+    campotelefone:"",
+    campopoucoinst:"",
+    campomoderadoinst:"",
+    campoelevadoinst:"",
+    campodescricao:"",
+    listlocaisoutdoor:[],
+    listlocaisindoor:[],
+    listaalertas:[],
+    listainstituicoes:[],
+
+    
+    //Criar local exterior
+    camponomeCriar:"",
+    campocodpostalCriar:"",
+    campodescricaoCriar:"",
+    campourlimgCriar:"",
+    campolocaliCriar:"",
+    campolongitude:"",
+    campolatitude:"",
+
+    //Criar local interior
+    camponomeCriarindoor:"",
+    campodescricaoCriarindoor:"",
+    campopisocriar:"",
+    
+
+    //editar local exterior
+    camponomeedit:"",
+    campocodpostaledit:"",
+    campodescricaoedit:"",
+    campourlimgedit:"",
+    campolocaliedit:"",
+    campolongitudeedit:"",
+    campolatitudeedit:"",
+
+     //editar local interior
+     camponomeeditint:"",
+     campodescricaoeditint:"",
+     campopisoeditint:"",
+     
     }
   }
-  onDelete(id){
-        Swal.fire({
-        title: 'Tem a certeza?',
-        text: 'O alerta vai ser apagado',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, quero apagar !',
-        cancelButtonText: 'Não, manter o alerta.'
-        }).then((result) => {
-        if (result.value) {
-        this.sendDelete(id)
-        } else if (result.dismiss === 
-        Swal.DismissReason.cancel) {
-        Swal.fire(
-        'Cancelado',
-        'O alerta continua seguro.'
-        )
-        }
-        })
-        }
-        sendDelete(userId)
-        {
-        const baseUrl = "http://localhost:3000/Filme/delete" 
-        axios.post(baseUrl,{
-        id:userId
-        })
-        .then(response =>{
-        if (response.data.success) {
-        Swal.fire(
-        'Apagado!',
-        'O alerta foi apagado com sucesso'
-        )
-        this.loadFilme()
-        }
-        })
-        .catch ( error => {
-        alert("Error 325 ")
-        })    
-    } 
-
+ 
     componentDidMount(){
+
+      this.LoadLocaisDelete()
+    
       const idlocal=localStorage.getItem('idinstituicao');
       const idad=localStorage.getItem('idadmin');
       const idinst=localStorage.getItem('idinstituicao');
@@ -81,8 +89,11 @@ class definicoes extends React.Component{
       console.log("idadmin",idad);
       console.log("idinst",idinst);
 
-
+      const url4="https://pint2021.herokuapp.com/Instituicao/get_instituicoes/"+idinst;
+      const url3="https://pint2021.herokuapp.com/Alertas/listalertas/"+idinst;
+      const url2 = "https://pint2021.herokuapp.com/Locais/listlocaisindoor/"+idinst;
       const url = "https://pint2021.herokuapp.com/Locais/listlocaisout/"+idinst;
+      console.log('url4',url4);
       axios.get(url).then(res => {
       if(res.data.status==200){
       const data = res.data.LocaisInst;
@@ -95,6 +106,79 @@ class definicoes extends React.Component{
       .catch(error => {
       alert(error)
       });
+
+      //lista de locais indoor
+        axios.get(url2).then(res => {
+        if(res.data.status==200){  
+        const data2=res.data.LocaisIndor;
+        this.setState({ listlocaisindoor:data2});
+        }else{
+        alert("Error Web Service!");
+        
+        }
+        console.log(res)
+        })
+        .catch(error => {
+        alert(error)
+        });
+
+        
+    //lista de alertas
+      axios.get(url3).then(res => {
+        if(res.data.status==200){  
+        const data3=res.data.Alertas;
+        this.setState({ listaalertas:data3});
+      }else{
+      alert("Error Web Service!");
+      }
+      console.log(res)
+      })
+      .catch(error => {
+      alert(error)
+      });
+        
+
+    
+      // Instituição pelo ID
+      /*axios.get(url4).then(res => {
+        if(res.status==200){  
+        console.log("Entrou",1);
+        const data4=res.data.Instituicoes;
+        this.setState({ listainstituicoes:data4});
+      }else{
+      alert("Error Web Service!");
+      }
+      console.log(res)
+      })
+      .catch(error => {
+      alert(error)
+      });*/
+
+        //apresentar definições da instituição
+        axios.get(url4).then(res => {
+          if(res.status==200){ 
+             const data=res.data.Instituicoes[0];
+             
+             this.setState({
+               
+               camponome:data.Nome,
+               campoemail:data.Email,
+               campotelefone:data.Telefone,
+               campopoucoinst:data.Lotacao_Pouco,
+               campomoderadoinst:data.Lotacao_Moderado,
+               campoelevadoinst:data.Lotacao_Elevado,
+               campodescricao:data.Descricao,
+               
+             })
+             console.log('camponome',this.state.camponome);
+          }
+          else {
+            alert("Error web service")
+            }
+        })
+        .catch(error=>{
+          alert("Error server: "+error)
+          })
       }
 
    render(){
@@ -115,11 +199,8 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Instituição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome" 
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control value={this.state.camponome} onChange={(value)=>this.setState({camponome:value.target.value})} placeholder="Nome" type="text"></Form.Control>
+
                       </Form.Group>
                     </Col>
                     
@@ -128,21 +209,13 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="6">
                       <Form.Group>
                         <label>Email</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Email"
-                          type="email"
-                        ></Form.Control>
+                        <Form.Control value={this.state.campoemail} placeholder="Email" type="email"></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pl-1" md="6">
                       <Form.Group>
                         <label>Telefone</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Número telefone"
-                          type="number"
-                        ></Form.Control>
+                        <Form.Control value={this.state.campotelefone} placeholder="Número telefone" type="number"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -156,20 +229,20 @@ class definicoes extends React.Component{
                   <Col md="2" >
                       <p3>Pouco</p3>
                       <br></br>
-                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                      <input style={{width:'115%'}} value={this.state.campopoucoinst} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
 
                   </Col>
                  
                   <Col md="2">
                   <p3>Moderado</p3>
                       <br></br>
-                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                      <input style={{width:'115%'}} value={this.state.campomoderadoinst} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
                   </Col>
                   
                   <Col md="2">
                   <p3>Elevado</p3>
                       <br></br>
-                      <input style={{width:'115%'}} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
+                      <input style={{width:'115%'}}  value={this.state.campoelevadoinst} type="number" id="InstituicaoPouco" name="InstituicaoPouco"></input>
                   </Col>
                 </Row>
                 
@@ -179,11 +252,7 @@ class definicoes extends React.Component{
                     <Col md="12">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Texto"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control value={this.state.campodescricao} placeholder="Texto" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -223,7 +292,7 @@ class definicoes extends React.Component{
           <Col md="12">
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
-                <Card.Title as="h4">Locais Exterior</Card.Title>
+                <Card.Title as="h4">Locais </Card.Title>
                 <Dropdown>
                   <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
                     Ordenar &nbsp;
@@ -241,7 +310,6 @@ class definicoes extends React.Component{
                
                   <thead>
                     <tr>
-                      <th></th>
                       <th className="border-0">Nº Local</th>
                       <th className="border-0">Local</th>
                       <th className="border-0">cod_postal</th>
@@ -250,6 +318,8 @@ class definicoes extends React.Component{
                       <th className="border-0">Localização</th>
                       <th className="border-0">Longitude</th>
                       <th className="border-0">Latitude</th>
+                      <th>Editar</th>
+                      <th>Eliminar</th>
 
                     </tr>
                   </thead>
@@ -259,7 +329,7 @@ class definicoes extends React.Component{
                 </Table>
                 </div>
                 <a class="button7" href="#popup3"><i class="fas fa-plus-circle" ></i>Adicionar</a>
-                  <a class="button8" href="#popup4"><i class="fas fa-edit"></i>Alterar</a>
+                 
                 <br/>
                 <br/>
                 
@@ -290,97 +360,25 @@ class definicoes extends React.Component{
                
                   <thead>
                     <tr>
-                      <th></th>
+                      
                       <th className="border-0">Nº Local</th>
+                      <th className="border-0">Nome</th>
+                      <th className="border-0">Descrição</th>
+                      <th className="border-0">Piso</th>
                       <th className="border-0">Local</th>
-                      <th className="border-0">Total Reports</th>
+                      <th className="border-0">Editar</th>
+                      <th className="border-0">Eliminar</th>
+
                       
                     </tr>
                   </thead>
                    <tbody id="table-scroll">
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>1</td>
-                      <td>Dakota Rice</td>
-                      <td>738</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>2</td>
-                      <td>Minerva Hooper</td>
-                      <td>789</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>3</td>
-                      <td>Sage Rodriguez</td>
-                      <td>142</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input  defaultValue=""   type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>4</td>
-                      <td>Philip Chaney</td>
-                      <td>735</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>5</td>
-                      <td>Doris Greene</td>
-                      <td>542</td>
-                    </tr>
-                    <tr>
-                    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
-                      <td>6</td>
-                      <td>Mason Porter</td>
-                      <td>615</td>
-                    </tr>
+                   {this.loadFillDataLocaiInt()}
                   </tbody>
                 </Table>
                 </div>
                 <a class="button7" href="#popup1"><i class="fas fa-plus-circle" ></i>Adicionar</a>
-                  <a class="button8" href="#popup2"><i class="fas fa-edit"></i>Alterar</a>
+                  
                 <br/>
                 <br/>
 
@@ -412,112 +410,17 @@ class definicoes extends React.Component{
                 <Table className="table-hover" id="table-scroll">
                   <thead>
                     <tr>
-                      <th></th>
+                      
                       <th className="border-0">ID Alerta</th>
-                      <th className="border-0">ID Admin</th>
-                      <th className="border-0">Local Exterior</th>
-                      <th className="border-0">Tipo de Alerta</th>
                       <th className="border-0">Descrição</th>
-                      <th className="border-0">Excluir</th>
+                      <th className="border-0">Data</th>
+                      <th className="border-0">Local</th>
+                      <th className="border-0">Admin</th>
+                      <th className="border-0">Tipo de Alerta</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                    <td></td>
-                      <td>1</td>
-                       <td>2</td>
-                      <td>palacio gelo</td>
-                      <td>Desinfecao</td>
-                       <td>nada</td>
-                       <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                    </tr>
-                    <tr>
-                    <td></td>
-                      <td>1</td>
-                       <td>2</td>
-                      <td>palacio gelo</td>
-                      <td>Desinfecao</td>
-                       <td>nada</td>
-                       <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                    </tr>
-                    <tr>
-                    <td></td>
-                      <td>1</td>
-                       <td>2</td>
-                      <td>palacio gelo</td>
-                      <td>Desinfecao</td>
-                       <td>nada</td>
-                       <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                    </tr>
-                    <tr>
-                    <td></td>
-                      <td>1</td>
-                       <td>2</td>
-                      <td>palacio gelo</td>
-                      <td>Desinfecao</td>
-                       <td>nada</td>
-                       <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                    </tr>
+                  {this.loadalertas()}
 
                     
                   </tbody>
@@ -537,11 +440,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Local Interior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local interior"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.camponomeCriarindoor} onChange={(value)=>this.setState({camponomeCriarindoor:value.target.value})}   placeholder="Nome local interior"    type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -550,11 +449,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.campodescricaoCriarindoor} onChange={(value)=>this.setState({campodescricaoCriarindoor:value.target.value})} placeholder="Descricao"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -563,11 +458,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Piso</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Ex. 1,2"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.campopisocriar} onChange={(value)=>this.setState({campopisocriar:value.target.value})} placeholder="Ex. 1,2" type="text"   ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -577,24 +468,18 @@ class definicoes extends React.Component{
                     <Form.Group>
                         <label>Pertence ao local Exterior :</label>
                         <br/>
-                   <select>
-                     <option value="1">palacio do gelo</option>
-                    <option  value="2">visabeira</option>
-                    <option  value="3">parque</option>
+                  <select id="optionlocalindoor">
+                  {this.loadFillDataLocaisExt_option()}
+
                   </select>
+                 
                 
                       </Form.Group>
 
                     </Col>
                   </Row>
                <br/>
-                  <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
-                    Guardar local interior 
-                  </Button>
+                  <Button className="btn-fill pull-left"   type="submit" variant="info" onClick={()=>this.sendSaveLocaisIndoor()}>Guardar local interior </Button>
                   
                   </Form>
   </div>
@@ -611,11 +496,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Local Interior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local interior"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" defaultValue="" value={this.state.camponomeeditint} onChange={(value)=>this.setState({camponomeeditint:value.target.value})} placeholder="Nome local interior"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -624,11 +505,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" defaultValue="" value={this.state.campodescricaoeditint} onChange={(value)=>this.setState({campodescricaoeditint:value.target.value})} placeholder="Descricao"   type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -637,21 +514,14 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Piso</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Ex. 1,2"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" defaultValue="" value={this.state.campopisoeditint} onChange={(value)=>this.setState({campopisoeditint:value.target.value})} placeholder="Ex. 1,2" type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
 
                <br/>
                   <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
+                    className="btn-fill pull-left" onClick={()=>this.saveAtualizarLocalInt()}  type="submit"  variant="info" >
                     Efetuar alteração
                   </Button>
                   
@@ -673,11 +543,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Local Exterior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local exterior"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.camponomeCriar} onChange={(value)=>this.setState({camponomeCriar:value.target.value})} placeholder="Nome local exterior" type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -686,21 +552,13 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Código Postal</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="ex: 2340200"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue=""  value={this.state.campocodpostalCriar} onChange={(value)=>this.setState({campocodpostalCriar:value.target.value})} placeholder="ex: 2340200" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.campodescricaoCriar} onChange={(value)=>this.setState({campodescricaoCriar:value.target.value})} placeholder="Descricao" type="text"></Form.Control>
                       </Form.Group>
                     </Col>  
                   </Row>
@@ -708,11 +566,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>URL Imagem</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="http://imagem.com"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campourlimgCriar} onChange={(value)=>this.setState({campourlimgCriar:value.target.value})} placeholder="http://imagem.com" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -720,11 +574,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Localização</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="ex: viseu"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue=""  value={this.state.campolocaliCriar} onChange={(value)=>this.setState({campolocaliCriar:value.target.value})} placeholder="ex: viseu" type="text"></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -732,33 +582,19 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Longitude</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="-7.9128371289"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campolongitude} onChange={(value)=>this.setState({campolongitude:value.target.value})} placeholder="-7.9128371289" type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Latitude</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="40.3871233"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campolatitude} onChange={(value)=>this.setState({campolatitude:value.target.value})} placeholder="40.3871233" type="text"   ></Form.Control>
                       </Form.Group>
                     </Col>  
                     
                   </Row>
                <br/>
-                  <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
-                    Guardar local exterior 
-                  </Button>
+                  <Button className="btn-fill pull-left"   type="submit"  variant="info" onClick={()=>this.sendSaveLocais()}>Guardar local exterior </Button>
                   
                   </Form>
   </div>
@@ -777,11 +613,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Local Exterior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local exterior"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.camponomeedit} onChange={(value)=>this.setState({camponomeedit:value.target.value})}  placeholder="Nome local exterior"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -790,21 +622,13 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Código Postal</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="ex: 2340200"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campocodpostaledit} onChange={(value)=>this.setState({campocodpostaledit:value.target.value})}  placeholder="ex: 2340200"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control    defaultValue="" value={this.state.campodescricaoedit} onChange={(value)=>this.setState({campodescricaoedit:value.target.value})}  placeholder="Descricao"     type="text" ></Form.Control>
                       </Form.Group>
                     </Col>  
                   </Row>
@@ -812,11 +636,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>URL Imagem</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="http://imagem.com"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campourlimgedit} onChange={(value)=>this.setState({campourlimgedit:value.target.value})} placeholder="http://imagem.com" type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -824,11 +644,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Localização</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="ex: viseu"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control  defaultValue="" value={this.state.campolocaliedit} onChange={(value)=>this.setState({campolocaliedit:value.target.value})}  placeholder="ex: viseu"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -836,33 +652,19 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Longitude</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="-7.9128371289"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campolongitudeedit} onChange={(value)=>this.setState({campolongitudeedit:value.target.value})}  placeholder="-7.9128371289"  type="text"  ></Form.Control>
                       </Form.Group>
                     </Col>
                     <Col className="pr-1" md="5">
                       <Form.Group>
                         <label>Latitude</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="40.3871233"
-                          type="text"
-                        ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campolatitudeedit} onChange={(value)=>this.setState({campolatitudeedit:value.target.value})}  placeholder="40.3871233"  type="text" ></Form.Control>
                       </Form.Group>
                     </Col>  
                     
                   </Row>
                <br/>
-                  <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
-                    Atualizar local exterior 
-                  </Button>
+                  <Button  className="btn-fill pull-left"    type="submit" variant="info" onClick={()=>this.saveAtualizarLocal()} >  Atualizar local exterior   </Button>
                   
                   </Form>
   </div>
@@ -883,19 +685,125 @@ class definicoes extends React.Component{
 }
 
 
+
+sendSaveLocaisIndoor()
+{
+  console.log("testebutton")
+  var e=document.getElementById("optionlocalindoor");
+  var idlocalis=e.value;
+  if(this.state.camponomeCriarindoor==="")
+  {
+    alert("Insira o nome do local indoor")
+  }
+  if(this.state.campodescricaoCriarindoor==="")
+  {
+    alert("Insira a descrição do local indoor")
+  }
+  if(this.state.campopoucoinst==="")
+  {
+    alert("Insira o piso do local indoor")
+  }
+  else{
+
+    const idinst=localStorage.getItem('idinstituicao');
+    const url="https://pint2021.herokuapp.com/Locais/criarLocalWebINDOOR"
+    const datapost={
+      nome:this.state.camponomeCriarindoor,
+      descricao:this.state.campodescricaoCriarindoor,
+      piso:this.state.campopisocriar,
+      idlocal:idlocalis
+
+    }
+     axios.post(url,datapost)
+      .then(response=>{
+      if (response.data.success===true) {
+      alert(response.data.message)
+      window.location.replace("http://localhost:3001/admin/definicoes")
+      }
+      else {
+      alert(response.data.message)
+      }
+      }).catch(error=>{
+      alert("Error 34 "+error)
+      })
+      }
+}
+
+sendSaveLocais()
+{
+  if(this.state.camponomeCriar==="")
+  {
+    alert("Insira o nome do local")
+  }
+  if(this.state.campocodpostalCriar==="")
+  {
+    alert("Insira o código postal do local")
+  }
+  if(this.state.campodescricaoCriar==="")
+  {
+    alert("Insira a descrição do local")
+  }
+  if(this.state.campourlimgCriar==="")
+  {
+    alert("Insira o url da imagem do local")
+  }
+  if(this.state.campolocaliCriar==="")
+  {
+    alert("Insira a localização do local")
+  }
+  if(this.state.campolongitude==="")
+  {
+    alert("Insira a longitude do local")
+  }
+  if(this.state.campolatitude==="")
+  {
+    alert("Insira a latitude do local")
+  }
+  else{
+    const idinst=localStorage.getItem('idinstituicao');
+    const url="https://pint2021.herokuapp.com/Locais/criarLocalWeb"
+    const datapost={
+      nome:this.state.camponomeCriar,
+      codigopostal:this.state.campocodpostalCriar,
+      descricao:this.state.campodescricaoCriar,
+      urlimagem:this.state.campourlimgCriar,
+      localizacao:this.state.campolocaliCriar,
+      longitude:this.state.campolongitude,
+      latitude:this.state.campolatitude,
+      idinstituicao:idinst
+    }
+     axios.post(url,datapost)
+      .then(response=>{
+      if (response.data.success===true) {
+      alert(response.data.message)
+      window.location.replace("http://localhost:3001/admin/definicoes")
+      }
+      else {
+      alert(response.data.message)
+      }
+      }).catch(error=>{
+      alert("Error 34 "+error)
+      })
+      }
+  }
+
+  loadFillDataLocaisExt_option()
+  {
+    return this.state.listlocaisoutdoor.map((data, index)=>{
+      return(
+        
+          <option  key={index} value={data.ID_Local}>{data.Nome}</option>
+        
+      )
+      });
+      }
+
 loadFillDataLocaisExt()
 {
   return this.state.listlocaisoutdoor.map((data, index)=>{
     return(
     <tr key={index}>
-       <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
+        
         <th>{data.ID_Local}</th>
         <td>{data.Nome}</td>
         <td>{data.Codigo_Postal}</td>
@@ -904,9 +812,221 @@ loadFillDataLocaisExt()
         <td>{data.Localizacao}</td>
         <td>{data.Longitude}</td>
         <td>{data.Latitude}</td>
+        <td><a class="" href="#popup4" onClick={()=>this.getlocal(data.ID_Local)} ><i class="fas fa-edit"></i></a></td>
+        <td><a class=""  onClick={()=>this.onDeleteLocal(data.ID_Local)}><i class="far fa-trash-alt"></i></a></td>      
+
     </tr>
     )
     });
+    }
+    onDeleteLocal(id)
+    {
+      Swal.fire({ title: 'Tem a certeza?',  text: 'Não poderá voltar a recuperar o Local',  type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, Apagar !',
+        cancelButtonText: 'Não, Manter!'
+        }).then((result) => {
+          if (result.value) {
+          this.sendDeleteLocal(id)
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+              'Cancelado',
+               'O Local não foi apagado',
+              'error'
+              )
+              }
+              })
+    }
+    sendDeleteLocal(userId)
+    {
+          // url do backend
+          const baseUrl = "http://localhost:3000/Locais/deleteLocal"
+          // network
+          axios.post(baseUrl,{id:userId })
+          .then(response =>{
+          if (response.data.success) {
+          Swal.fire(
+          'Apagado!',
+          'O Local foi apagado com sucesso',
+          'success'
+          )
+          this.LoadLocaisDelete();
+
+          }
+          })
+          .catch ( error => {
+          alert("Error 325 ")
+          })
+    }
+    
+    LoadLocaisDelete()
+    {
+      const idlocal=localStorage.getItem('idinstituicao');
+      const idad=localStorage.getItem('idadmin');
+      const idinst=localStorage.getItem('idinstituicao');
+      console.log("idlocal",idlocal);
+      console.log("idadmin",idad);
+      console.log("idinst",idinst);
+      const url = "https://pint2021.herokuapp.com/Locais/listlocaisout/"+idinst;
+      axios.get(url).then(res => {
+        if(res.data.status==200){
+        const data = res.data.LocaisInst;
+        this.setState({ listlocaisoutdoor:data });
+        }else{
+        alert("Error Web Service!");
+        }
+        console.log(res)
+        })
+        .catch(error => {
+        alert(error)
+        });
+    }
+    saveAtualizarLocal()
+    {
+      let id=this.state.idatualizarlocal;
+      const url="https://pint2021.herokuapp.com/Locais/updatelocais/"+id
+      const datapost = {
+        nome : this.state.camponomeedit,
+        cp : this.state.campocodpostaledit,
+        descri : this.state.campodescricaoedit,
+        urlimg : this.state.campourlimgedit,
+        locali : this.state.campolocaliedit,
+        long : this.state.campolongitudeedit,
+        lati : this.state.campolatitudeedit,
+        }
+        axios.post(url,datapost)
+        .then(response=>{
+          if (response.data.success===true) {
+          alert(response.data.message)
+          window.location.replace("http://localhost:3001/admin/definicoes")
+
+        }
+        else {
+          alert("Error")
+        }
+        }).catch(error=>{
+          alert("Error 34 "+error)
+        })
+    }
+
+    saveAtualizarLocalInt()
+    {
+      let id=this.state.idatualizarlocal;
+      const url="https://pint2021.herokuapp.com/Locais/updatelocaisindoor/"+id
+      const datapost = {
+        nome : this.state.camponomeeditint,
+        descri : this.state.campodescricaoeditint,
+        piso:this.state.campopisoeditint,
+        }
+        axios.post(url,datapost)
+        .then(response=>{
+          if (response.data.success===true) {
+          alert(response.data.message)
+          window.location.replace("http://localhost:3001/admin/definicoes")
+
+        }
+        else {
+          alert("Error")
+        }
+        }).catch(error=>{
+          alert("Error 34 "+error)
+        })
+    }
+
+    getlocal(idlocal)
+    {
+        this.state.idatualizarlocal=idlocal;
+        const url="https://pint2021.herokuapp.com/Locais/getlocal/"+idlocal
+        axios.get(url)
+          .then(res=>{
+          if (res.data.success) {
+              const data = res.data.data[0]
+              this.setState({
+              datalocal:data,
+              camponomeedit: data.Nome,
+              campocodpostaledit:data.Codigo_Postal,
+              campodescricaoedit:data.Descricao,
+              campourlimgedit:data.URL_Imagem,
+              campolocaliedit:data.Localizacao,
+              campolongitudeedit:data.Longitude,
+              campolatitudeedit:data.Latitude
+          })
+            console.log(JSON.stringify(data))
+          }
+          else {
+            alert("Error web service")
+          }
+          })
+            .catch(error=>{
+            alert("Error server: "+error)
+          })
+    }
+    getlocalint(idlocal)
+    {
+      this.state.idatualizarlocal=idlocal;
+      const url="https://pint2021.herokuapp.com/Locais/getlocalint/"+idlocal
+      console.log("url int",url)
+      axios.get(url)
+        .then(res=>{
+        if (res.data.success) {
+            const data = res.data.data[0]
+
+            this.setState({
+            datalocal:data,
+            camponomeeditint:data.Nome,
+            campodescricaoeditint:data.Descricao,
+            campopisoeditint:data.Piso,
+        })
+          console.log(JSON.stringify(data))
+        }
+        else {
+          alert("Error web service")
+        }
+        })
+          .catch(error=>{
+          alert("Error server: "+error)
+        })
+    }
+
+
+
+    loadFillDataLocaiInt()
+    {
+      return this.state.listlocaisindoor.map((data2, index)=>{
+        return(
+        <tr key={index}>
+           
+            <th>{data2.ID_Local_Indoor}</th>
+            <td>{data2.Nome}</td>
+            <td>{data2.Descricao}</td>
+            <td>{data2.Piso}</td>
+            <td>{data2.Local.Nome}</td>
+            <td><a class="" href="#popup2" onClick={()=>this.getlocalint(data2.ID_Local_Indoor)}  ><i class="fas fa-edit"></i></a></td>
+           <td><a class="" ><i class="far fa-trash-alt"></i></a></td>   
+            
+        </tr>
+        )
+        });
+      
+    }
+
+
+    loadalertas()
+    {
+      return this.state.listaalertas.map((data2, index)=>{
+        return(
+        <tr key={index}>
+            <th>{data2.ID_alerta}</th>
+            <td>{data2.Descricao}</td>
+            <td>{data2.Data}</td>
+            <td>{data2.Local.Nome}</td>
+            <td>{data2.AdminIDAdmin}</td>
+            <td>{data2.Tipo_Alerta.Tipo_Alerta}</td>
+            
+        </tr>
+        )
+        });
+      
     }
 }
 
