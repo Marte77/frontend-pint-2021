@@ -26,37 +26,101 @@ import {
   Tooltip,
 } from "react-bootstrap";
 class home extends React.Component{
-// lista utilizadores em espera
-constructor(props){
-super(props);
-this.state = {
-listUtilsEspera:[]
-}
-}
-componentDidMount(){
-    this.PedidoUtilsEspera();
+  
+  constructor(props){
+    super(props);
+    var arraylabelsmeses = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ]
+    var arraylabelsdias = [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ]
+    this.labels = [arraylabelsmeses, arraylabelsdias]
+    this.state = {
+      listUtilsEspera:[],
+      listaDiasNumeroReports:[],
+      labels : [arraylabelsmeses, arraylabelsdias]
     }
-    PedidoUtilsEspera() {
+  }
+  componentDidMount(){
+    this.PedidoUtilsEspera();
+    this.obterReportsEmCadaDia()
+  }
+  PedidoUtilsEspera() {
     const url = "https://pint2021.herokuapp.com/Pessoas/getUtilsEspera";
     axios.get(url)
     .then(res => {
-       console.log(res);
-    if(res.status === 200){
-    const data = res.data.Utils;
-    this.setState({ listUtilsEspera:data });
-    
+      console.log(res);
+      if(res.status === 200){
+      const data = res.data.Utils;
+      this.setState({ listUtilsEspera:data });
     }else{
-    alert("Erro dispositivo web");
-    }
-    })
-    .catch(error => {
-    alert(error)
+      alert("Erro dispositivo web");
+    }}).catch(error => {
+      alert(error)
     });
+  }
+  obterReportsEmCadaDia(){
+    let url = 'https://pint2021.herokuapp.com/Instituicao/numero_reports_x_dias/'+localStorage.getItem('idinstituicao')+ '/'+7
+    axios.get(url).then( res=>{
+      //console.log(res.data)
+      this.setState({listaDiasNumeroReports:res.data.res})
+      var arraylabelsdias = this.state.labels[1]
+      
+      var arraydiasordenadosdeacordocompedido = new Array()
+      for(let dia of res.data.res){
+        arraydiasordenadosdeacordocompedido.push(arraylabelsdias[dia.diasemana])
+      }
+      
+      arraydiasordenadosdeacordocompedido.reverse()
+      this.setState({labels:[this.state.labels[0],arraydiasordenadosdeacordocompedido]})
+    }).catch( err=>{
+      console.log(err)
+      alert(err)
+    })
+  
+  }
+  loadGraficoNumeroReports(){
+    let array = this.state.listaDiasNumeroReports
+    if(array.length === 0)
+      return [[0]]
+    let arrayfinal = new Array()
+    for(let obj in array){
+      arrayfinal.push(array[obj].NReports)
     }
-//fim lista de utilizadores em espera
+    return [arrayfinal]
+  }
 
- render(){
- return (
+  loadGraficoLotacaoReports(){
+    let array = this.state.listaDiasNumeroReports
+    if(array.length === 0)
+      return [[0]]
+    let arrayfinal = new Array()
+    for(let obj in array){
+      arrayfinal.push(array[obj].densidademedia)
+    }
+    return [arrayfinal]
+  }
+
+  render(){
+  return (
     <>
       <Container fluid>
         <Row>
@@ -82,59 +146,31 @@ componentDidMount(){
               </Card.Body>  
             </Card>
           </Col>   {/*coluna Estatisticas Diárias*/}
-         <Col md="7">
+          <Col md="7">{/*grafico reports por dias*/}
             <Card>
+
               <Card.Header>
-
-              <p className="first_titulo_esquerda">Reportes:
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style">
-    Periodo de Tempo
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Tempo real</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Hoje</Dropdown.Item>
-    <Dropdown.Item href="#/action-3">Esta semana</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown></p>
-
-                
+                <p className="first_titulo_esquerda">Reportes:
+                {/*<Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style">
+                      Periodo de Tempo
+                  </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item href="#/action-1">Tempo real</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">Hoje</Dropdown.Item>
+                      <Dropdown.Item href="#/action-3">Esta semana</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>*/}
+                </p>
                 <p className="card-category">Todos os reportes do local:</p>
               </Card.Header>
+
               <Card.Body>
                 <div className="ct-chart" id="chartActivity">
                   <ChartistGraph
                     data={{
-                      labels: [
-                        "Jan",
-                        "Feb",
-                        "Mar",
-                        "Apr",
-                        "Mai",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Oct",
-                        "Nov",
-                        "Dec",
-                      ],
-                      series: [
-                        [
-                          5,
-                          5,
-                          5,
-                          4,
-                          5,
-                          5,
-                          5,
-                          4,
-                          5,
-                          5,
-                          5,
-                          4
-                        ],
-                      ],
+                      labels: this.state.labels[1],
+                      series: this.loadGraficoNumeroReports()
                     }}
                     type="Bar"
                     options={{
@@ -168,37 +204,26 @@ componentDidMount(){
           <Col md="7">
             <Card>
               <Card.Header>
-               <p className="first_titulo_esquerda">Lotação:
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_lotacao">
-   Local Indoor
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Cantina</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">BAR</Dropdown.Item>
-    <Dropdown.Item href="#/action-3">bla bla</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown></p>
-                <p className="card-category">Dados dos últimos 7 dias</p>
+              <p className="first_titulo_esquerda">Lotação:
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_lotacao">
+                    Local Indoor
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Cantina</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">BAR</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">bla bla</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </p>
+              <p className="card-category">Dados dos últimos 7 dias</p>
               </Card.Header>
               <Card.Body>
                 <div className="ct-chart" /*id="chartHours"*/>
                   <ChartistGraph
                     data={{
-                      labels: [
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S",
-                        "D",
-                      ],
-                      series: [
-                        [5,5,5,5,5,5,5],
-                        /*[67, 152, 143, 240, 287, 335, 435],
-                        [23, 113, 67, 108, 190, 239, 307],*/
-                      ],
+                      labels: this.state.labels[1],
+                      series: this.loadGraficoLotacaoReports()
                     }}
                     type="Line"
                     options={{
@@ -321,11 +346,11 @@ componentDidMount(){
       </Container>
     </>
   );
-}
+  }
 
 
 
-loadUtilsEspera(){
+  loadUtilsEspera(){
     return this.state.listUtilsEspera.map((data, index)=>{
     var tipo;
     console.log(data.ID_Admin);
@@ -388,8 +413,8 @@ loadUtilsEspera(){
     </tr>
     )
     });
-    }
-    onDelete(id){
+  }
+  onDelete(id){
         Swal.fire({
         title: 'Tem a certeza?',
         text: 'O pedido pendente vai ser apagado',
@@ -408,66 +433,52 @@ loadUtilsEspera(){
         )
         }
         })
-        }
-        sendDelete(userId)
-        {
-        const baseUrl = "http://localhost:3000/Filme/delete" 
-        axios.post(baseUrl,{
-        id:userId
-        })
-        .then(response =>{
-        if (response.data.success) {
-        Swal.fire(
-        'Apagado!',
-        'O pedido foi apagado com sucesso'
-        )
-        this.loadFilme()
-        }
-        })
-        .catch ( error => {
-        alert("Error 325 ")
-        })    
-    } 
-
-     onAdd(id){
-        Swal.fire({
-        title: 'Tem a certeza?',
-        text: 'O pedido será aceite',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, aceitar pedido !',
-        cancelButtonText: 'Não, manter o pedido.'
-        }).then((result) => {
-        if (result.value) {
-        this.sendDelete(id)
-        } else if (result.dismiss === 
-        Swal.DismissReason.cancel) {
-        Swal.fire(
-        'Cancelado',
-        'O pedido continua seguro.'
-        )
-        }
-        })
-        }
-        sendDelete(userId)
-        {
-        const baseUrl = "http://localhost:3000/Filme/delete" 
-        axios.post(baseUrl,{
-        id:userId
-        })
-        .then(response =>{
-        if (response.data.success) {
-        Swal.fire(
-        'Apagado!',
-        'O pedido foi apagado com sucesso'
-        )
-        this.loadFilme()
-        }
-        })
-        .catch ( error => {
-        alert("Error 325 ")
-        })    
-    } 
+  }
+  sendDelete(userId){
+    const baseUrl = "http://localhost:3000/Filme/delete" 
+    axios.post(baseUrl,{
+      id:userId
+    })
+    .then(response =>{
+      if (response.data.success) {
+      Swal.fire('Apagado!','O pedido foi apagado com sucesso')
+      this.loadFilme()
+      }
+    }).catch ( error => {
+      alert("Error 325 ")
+    })    
+  }   
+  onAdd(id){
+    Swal.fire({
+      title: 'Tem a certeza?',
+      text: 'O pedido será aceite',
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, aceitar pedido !',
+      cancelButtonText: 'Não, manter o pedido.'
+    }).then(result => {
+    if (result.value) {
+      this.sendDelete(id)
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      Swal.fire('Cancelado','O pedido continua seguro.')
+    }
+    })
+  }
+  sendDelete(userId){
+    const baseUrl = "http://localhost:3000/Filme/delete" 
+    axios.post(baseUrl,{
+      id:userId
+    })
+    .then(response =>{
+      if (response.data.success) {
+      Swal.fire('Apagado!','O pedido foi apagado com sucesso')
+      this.loadFilme()
+    }
+    })
+    .catch ( error => {
+      alert("Error 325 ")
+    })    
+  } 
 
 
 
