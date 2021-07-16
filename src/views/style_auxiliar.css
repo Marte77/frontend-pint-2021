@@ -1,22 +1,23 @@
 .aligncenter{
   text-align: center;
+  font-weight: bold;
 }
 .first_titulo_esquerda{
-	font-size: 18px;
+	font-size: 22px;
     font-weight: 400;
     color: #3973ac;
     margin-bottom: 0px; 
     text-align: left;
 }
 .first_titulo{
-	font-size: 18px;
+	font-size: 26px;
     font-weight: 400;
     color: #3973ac;
     margin-bottom: 0px; 
     text-align: center;
 }
 .secound_titulo{
-	font-size: 12px;
+	font-size: 21px;
     font-weight: 400;
     color: black;
     margin-bottom: 0px; 

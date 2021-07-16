@@ -24,113 +24,91 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
+import { actions } from "react-table";
 class utilizadores extends React.Component{
   constructor(props){
     super(props);
     this.state = {
      listautilizadores:[],
+     campocountverifu:"",
+     campocountNOverifu:"",
+     
     }
   }
   componentDidMount(){
-    const idlocal=localStorage.getItem('idinstituicao');
-    const idad=localStorage.getItem('idadmin');
-    const idinst=localStorage.getItem('idinstituicao');
-    console.log("idlocal",idlocal);
-    console.log("idadmin",idad);
-    console.log("idinst",idinst);
-
-    const url = "https://pint2021.herokuapp.com/Utilizadores/listutilizadores/"+idinst;
-
-    //listar utilizadores
-    axios.get(url).then(res => {
-      if(res.data.status==200){  
-        const data=res.data.ListaUtilizadores;
-        this.setState({ listautilizadores:data});
-      }else{
-        alert("Error Web Service!");
+    this.loadutilizadores()
+    
+    
+    
       
-      }
-        console.log(res)
-      })
-      .catch(error => {
-        alert(error)
-      }); 
+      const idlocal=localStorage.getItem('idinstituicao');
+      const idad=localStorage.getItem('idadmin');
+      const idinst=localStorage.getItem('idinstituicao');
+      console.log("idlocal",idlocal);
+      console.log("idadmin",idad);
+      console.log("idinst",idinst);
+  
+      const url="https://pint2021.herokuapp.com/Utilizadores/countUtilVerify/"+idinst
+  
+      axios.get(url).then(res => {
+        if(res.data.status==200){  
+          this.setState({
+            campocountverifu:res.data.NumeroUtilizadores
+          })
+          console.log("data",res.data.NumeroUtilizadores)
+        }else{
+          alert("Error Web Service!");
+        
+        }
+          console.log(res)
+        })
+        .catch(error => {
+          alert(error)
+        }); 
+
+        const url2="https://pint2021.herokuapp.com/Utilizadores/countUtilNOVerify/"+idinst
+  
+      axios.get(url2).then(res => {
+        if(res.data.status==200){  
+          this.setState({
+            campocountNOverifu:res.data.NumeroUtilizadores
+          })
+          console.log("data",res.data.NumeroUtilizadores)
+        }else{
+          alert("Error Web Service!");
+        
+        }
+          console.log(res)
+        })
+        .catch(error => {
+          alert(error)
+        }); 
 
   }
-     onDelete(id){
-        Swal.fire({
-        title: 'Tem a certeza?',
-        text: 'O utilizador será removido',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, quero remover !',
-        cancelButtonText: 'Não, manter utilizador.'
-        }).then((result) => {
-        if (result.value) {
-        this.sendDelete(id)
-        } else if (result.dismiss === 
-        Swal.DismissReason.cancel) {
-        Swal.fire(
-        'Cancelado',
-        'O utilizador continua na instituição.'
-        )
-        }
-        })
-        }
-        sendDelete(userId)
-        {
-        const baseUrl = "http://localhost:3000/Filme/delete" 
-        axios.post(baseUrl,{
-        id:userId
-        })
-        .then(response =>{
-        if (response.data.success) {
-        Swal.fire(
-        'Apagado!',
-        'O utilizador foi removido com sucesso!'
-        )
-        this.loadFilme()
-        }
-        })
-        .catch ( error => {
-        alert("Error 325 ")
-        })    
-    } 
+     
    render(){
   return (
     <>
       <Container fluid>
-      <Row>
+      <Row style={{paddingLeft:'30%'}}>
           <Col md="5">  {/*coluna Estatisticas Diárias*/}
-            <Card className="card-stats">
+            <Card style={{height:'100%'}} className="card-stats">
               <Card.Body>
               
                 <Row>
-                  <Row><p className="first_titulo">Estatísticas:</p></Row>
-                <Col lg="6" sm="12">  {/*coluna Estatisticas Diárias*/}
-                    <div className="numbers">
+                  <Row ><p className="first_titulo">Estatísticas:</p></Row>
+                <Col lg="12" sm="12">  {/*coluna Estatisticas Diárias*/}
+                    <div  className="numbers">
                       
-                      <p className="secound_titulo">Utilizadores Registados: </p>
-                      <Card.Title><h3 className="aligncenter">3</h3></Card.Title>    
+                      <p   className="secound_titulo">Utilizadores Registados: </p>
+                      <Card.Title><h3   onChange={(value)=>this.setState({campocountverifu:value.target.value})} className="aligncenter">{this.state.campocountverifu}</h3></Card.Title>    
                     
                       <p className="secound_titulo">À espera de aprovação: </p>
-                      <Card.Title><h3 className="aligncenter">3</h3></Card.Title>
+                      <Card.Title><h3  onChange={(value)=>this.setState({campocountNOverifu:value.target.value})} className="aligncenter">{this.state.campocountNOverifu}</h3></Card.Title>
                       
                     </div>
                   </Col>
-                  <Col lg="6" sm="12">  {/*coluna Estatisticas Diárias*/}
-                
-                    <div className="numbers">
-                      
-                      <p className="secound_titulo">Ativos últimas 24 horas: </p>
-                      <Card.Title><h3 className="aligncenter">3</h3></Card.Title>    
-                    
-                      <p className="secound_titulo">Registados em 24 horas: </p>
-                      <Card.Title><h3 className="aligncenter">3</h3></Card.Title>
-                      
-                    </div>
-                
-                </Col>
+                 
                   </Row>
                 </Card.Body>  
             </Card>
@@ -139,9 +117,10 @@ class utilizadores extends React.Component{
           
           </Row>
 
-<Row>
+
+<Row style={{paddingTop:'4%'}}>
           <Col md="12">
-            <Card className="card-tasks">
+            <Card  className="card-tasks">
               <Card.Header>
                 <p className="first_titulo_esquerda">Utilizadores da Instituição:
               <Dropdown>
@@ -156,22 +135,15 @@ class utilizadores extends React.Component{
 </p>
  
                 <br/>
-                <div class="input-group">
-                      <div class="form-outline">
-                        <input id="search-input" type="search" id="form1" class="form-control" placeholder="Search"></input>
-                     </div>
-                      <button id="search-button" type="button" class="btn btn-primary">
-                        <i class="fas fa-search"></i>
-                     </button>
-                    </div>
+               
               </Card.Header>
 
-              <Card.Body>
+              <Card.Body >
                 <div id="table-scroll">
                   <Table id="table-scroll">
                   <thead>
                     <tr>
-                        <th></th>
+                        
                         <th>Nome</th>
                         <th>Data Nasc</th>
                         <th>Codigo Postal</th>
@@ -209,14 +181,7 @@ loadfillutilizadores()
   return this.state.listautilizadores.map((data, index)=>{
     return(
     <tr key={index}>
-       <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                            <Form.Check.Input    defaultValue=""   type="checkbox" ></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                      </td>
+       
         <td>{data.Pessoa.PNome + " "+ data.Pessoa.UNome}</td>
         <td>{data.Pessoa.Data_Nascimento}</td>
         <td>{data.Pessoa.Codigo_Postal}</td>
@@ -225,13 +190,82 @@ loadfillutilizadores()
         <td>{data.Pessoa.Email}</td>
         <td>{data.Pontos}</td>
         <td>{data.Ranking}</td>
-        <td><Button className="btn-simple btn-link p-1" type="button" variant="danger" onClick={()=>this.onDelete()}> <i className="fas fa-times"></i></Button></td>
+        <td><Button className="btn-simple btn-link p-1" type="button" variant="danger" onClick={()=>this.onDelete(data.ID_Util)}> <i className="fas fa-times"></i></Button></td>
         
     </tr>
     )
     });
     }
 
+    onDelete(id)
+    {
+      Swal.fire({ title: 'Tem a certeza?',  text: 'Não poderá voltar a recuperar o utilizador',  type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, Apagar !',
+        cancelButtonText: 'Não, Manter!'
+        }).then((result) => {
+          if (result.value) {
+          this.senddeleteutil(id)
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+              'Cancelado',
+               'O Utilizador não foi apagado',
+              'error'
+              )
+              }
+              })
+    }
 
+    senddeleteutil(userId)
+    {
+          // url do backend
+          const baseUrl = "https://pint2021.herokuapp.com/Utilizadores/deleteutil"
+          // network
+          axios.post(baseUrl,{id:userId })
+          .then(response =>{
+          if (response.data.success) {
+          Swal.fire(
+          'Apagado!',
+          'O Utilizador foi apagado com sucesso',
+          'success'
+          )
+          this.loadutilizadores();
+
+          }
+          })
+          .catch ( error => {
+          alert("Error 325 ")
+          })
+    }
+
+
+    loadutilizadores()
+    {
+      const idlocal=localStorage.getItem('idinstituicao');
+      const idad=localStorage.getItem('idadmin');
+      const idinst=localStorage.getItem('idinstituicao');
+      console.log("idlocal",idlocal);
+      console.log("idadmin",idad);
+      console.log("idinst",idinst);
+  
+      const url = "https://pint2021.herokuapp.com/Utilizadores/listutilizadores/"+idinst;
+  
+      //listar utilizadores
+      axios.get(url).then(res => {
+        if(res.data.status==200){  
+          const data=res.data.ListaUtilizadores;
+          this.setState({ listautilizadores:data});
+        }else{
+          alert("Error Web Service!");
+        
+        }
+          console.log(res)
+        })
+        .catch(error => {
+          alert(error)
+        }); 
+    }
+    
 }
+
 export default utilizadores;
