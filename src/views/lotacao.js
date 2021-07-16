@@ -27,13 +27,16 @@ class lotacao extends React.Component{
     super(props);
     this.state = {
       listindoor:[],
+      dadostabelas:[],
+      numerolocaisoutdoor:0,
+      numerolocaisindoor:0
     }
   }
 
   componentDidMount(){
     const idinst=localStorage.getItem('idinstituicao');
 
-    const url = "http://localhost:3000/Locais/get_lista_locais_indoor_local/"+idinst;
+    const url = "http://pint2021.herokuapp.com/Locais/get_lista_locais_indoor_local/"+idinst;
     axios.get(url).then(res => {
       if(res.data){
         const data = res.data.data;
@@ -47,40 +50,98 @@ class lotacao extends React.Component{
     .catch(error => {
       alert(error)
     });
+    this.obterDadosTabelas('2021-07-01','2021-07-16')
   }
 
-  loadFillData(){
-    return this.state.listcomentarios.map((data, index)=>{
-        return(
-            <tr key={index}>
-                <td>{data.Pessoa.PNome} {data.Pessoa.UNome}</td>  
-                <td>{data.Local.Nome}</td>
-                <td>{data.Classificacao}</td>
-                <td>{data.Descricao}</td>
-                <td className="td-actions text-right">
-                    <OverlayTrigger
-                      overlay={
-                        <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                      }
-                    >
-                      <Button
-                        className="btn-simple btn-link p-1"
-                        type="button"
-                        variant="danger"
-                        onClick={()=>this.onDelete()}
-                      >
-                        <i className="fas fa-times"></i>
-                      </Button>
-                    </OverlayTrigger>
-                </td>
-            </tr>
-        )
+  obterDadosTabelas(dataliminf, datalimsup){
+    const url = 'http://pint2021.herokuapp.com/Locais/get_dados_tabela_lotacao/'+localStorage.getItem('idinstituicao')+ '/'+dataliminf + '/'+ datalimsup+'/'
+    axios.get(url).then(res=>{
+      this.setState({dadostabelas:res.data})
+    }).catch(err=>{
+      console.log(err)
+      alert(err)
+    })
+  }
+
+  loadTabelaCrowdZero(isCrowdZero){
+    if(this.state.dadostabelas.length ===0)
+      return
+    let arraycomtodos = new Array()
+    
+    if(isCrowdZero)
+      this.state.dadostabelas.ZonasCrowdZero[0].ZonasOutdoor.forEach(element => {
+        arraycomtodos.push(element)
+      });
+    //this.state.dadostabelas.ZonasNotCrowdZero.ZonasOutdoor.forEach(element => {
+    //  arraycomtodos.push(element)
+    //});
+    
+    
+    this.state.dadostabelas.ZonasCrowdZero[0].ZonasIndoor.forEach(element => {
+      arraycomtodos.push(element)
     });
+    if(!isCrowdZero)
+      this.state.dadostabelas.ZonasNotCrowdZero.ZonasIndoor.forEach(element => {
+        arraycomtodos.push(element)
+      });
+    return arraycomtodos.map((data,index)=>{
+        if(data.hasOwnProperty('Local'))//é local outdoor
+        {
+          let totreports = data.Nreports[0][0] +data.Nreports[1][1]+data.Nreports[2][1]
+          return (
+            <tr key = {index}>
+              <td>
+                {data.Local.Nome}
+              </td>
+              <td>
+                {totreports}
+              </td>
+              <td>
+                {data.Nreports[0][1]}
+              </td>
+              <td>
+                {data.Nreports[1][1]}
+              </td>
+              <td>
+                {data.Nreports[2][1]}
+              </td>
+              <td>
+                obter data desinfecao
+              </td>
+            </tr>
+          )
+        }else{
+          let totreports = data.Nreports[0][0] +data.Nreports[1][1]+data.Nreports[2][1]
+          return (
+            <tr key = {index}>
+              <td>
+                {data.LocalIndoor.Nome}
+              </td>
+              <td>
+                {totreports}
+              </td>
+              <td>
+                {data.Nreports[0][1]}
+              </td>
+              <td>
+                {data.Nreports[1][1]}
+              </td>
+              <td>
+                {data.Nreports[2][1]}
+              </td>
+              <td>
+                obter data desinfecao
+              </td>
+            </tr>
+          )  
+      }
+    })
+    
   }
+  
 
 
-
-   render(){
+  render(){
   return (
     <>
       <Container fluid>
@@ -149,7 +210,7 @@ class lotacao extends React.Component{
 
  </Row>
  <Container fluid>
-     <Row>
+    <Row>
           <Col md="12">
             <Card className="card-tasks">
               <Card.Header>
@@ -193,71 +254,7 @@ class lotacao extends React.Component{
                         <th></th>
 
                     </tr>
-                      <tr>
-                        
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                        
-                      </tr>
-                      <tr>
-                       
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                        
-                      </tr>
-                      <tr>          
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                        
-                      </tr>
+                      {this.loadTabelaCrowdZero(false)}
                     </tbody>
                   </Table>
                 </div>
@@ -296,8 +293,7 @@ class lotacao extends React.Component{
                 <div id="table-scroll">
                   <Table id="table-scroll">
                     <tbody id="table-scroll">
-                    <tr>
-                        
+                      <tr>
                         <th className="th">Local</th>
                         <th>Total</th>
                         <th>Pouco populado</th>
@@ -305,73 +301,8 @@ class lotacao extends React.Component{
                         <th>Extemamente populado</th>
                         <th>Data/hora última desinfeção</th>
                         <th></th>
-
-                    </tr>
-                      <tr>
-                        
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                        
                       </tr>
-                      <tr>
-                       
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                        
-                      </tr>
-                      <tr>          
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                        
-                      </tr>
+                      {this.loadTabelaCrowdZero(true)}
                     </tbody>
                   </Table>
                 </div>
