@@ -110,7 +110,7 @@ class reports extends React.Component{
     let body = {tempo:this.state.temporeports, tipoTempo:"dd"}
 
     axios.put(url1,body).then(res=>{
-      console.log(1,res.data)
+      
       let array = new Array()
       for(let a of res.data.reports)
         if(a.hasOwnProperty('ID_Report_Indoor'))

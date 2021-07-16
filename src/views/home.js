@@ -111,7 +111,6 @@ if(this.state.listaDiasNumeroReports.length !==0)
            return this.state.listaDiasNumeroReports[0].NReports
   }
 
-  
   obterPercentagem(){
     let url = 'http://pint2021.herokuapp.com/Instituicao/percentagem_util_por_inst/' + localStorage.getItem('idinstituicao')
     axios.get(url).then(res =>{
@@ -445,7 +444,7 @@ if(this.state.listaDiasNumeroReports.length !==0)
       text: 'O pedido será aceite',
       type: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Sim, aceitar pedido !',
+      confirmButtonText: 'Sim, aceitar pedido!',
       cancelButtonText: 'Não, manter o pedido.'
     }).then(result => {
     if (result.value) {
@@ -456,7 +455,7 @@ if(this.state.listaDiasNumeroReports.length !==0)
     })
   }
   acepetutil(userId){
-    const baseUrl = "http://localhost:3000/Utilizadores/updateUtilVerify/"+userId
+    const baseUrl = "http://pint2021.herokuapp.com/Utilizadores/updateUtilVerify/"+userId
     console.log(baseUrl)
     axios.post(baseUrl,{
       idutil:userId
@@ -464,7 +463,7 @@ if(this.state.listaDiasNumeroReports.length !==0)
     .then(response =>{
       if (response.data.success) {
       Swal.fire('Aceite com sucesso!')
-      
+      this.PedidoUtilsEspera()
     }
     })
     .catch ( error => {
