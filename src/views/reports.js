@@ -199,6 +199,21 @@ class reports extends React.Component{
           <td>
             {descricao}
           </td>
+          <td className="td-actions text-right">
+            <OverlayTrigger
+              overlay={
+                <Tooltip id="tooltip-21130535">Remover</Tooltip>
+              }>
+              <Button
+                className="btn-simple btn-link p-1"
+                type="button"
+                variant="danger"
+                onClick={()=>this.onDelete()}
+              >
+                <i className="fas fa-times"></i>
+              </Button>
+            </OverlayTrigger>
+          </td>
         </tr>
       )
 
