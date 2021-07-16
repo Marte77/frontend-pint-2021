@@ -73,6 +73,8 @@ function Maps() {
     
     
     var listalocais =await obterListaLocaisEDensidadeMedia();
+    console.log(listalocais.Lista[2])
+
     //listalocais.Lista.push({
     //  IDLocal:11,Latitude:40.6467634,Longitude:-7.9173397, densidadeMedia:1,Nome: "ola"
     //})
@@ -83,13 +85,17 @@ function Maps() {
     //  IDLocal:13,Latitude:40.6387692,Longitude:-7.9166592, densidadeMedia:1,Nome: "ola"
     //})
     var latitudetotal = 0, longitudetotal=0 //calcular ponto medio entre locais
+    let nlocais = 0
     for (let city in listalocais.Lista) {
       let local = listalocais.Lista[city]
-      latitudetotal = latitudetotal + local.Latitude
-      longitudetotal = longitudetotal + local.Longitude
+      if(local.Latitude>=-90 && local.Latitude <= 90 && local.Longitude>=-180 && local.Longitude<=180){
+        latitudetotal = latitudetotal + local.Latitude
+        longitudetotal = longitudetotal + local.Longitude
+        nlocais++
+      }
     }
-    latitudetotal = latitudetotal / listalocais.Lista.length
-    longitudetotal = longitudetotal / listalocais.Lista.length
+    latitudetotal = latitudetotal / nlocais//listalocais.Lista.length
+    longitudetotal = longitudetotal / nlocais //listalocais.Lista.length
     const myLatlng = new google.maps.LatLng(latitudetotal, longitudetotal);
     const mapOptions = {
       zoom: 15,
@@ -101,6 +107,9 @@ function Maps() {
     map = new google.maps.Map(map, mapOptions);
     for (let city in listalocais.Lista) {
       let local = listalocais.Lista[city]
+      if(local.Latitude<-90 && local.Latitude > 90 && local.Longitude<-180 && local.Longitude>180){
+        break
+      }
       const marker = new google.maps.Marker({
         position: new google.maps.LatLng(local.Latitude,local.Longitude),
         map:map,
