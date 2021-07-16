@@ -394,7 +394,7 @@ if(this.state.listaDiasNumeroReports.length !==0)
                           </td>
                           <td>
                           <OverlayTrigger  overlay={ <Tooltip id="tooltip-21130535">Remover</Tooltip> }>
-                            <Button className="btn-simple btn-link p-1" type="button" variant="danger" onClick={()=>this.onDelete(data.id)}>
+                            <Button className="btn-simple btn-link p-1" type="button" variant="danger" onClick={()=>this.onDelete(data.ID_Util)}>
                               <i className="fas fa-times"></i>
                             </Button>
                           </OverlayTrigger>
@@ -404,6 +404,7 @@ if(this.state.listaDiasNumeroReports.length !==0)
     });
   }
   onDelete(id){
+    console.log(id)
         Swal.fire({
         title: 'Tem a certeza?',
         text: 'O pedido pendente vai ser apagado',
@@ -416,6 +417,7 @@ if(this.state.listaDiasNumeroReports.length !==0)
         this.sendDelete(id)
         } else if (result.dismiss === 
         Swal.DismissReason.cancel) {
+          
         Swal.fire(
         'Cancelado',
         'O pedido continua seguro.'
@@ -424,17 +426,18 @@ if(this.state.listaDiasNumeroReports.length !==0)
         })
   }
   sendDelete(userId){
-    const baseUrl = "http://localhost:3000/Filme/delete" 
+    const baseUrl = "https://pint2021.herokuapp.com/Utilizadores/recusarutil/ " +userId+"/"+localStorage.getItem('idinstituicao') 
     axios.post(baseUrl,{
       id:userId
     })
     .then(response =>{
+      
       if (response.data.success) {
       Swal.fire('Apagado!','O pedido foi apagado com sucesso')
-      this.loadFilme()
+      this.PedidoUtilsEspera()
       }
     }).catch ( error => {
-      alert("Error 325 ")
+      alert(error)
     })    
   }   
   onAdd(id){
