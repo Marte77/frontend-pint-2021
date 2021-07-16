@@ -99,7 +99,7 @@ sendSave(){
     alert("Campo descrição vazio!")
     }
     else {
-    const baseUrl = "http://localhost:3000/Pessoas/createAdmin"
+    const baseUrl = "http://pint2021.herokuapp.com/Pessoas/createAdmin"
     const datapost = {
 PNome : this.state.campoPnome,
 UNome : this.state.campoUnome,

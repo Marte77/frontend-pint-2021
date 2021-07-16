@@ -101,7 +101,7 @@ class definicoes extends React.Component{
       const url3="https://pint2021.herokuapp.com/Alertas/listalertas/"+idinst;
       const url2 = "https://pint2021.herokuapp.com/Locais/listlocaisindoor/"+idinst;
       const url = "https://pint2021.herokuapp.com/Locais/listlocaisout/"+idinst;
-      const url5="http://localhost:3000/Alertas/gettipoalerta";
+      const url5="http://pint2021.herokuapp.com/Alertas/gettipoalerta";
       console.log('url4',url4);
       axios.get(url).then(res => {
       if(res.data.status==200){
