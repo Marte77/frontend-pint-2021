@@ -65,13 +65,17 @@ class home extends React.Component{
     this.obterReportsEmCadaDia();
     this.obterPercentagem();
   }
+  
   PedidoUtilsEspera() {
-    const url = "https://pint2021.herokuapp.com/Pessoas/getUtilsEspera";
+    const idlocal=localStorage.getItem('idinstituicao');
+      const idad=localStorage.getItem('idadmin');
+      const idinst=localStorage.getItem('idinstituicao');
+    const url = "https://pint2021.herokuapp.com/Utilizadores/listutilizadoresNoVerify/"+idinst;
     axios.get(url)
     .then(res => {
       console.log(res);
       if(res.status === 200){
-      const data = res.data.Utils;
+      const data = res.data.ListaUtilizadores;
       this.setState({ listUtilsEspera:data });
     }else{
       alert("Erro dispositivo web");
@@ -298,13 +302,16 @@ if(this.state.listaDiasNumeroReports.length !==0)
                           Tipo Utilizador  &nbsp;&nbsp;
                         </th>
                         <th>
-                          Primeiro nome
+                          Primeiro Nome
                         </th>
                         <th>
-                          Ultimo nome &nbsp;&nbsp;
+                          Último Nome &nbsp;&nbsp;
                         </th>
                         <th>
                           Email
+                        </th>
+                        <th>
+                          Data Nascimento
                         </th>
                        
                        {this.loadUtilsEspera()} 
@@ -382,6 +389,7 @@ if(this.state.listaDiasNumeroReports.length !==0)
     <td>{data.Pessoa.PNome}</td>
     <td>{data.Pessoa.UNome}</td>
     <td>{data.Pessoa.Email}</td>
+    <td>{data.Pessoa.Data_Nascimento}</td>
 
 
 <td className="td-actions text-right">

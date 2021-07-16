@@ -89,6 +89,7 @@ class definicoes extends React.Component{
       this.Loaddeletealerta()
       this.LoadLocaisDelete()
       this.LoadLocaisintDelete()
+      this.loadFillDatatipoalerta_option()
       const idlocal=localStorage.getItem('idinstituicao');
       const idad=localStorage.getItem('idadmin');
       const idinst=localStorage.getItem('idinstituicao');
