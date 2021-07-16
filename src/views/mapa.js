@@ -122,12 +122,12 @@ function Maps() {
       {
         const cityCircle = new google.maps.Circle({
         
-        strokeOpacity: 0.8,
+        strokeOpacity: 1,
         strokeWeight: 2,
-        fillOpacity: 0.35,
+        fillOpacity: 0.45,
         map: map,
         center:  new google.maps.LatLng(local.Latitude,local.Longitude),
-        radius: 50,     
+        radius: 70,     
         fillColor: "#00ff00",
         strokeColor: "#00ff00",
         
@@ -137,13 +137,13 @@ function Maps() {
         {
        const cityCircle = new google.maps.Circle({
         
-        strokeOpacity: 0.8,
+        strokeOpacity: 1,
         strokeWeight: 2,
         
-        fillOpacity: 0.35,
+        fillOpacity: 0.45,
         map: map,
         center: new google.maps.LatLng(local.Latitude,local.Longitude),
-        radius: 50,     
+        radius: 70,     
         fillColor: "#e0e000",
         strokeColor: "#ffff00",
         
@@ -153,13 +153,13 @@ function Maps() {
         {
        const cityCircle = new google.maps.Circle({
         
-        strokeOpacity: 0.8,
+        strokeOpacity: 1,
         strokeWeight: 2,
         
-        fillOpacity: 0.35,
+        fillOpacity: 0.45,
         map: map,
         center:  new google.maps.LatLng(local.Latitude,local.Longitude),
-        radius: 50,     
+        radius: 70,     
         fillColor: "#e60000",
         strokeColor: "#e60000",
         
@@ -182,286 +182,7 @@ function Maps() {
       <div className="map-container">
         <div id="map" ref={mapRef}></div>
       </div>
-     <br/>
-     <Container fluid>
-     <Row>
-          <Col md="12">
-            <Card className="card-tasks">
-              <Card.Header>
-                <p className="first_titulo_esquerda">Lista de Locais existentes: 
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-    Ordenar por
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Data Asc.</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Data Desc.</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown>    
-</p>
- 
-                <p className="card-category">Faça a gestão de locais indoor</p>
-                <br/>
-                <div class="input-group">
-                      <div class="form-outline">
-                        <input id="search-input" type="search" id="form1" class="form-control" placeholder="Search"></input>
-                     </div>
-                      <button id="search-button" type="button" class="btn btn-primary">
-                        <i class="fas fa-search"></i>
-                     </button>
-                    </div>
-              </Card.Header>
-
-              <Card.Body>
-                <div id="table-scroll">
-                  <Table id="table-scroll">
-                    <tbody id="table-scroll">
-                    <tr>
-                        <th></th>
-                        <th>Local</th>
-                        <th>Total Alertas</th>
-                        <th>Pouco populado</th>
-                        <th>Muito populado</th>
-                        <th>Extemamente populado</th>
-                        <th>Data última desinfeção</th>
-                        <th></th>
-
-                    </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                        
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                       
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                        
-                      </tr>
-                    </tbody>
-                  </Table>
-                </div>
-
- <a class="button2" href="#popup1">Adicionar local</a>
-<a class="button3" href="#popup2">Alterar local selecionado</a>
-
-
-<div id="popup1" class="overlay">
-  <div class="popup">
-    <h2>Adicionar local</h2>
-    <a class="close" href="#">&times;</a>
-    <div class="content">
-      <p>Preencha os dados do local interior :</p>
-    </div>
-    <Form>
-                  <Row>
-                    <Col className="pr-1" md="10">
-                      <Form.Group>
-                        <label>Local Interior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local interior"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="10">
-                      <Form.Group>
-                        <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="10">
-                      <Form.Group>
-                        <label>Piso</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Ex. 1,2"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-
-                  <Row>
-                    <Col className="pr-1" md="10">
-                    <Form.Group>
-                        <label>Pertence ao local Exterior :</label>
-                        <br/>
-                   <select>
-                     <option value="1">palacio do gelo</option>
-                    <option  value="2">visabeira</option>
-                    <option  value="3">parque</option>
-                  </select>
-                
-                      </Form.Group>
-
-                    </Col>
-                  </Row>
-               <br/>
-                  <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
-                    Guardar local interior 
-                  </Button>
-                  
-                  </Form>
-  </div>
-</div>
-<div id="popup2" class="overlay">
-  <div class="popup">
-    <h2>Alterar Local</h2>
-    <a class="close" href="#">&times;</a>
-    <div class="content">
-      <p>Altere os dados do local interior :</p>
-    </div>
-    <Form>
-                  <Row>
-                    <Col className="pr-1" md="10">
-                      <Form.Group>
-                        <label>Local Interior</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Nome local interior"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="10">
-                      <Form.Group>
-                        <label>Descrição</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Descricao"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                    
-                  </Row>
-                  <Row>
-                    <Col className="pr-1" md="10">
-                      <Form.Group>
-                        <label>Piso</label>
-                        <Form.Control
-                          defaultValue=""
-                          placeholder="Ex. 1,2"
-                          type="text"
-                        ></Form.Control>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-
-               <br/>
-                  <Button
-                    className="btn-fill pull-left" 
-                    type="submit"
-                    variant="info"
-                  >
-                    Efetuar alteração
-                  </Button>
-                  
-                  </Form>
-  </div>
-</div>
-                <br/><br/>
-              </Card.Body>
-              
-            </Card>
-          </Col>
-          </Row>
-     </Container>
+    
 
     </>
   );

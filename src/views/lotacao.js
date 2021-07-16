@@ -29,7 +29,8 @@ class lotacao extends React.Component{
       listindoor:[],
       dadostabelas:[],
       numerolocaisoutdoor:0,
-      numerolocaisindoor:0
+      numerolocaisindoor:0,
+      arrayalertas:[]
     }
   }
 
@@ -51,6 +52,7 @@ class lotacao extends React.Component{
       alert(error)
     });
     this.obterDadosTabelas('2021-07-01','2021-07-16')
+    this.obterAlertasMaisRecentes()
   }
 
   obterDadosTabelas(dataliminf, datalimsup){
@@ -63,11 +65,22 @@ class lotacao extends React.Component{
     })
   }
 
+  obterAlertasMaisRecentes(){
+    const url = 'http://pint2021.herokuapp.com/Alertas/get_ultimo_alerta_desinfecao/'+localStorage.getItem('idinstituicao')
+    axios.get(url).then( res=>{
+      this.setState({arrayalertas:res.data.Alertas})
+    }).catch(err=>{
+      console.log(err)
+      alert(err)
+    })
+  
+  }
+
   loadTabelaCrowdZero(isCrowdZero){
-    if(this.state.dadostabelas.length ===0)
+    if(this.state.dadostabelas.length ===0 || this.state.arrayalertas.length ===0 )
       return
     let arraycomtodos = new Array()
-    
+    let arrayalertas = this.state.arrayalertas
     if(isCrowdZero)
       this.state.dadostabelas.ZonasCrowdZero[0].ZonasOutdoor.forEach(element => {
         arraycomtodos.push(element)
@@ -87,6 +100,15 @@ class lotacao extends React.Component{
     return arraycomtodos.map((data,index)=>{
         if(data.hasOwnProperty('Local'))//é local outdoor
         {
+          let alerta
+          for(let alertas of arrayalertas){
+            if(data.Local.ID_Local === alertas.Local.ID_Local)
+              alerta = alertas
+          }
+          if(alerta.alerta.length === 0)
+            alerta = 'Erro'
+          else alerta = alerta.alerta[0].Data.split('T')[0]
+          
           let totreports = data.Nreports[0][1] +data.Nreports[1][1]+data.Nreports[2][1]
           return (
             <tr key = {index}>
@@ -106,7 +128,7 @@ class lotacao extends React.Component{
                 {data.Nreports[2][1]}
               </td>
               <td>
-                obter data desinfecao
+                {alerta}
               </td>
             </tr>
           )
@@ -131,7 +153,7 @@ class lotacao extends React.Component{
                 {data.Nreports[2][1]}
               </td>
               <td>
-                obter data desinfecao
+                LocalIndoor nao suporta Alerta
               </td>
             </tr>
           )  

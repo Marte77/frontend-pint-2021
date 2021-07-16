@@ -77,7 +77,12 @@ como: (Definições e Alteração de limites de densidade).
 
                 </Row>
               </Card.Body>  
+
             </Card>
+
+         
+            <Button className="btn btn-dark btn-lg btn-block" onClick={()=>window.open('https://estgv-my.sharepoint.com/:u:/g/personal/estgv18727_alunos_estgv_ipv_pt/ETBP_AGM0SBKkXsypom4pT0BekjwCMxJiGEPaLMpVwBR_A?e=hN2NMd')} >
+                           <i class='fab fa-android'></i>&nbsp; Download app</Button>
           </Col>  
 
           

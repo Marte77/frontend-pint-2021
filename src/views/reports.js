@@ -27,45 +27,210 @@ import {
 
 class reports extends React.Component{
   onDelete(id){
-        Swal.fire({
-        title: 'Tem a certeza?',
-        text: 'O report vai ser apagado',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, quero apagar !',
-        cancelButtonText: 'Não, manter o report.'
-        }).then((result) => {
-        if (result.value) {
+    Swal.fire({title: 'Tem a certeza?',text: 'O report vai ser apagado',type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, quero apagar !',
+      cancelButtonText: 'Não, manter o report.'
+    }).then((result) => {
+      console.log(id)
+      if (result.value) {
         this.sendDelete(id)
-        } else if (result.dismiss === 
-        Swal.DismissReason.cancel) {
-        Swal.fire(
-        'Cancelado',
-        'O report continua seguro.'
-        )
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelado','O report continua seguro.')
+      }
+    })
+  }
+  sendDelete(userId)
+  {
+    const baseUrl = "http://pint2021.herokuapp.com/Report/apgar_report/"+userId 
+    axios.delete(baseUrl)
+    .then(response =>{
+      if (response.data.success) {
+        Swal.fire('Apagado!','O pedido foi apagado com sucesso')
+        this.obterDadosTabela()
+      } 
+    })
+    .catch ( error => {
+      alert("Error 325 ")
+    })    
+  } 
+
+  constructor(props){
+    super(props)
+    this.state = {
+      temporeports:7,
+      listareports:[],
+      localindoorcommaisreports:["sem ifno",0],
+      numeroreportsnainstituicao:0,
+      locaisindoorereports:{
+        labels: ["Cantina ", "Bar","Aula magna","Estacionamento"],
+        series: [30, 15,15,40],
+      },
+      dadosgraficobarras: {
+        labels: ["S","T","Q","Q","S","S","D",],
+        series: [[20,30,25,80,20,30,25,],],
+      }
+    }
+  }
+  componentDidMount(){
+    this.obterDadosTabela()
+    this.obterDadosGrafico()
+  }
+
+  obterDadosGrafico(){
+    let dadosjson = {labels:[], series:[[]]}
+    let url = 'https://pint2021.herokuapp.com/Instituicao/numero_reports_x_dias/'+localStorage.getItem('idinstituicao')+ '/'+this.state.temporeports
+    axios.get(url).then( res=>{
+      //console.log(res.data)
+      
+      var arraylabelsdias = ["Dom","Seg","Ter","Quar","Quin","Sext","Sab"]
+      
+      console.log(res.data.res)
+      for(let dia of res.data.res){
+        
+        dadosjson.labels.push(arraylabelsdias[dia.diasemana])
+        dadosjson.series[0].push(dia.NReports)
+        
+      }
+      
+      
+      dadosjson.labels.reverse()
+      dadosjson.series[0].reverse()
+      this.setState({dadosgraficobarras:dadosjson})
+      console.log(dadosjson)
+    }).catch( err=>{
+      console.log(err)
+      alert(err)
+    })
+  }
+
+  obterDadosTabela(){
+    const urlgeral = 'http://pint2021.herokuapp.com/'
+    const url1 = urlgeral + 'Instituicao/getReportsTodosPorTempo/'+localStorage.getItem('idinstituicao')
+    let body = {tempo:this.state.temporeports, tipoTempo:"dd"}
+
+    axios.put(url1,body).then(res=>{
+      console.log(1,res.data)
+      let array = new Array()
+      for(let a of res.data.reports)
+        if(a.hasOwnProperty('ID_Report_Indoor'))
+          array.push(a)
+      let locaisindoorpiechar={labels:[],series:[]}
+      for(let a of array){
+        if(locaisindoorpiechar.labels.findIndex(element => element === a.Local_Indoor.Nome ) === -1){
+          locaisindoorpiechar.labels.push(a.Local_Indoor.Nome)
+          locaisindoorpiechar.series.push(1)
         }
-        })
+        else {
+          let index = locaisindoorpiechar.labels.findIndex(element => element === a.Local_Indoor.Nome )
+          locaisindoorpiechar.series[index] = locaisindoorpiechar.series[index] + 1
         }
-        sendDelete(userId)
-        {
-        const baseUrl = "http://localhost:3000/Filme/delete" 
-        axios.post(baseUrl,{
-        id:userId
-        })
-        .then(response =>{
-        if (response.data.success) {
-        Swal.fire(
-        'Apagado!',
-        'O pedido foi apagado com sucesso'
-        )
-        this.loadFilme()
+      }
+
+
+
+      let max = -1, maxindex = 0
+      for(let i = 0; i<locaisindoorpiechar.series.length;i++)
+        if(max<=locaisindoorpiechar.series[i])
+          {max=locaisindoorpiechar.series[i]; maxindex = i}
+
+      this.setState({
+        listareports:res.data.reports,
+        numeroreportsnainstituicao:res.data.reports.length,
+        locaisindoorereports:locaisindoorpiechar,
+        localindoorcommaisreports:[locaisindoorpiechar.labels[maxindex],max]
+      })
+      console.log(1,locaisindoorpiechar)
+      
+    }).catch(error => {
+      alert(error)
+    });
+
+  }
+
+
+  loadDadosTabela(){ 
+    return this.state.listareports.map((data,index)=>{
+      let tipoReport = 0,tipoReportstring="" //1-rep outdoor outros, 2 rep outdoor util inst, 3 - rep indoor
+      if(data.hasOwnProperty('ID_Report_Out_Util'))
+        {tipoReport =1; tipoReportstring="Report Outdoor Outro Util"}
+      else if (data.hasOwnProperty('ID_Report_Out_Insti'))
+        {tipoReport = 2; tipoReportstring="Report Outdoor Util Inst"}
+      else {tipoReport = 3; tipoReportstring="Report Indoor"}
+      let nome, local, datarep, descricao, idreport
+      switch(tipoReport){
+        case 1:{
+          nome = data.Outros_Util.Pessoa.PNome + ' ' +data.Outros_Util.Pessoa.UNome
+          local = data.Local.nome
+          datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
+          descricao = data.Report.Descricao
+          idreport = data.Report.ID_Report
+          break;
         }
-        })
-        .catch ( error => {
-        alert("Error 325 ")
-        })    
-    } 
-   render(){
+        case 2:{
+          nome = data.Utils_Instituicao.Pessoa.PNome + ' ' +data.Utils_Instituicao.Pessoa.UNome
+          local = data.Local.nome
+          datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
+          descricao = data.Report.Descricao
+          idreport = data.Report.ID_Report
+          break;
+        }
+        case 3:{
+          nome = data.Utils_Instituicao.Pessoa.PNome + ' ' +data.Utils_Instituicao.Pessoa.UNome
+          local = data.Local_Indoor.nome
+          datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
+          descricao = data.Report.Descricao
+          idreport = data.Report.ID_Report
+          break;
+        }
+      }
+      return(
+        <tr key={index}>
+          <td>
+            <Form.Check className="mb-1 pl-0">
+              <Form.Check.Label>
+                <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
+                <span className="form-check-sign"></span>
+              </Form.Check.Label>
+            </Form.Check>
+          </td>
+          <td>
+            {nome}
+          </td>
+          <td>
+            {local}
+          </td>
+          <td>
+            {tipoReportstring}
+          </td>
+          <td>
+            {datarep}
+          </td>
+          <td>
+            {descricao}
+          </td>
+          <td className="td-actions text-right">
+            <OverlayTrigger
+              overlay={
+                <Tooltip id="tooltip-21130535">Remover</Tooltip>
+              }>
+              <Button
+                className="btn-simple btn-link p-1"
+                type="button"
+                variant="danger"
+                onClick={()=>this.onDelete(idreport)}
+              >
+                <i className="fas fa-times"></i>
+              </Button>
+            </OverlayTrigger>
+          </td>
+        </tr>
+      )
+
+    })
+  }
+
+  render(){
   return (
     <>
 
@@ -85,10 +250,7 @@ class reports extends React.Component{
                   id="chartPreferences"
                 >
                   <ChartistGraph
-                    data={{
-                      labels: ["Cantina ", "Bar","Aula magna","Estacionamento"],
-                      series: [30, 15,15,40],
-                    }}
+                    data={this.state.locaisindoorereports}
                     type="Pie"
                   />
                 </div>
@@ -104,14 +266,14 @@ class reports extends React.Component{
                       <p className="first_titulo">Reports da Instituição</p>
                       
                       <p className="secound_titulo">Nº total de  reportes na Instituição: </p>
-                      <Card.Title><h3 className="aligncenter">20001</h3></Card.Title>    
+                      <Card.Title><h3 className="aligncenter">{this.state.numeroreportsnainstituicao}</h3></Card.Title>    
                     <div class="container">
                      <a class="button6" href="#popup1">Alterar limites de lotação</a>
                     </div>
                     <hr/>
                       <p className="first_titulo">Zona com mais reports: </p>
-                      <p className="secound_titulo">Cantina </p>
-                      <Card.Title><h3 className="aligncenter">140</h3></Card.Title>
+                      <p className="secound_titulo">{this.state.localindoorcommaisreports[0]} </p>
+                      <Card.Title><h3 className="aligncenter">{this.state.localindoorcommaisreports[1]}</h3></Card.Title>
                       <br/>
                     </div>
 
@@ -131,29 +293,7 @@ class reports extends React.Component{
               <Card.Body>
                 <div className="ct-chart" id="chartActivity">
                   <ChartistGraph
-                    data={{
-                      labels: [
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S",
-                        "D",
-                       
-                      ],
-                      series: [
-                        [
-                          20,
-                          30,
-                          25,
-                          80,
-                          20,
-                          30,
-                          25,
-                        ],
-                      ],
-                    }}
+                    data={this.state.dadosgraficobarras}
                     type="Bar"
                     options={{
                       seriesBarDistance: 10,
@@ -223,133 +363,9 @@ class reports extends React.Component{
                         <th>Data</th>
                         <th>Descrição</th>
                         <th>Excluir</th>
-
                     </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr><tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         
-                        <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete()}
-                            >
-                              <i className="fas fa-times"></i>
-                            </Button>
-                          </OverlayTrigger>
-                        </td>
-                      </tr>
+                      {this.loadDadosTabela()}
+                    
                     </tbody>
                   </Table>
                 </div>
