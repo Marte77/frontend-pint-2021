@@ -23,11 +23,12 @@ import Report from "views/reports.js";
 import Opinioes from "views/opinioes.js";
 import Utilizadores from "views/utilizadores.js";
 import Definicoes from "views/definicoes.js";
+import Sobre from "views/sobre.js";
 const dashboardRoutes = [ //abrir paginas da aplicacao no menu da nossa dashboard
   {
     path: "/home",
     name: "Home",
-    icon: "nc-icon nc-app",
+    icon: "nc-icon nc-single-02",
     component: Home,
     layout: "/admin",
   },
@@ -76,8 +77,15 @@ const dashboardRoutes = [ //abrir paginas da aplicacao no menu da nossa dashboar
   {
     path: "/definicoes",
     name: "Definições",
-    icon: "nc-icon nc-preferences-circle-rotate",
+    icon: "nc-icon nc-settings-gear-64",
     component: Definicoes,
+    layout: "/admin",
+  },
+  {
+    path: "/sobre",
+    name: "Sobre",
+    icon: "nc-icon nc-attach-87",
+    component: Sobre,
     layout: "/admin",
   },
 ];
