@@ -28,45 +28,166 @@ import {
 
 class alertas extends React.Component{
 
-   onDelete(id){
-        Swal.fire({
-        title: 'Tem a certeza?',
-        text: 'O alerta vai ser apagado',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, quero apagar !',
-        cancelButtonText: 'Não, manter o alerta.'
-        }).then((result) => {
-        if (result.value) {
-        this.sendDelete(id)
-        } else if (result.dismiss === 
-        Swal.DismissReason.cancel) {
-        Swal.fire(
-        'Cancelado',
-        'O alerta continua seguro.'
+  constructor(props){
+    super(props);
+    this.state = {
+      listalertas:[],
+      listaalerta:[],
+      listatipo:[],
+      listalocais:[],
+      listatotais:[],
+      totais:[],
+      campotipo:"",
+      campolocal:"",
+      updatecampo:"",
+    }
+  }
+
+  totais(){
+    return this.state.totais.map((data, index)=>{
+      return(
+        this.state.listalocais.push(data.NomeLocal),
+        this.state.listatotais.push(data.NumeroAlertas),
+        null
+      )
+      });
+  }
+
+  componentDidMount(){
+    const idinst=localStorage.getItem('idinstituicao');
+
+    const url = "http://localhost:3000/Alertas/listalertas/"+idinst;
+    axios.get(url).then(res => {
+      if(res.data){
+        const data = res.data.Alertas;
+        this.setState({ listalertas:data });
+      }
+      else{
+        alert("No data");
+      }
+      console.log(res)
+    })
+    .catch(error => {
+      alert(error)
+    });
+
+
+    const url1 = "http://localhost:3000/Alertas/gettipoalerta";
+    axios.get(url1).then(res => {
+      if(res.data){
+        const data = res.data.ListipoAlertas;
+        this.setState({ listatipo:data });
+      }
+      else{
+        alert("No data");
+      }
+      console.log(res)
+    })
+    .catch(error => {
+      alert(error)
+    });
+
+
+    const url2 = "http://localhost:3000/Alertas/totalalertaslocais/"+idinst;
+    axios.get(url2).then(res => {
+      if(res.data){
+        const data = res.data.alertas;
+        this.setState({ totais:data });
+      }
+      else{
+        alert("No data");
+      }
+      console.log(res)
+    })
+    .catch(error => {
+      alert(error)
+    });
+  }
+
+
+  gettIPO(ID)
+    {
+        const url="http://localhost:3000/Alertas/getalerta/"+ID
+        axios.get(url)
+          .then(res=>{
+          if (res.data) {
+              const data = res.data.Tipo
+              this.state.campolocal= data[0].Local.Nome
+              this.state.campotipo= data[0].Tipo_Alerta.Tipo_Alerta
+            console.log('HEY', )
+            console.log(JSON.stringify(data))
+          }
+          else {
+            alert("Error web service")
+          }
+          })
+            .catch(error=>{
+            alert("Error server: "+error)
+          })
+    }
+
+  loadFillAlerta(){
+    var date= ""
+    var mes=0
+    return this.state.listalertas.map((data, index)=>{
+      return(
+        date = data.Data,
+           mes = new Date(date).getMonth()+1,
+           date = new Date(date).getDate() + "-" + mes + "-"+ new Date(date).getFullYear(),
+        <tr key={index}>
+            <td>{date}</td>
+            <td>{data.Local.Nome}</td>
+            <td>{data.Tipo_Alerta.Tipo_Alerta}</td>  
+            <td>
+              <a class="" href="#popup2" onClick={()=>this.gettIPO(data.ID_alerta)} ><i class="fas fa-edit"></i></a>
+            </td>
+        </tr>
         )
-        }
-        })
-        }
-        sendDelete(userId)
-        {
-        const baseUrl = "http://localhost:3000/Filme/delete" 
-        axios.post(baseUrl,{
-        id:userId
-        })
-        .then(response =>{
-        if (response.data.success) {
-        Swal.fire(
-        'Apagado!',
-        'O pedido foi apagado com sucesso'
+    });
+  }
+
+  loadFillTipo(){
+    var date= ""
+    var mes=0
+    return this.state.listatipo.map((data, index)=>{
+      return(
+        <tr>
+        <td></td>
+        <td>
+          {data.Tipo_Alerta}
+        </td>
+      </tr>
         )
-        this.loadFilme()
-        }
-        })
-        .catch ( error => {
-        alert("Error 325 ")
-        })    
-    } 
+    });
+  }
+
+  sendSaveTipo()
+  {
+    if (this.state.campotipo === "")
+      alert("Inserir dado!")
+    else{
+      
+    const url2 = "http://localhost:3000/Alertas/createTipoAlerta";
+    const datpost={
+      Tipo_Alerta:this.state.campotipo
+    }
+    axios.post(url2, datpost)
+    .then(res => {
+      if(res.data){
+        this.componentDidMount()
+      }
+      else{
+        alert("No data");
+      }
+      console.log(res)
+    })
+    .catch(error => {
+      alert(error)
+    });
+    }
+  }
+
+
    render(){
   return (
     <>
@@ -94,21 +215,19 @@ class alertas extends React.Component{
               </Card.Header>
               <Card.Body>
                 <div className="ct-chart" id="chartActivity">
+                  {this.totais()}
                   <ChartistGraph
                     data={{
                       labels: [
-                        "cantina",
-                        "patio",
-                        "sala12",
-                        "auditorio",
-                       
+                       this.state.listalocais[0],
+                       this.state.listalocais[1],
+                       this.state.listalocais[2]
                       ],
                       series: [
                         [
-                          542,
-                          443,
-                          320,
-                          100,
+                          this.state.listatotais[0],
+                          this.state.listatotais[1],
+                          this.state.listatotais[2],
                         ],
                       ],
                     }}
@@ -150,68 +269,12 @@ class alertas extends React.Component{
                 <div id="table-scroll">
                   <Table id="table-scroll">
                     <tbody id="table-scroll">
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Alerta com baixa lotação
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Alerta com lotação media
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Alerta com lotação alta
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Alerta Desinfeção urgente
-                        </td>
-                      </tr>
+                      {this.loadFillTipo()}
                     </tbody>
                   </Table>
                 </div>
-                <a class="button2" href="#popup1">Criar Alerta</a>
-                <a class="button4" href="#popup2">Alterar Alerta</a>
-
-                <button class="button_removeralerta" onClick={()=>this.onDelete()}>Remover Alerta</button>
-
+                <a class="button2"  href="#popup1" >Criar Alerta</a>           
                 <br/><br/>
-                
               </Card.Body>
               
             </Card>
@@ -227,27 +290,8 @@ class alertas extends React.Component{
             <Card className="card-tasks">
               <Card.Header>
               <br/>
-                <p className="first_titulo_esquerda">&nbsp;&nbsp;&nbsp;Últimos Alertas / Desinfeções
-                <Dropdown>
-               <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_stylev2">
-                 Tipo
-               </Dropdown.Toggle>
-               <Dropdown.Menu>
-                <Dropdown.Item href="#/action-1">Todos</Dropdown.Item>
-                 <Dropdown.Item href="#/action-1">Desinfeção</Dropdown.Item>
-                 <Dropdown.Item href="#/action-2">Pouco populado</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Muito populado</Dropdown.Item>
-                   <Dropdown.Item href="#/action-2">Extremante populado</Dropdown.Item>
-               </Dropdown.Menu>
-             </Dropdown>    
+                <p className="first_titulo_esquerda">&nbsp;&nbsp;&nbsp;Alertas
               <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-    Ordenar por
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Asc.</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Desc.</Dropdown.Item>
-  </Dropdown.Menu>
 </Dropdown>    
 </p>                
               </Card.Header>
@@ -261,86 +305,8 @@ class alertas extends React.Component{
                         <th className="th">Data</th>
                         <th>Local</th>
                         <th>Tipo alerta</th>
-                        
-
                     </tr>
-                      <tr>  
-                        <td>
-                          30/02/2021
-                        </td>
-                        <td>
-                          IPV
-                        </td>
-                        <td>
-                          Desinfeção
-                        </td>
-                      </tr>
-                       <tr>  
-                        <td>
-                          30/02/2021
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                         Desinfeção
-                        </td>
-                      </tr>
-                       <tr>  
-                        <td>
-                          30/02/2021
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                         Desinfeção
-                        </td>
-                      </tr>
-                       <tr>  
-                        <td>
-                          30/02/2021
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          Pouco populado
-                        </td>
-                      </tr>
-                       <tr>  
-                        <td>
-                          30/02/2021
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          Pouco populado
-                        </td>
-                      </tr>
-                       <tr>  
-                        <td>
-                          30/02/2021
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          Pouco populado
-                        </td>
-                      </tr>
-                       <tr>  
-                        <td>
-                          30/02/2021
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                         Pouco populado
-                        </td>
-                      </tr>
+                     {this.loadFillAlerta()}
                     </tbody>
                   </Table>
                 </div>
@@ -357,13 +323,6 @@ class alertas extends React.Component{
               <Card.Header>
                 <p className="first_titulo_esquerda">Alertar Locais existentes: 
               <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-    Ordenar por
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Data Asc.</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Data Desc.</Dropdown.Item>
-  </Dropdown.Menu>
 </Dropdown>    
 </p>
  
@@ -499,6 +458,7 @@ class alertas extends React.Component{
                           defaultValue=""
                           placeholder="Nome tipo de alerta"
                           type="text"
+                          onChange={(value)=>this.setState({campotipo:value.target.value})}
                         ></Form.Control>
                       </Form.Group>
                     </Col>
@@ -509,6 +469,7 @@ class alertas extends React.Component{
                     className="btn-fill pull-left" 
                     type="submit"
                     variant="info"
+                    onClick={()=>this.sendSaveTipo()}
                   >
                     Inserir
                   </Button>
@@ -521,7 +482,6 @@ class alertas extends React.Component{
     <h2>Atualizar alerta</h2>
     <a class="close" href="#">&times;</a>
     <div class="content">
-      <p>Altere o nome do alerta:</p>
     </div>
     <Form>
                   <Row>
@@ -532,6 +492,22 @@ class alertas extends React.Component{
                           defaultValue=""
                           placeholder="Nome tipo de alerta"
                           type="text"
+                          value={this.state.campotipo}
+                          onChange={(value)=>this.setState({campotipo:value.target.value})}
+                        ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col className="pr-1" md="10">
+                      <Form.Group>
+                        <label>Local</label>
+                        <Form.Control
+                          defaultValue=""
+                          placeholder="Nome do local"
+                          type="text"
+                          value={this.state.campolocal}
+                          onChange={(value)=>this.setState({campolocal:value.target.value})}
                         ></Form.Control>
                       </Form.Group>
                     </Col>

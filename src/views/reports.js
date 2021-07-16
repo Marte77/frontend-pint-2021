@@ -32,6 +32,7 @@ class reports extends React.Component{
       confirmButtonText: 'Sim, quero apagar !',
       cancelButtonText: 'Não, manter o report.'
     }).then((result) => {
+      console.log(id)
       if (result.value) {
         this.sendDelete(id)
       } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -41,12 +42,12 @@ class reports extends React.Component{
   }
   sendDelete(userId)
   {
-    const baseUrl = "http://localhost:3000/Filme/delete" 
-    axios.post(baseUrl,{id:userId})
+    const baseUrl = "http://pint2021.herokuapp.com/Report/apgar_report/"+userId 
+    axios.delete(baseUrl)
     .then(response =>{
       if (response.data.success) {
         Swal.fire('Apagado!','O pedido foi apagado com sucesso')
-        this.loadFilme()
+        this.obterDadosTabela()
       } 
     })
     .catch ( error => {
@@ -109,20 +110,25 @@ class reports extends React.Component{
     let body = {tempo:this.state.temporeports, tipoTempo:"dd"}
 
     axios.put(url1,body).then(res=>{
-      console.log(res.data)
+      console.log(1,res.data)
       let array = new Array()
       for(let a of res.data.reports)
         if(a.hasOwnProperty('ID_Report_Indoor'))
           array.push(a)
       let locaisindoorpiechar={labels:[],series:[]}
       for(let a of array){
-        locaisindoorpiechar.labels.push(a.Local_Indoor.Nome)
-        let nreportsdesselocal = 0
-        for(let b of array)
-          if(b.Local_Indoor.ID_Local_Indoor === a.Local_Indoor.ID_Local_Indoor)
-            nreportsdesselocal++
-        locaisindoorpiechar.series.push(nreportsdesselocal)
+        if(locaisindoorpiechar.labels.findIndex(element => element === a.Local_Indoor.Nome ) === -1){
+          locaisindoorpiechar.labels.push(a.Local_Indoor.Nome)
+          locaisindoorpiechar.series.push(1)
+        }
+        else {
+          let index = locaisindoorpiechar.labels.findIndex(element => element === a.Local_Indoor.Nome )
+          locaisindoorpiechar.series[index] = locaisindoorpiechar.series[index] + 1
+        }
       }
+
+
+
       let max = -1, maxindex = 0
       for(let i = 0; i<locaisindoorpiechar.series.length;i++)
         if(max<=locaisindoorpiechar.series[i])
@@ -132,8 +138,9 @@ class reports extends React.Component{
         listareports:res.data.reports,
         numeroreportsnainstituicao:res.data.reports.length,
         locaisindoorereports:locaisindoorpiechar,
-        localindoorcommaisreports:[locaisindoorpiechar.labels[maxindex],locaisindoorpiechar.series[maxindex]]
+        localindoorcommaisreports:[locaisindoorpiechar.labels[maxindex],max]
       })
+      console.log(1,locaisindoorpiechar)
       
     }).catch(error => {
       alert(error)
@@ -150,13 +157,14 @@ class reports extends React.Component{
       else if (data.hasOwnProperty('ID_Report_Out_Insti'))
         {tipoReport = 2; tipoReportstring="Report Outdoor Util Inst"}
       else {tipoReport = 3; tipoReportstring="Report Indoor"}
-      let nome, local, datarep, descricao 
+      let nome, local, datarep, descricao, idreport
       switch(tipoReport){
         case 1:{
           nome = data.Outros_Util.Pessoa.PNome + ' ' +data.Outros_Util.Pessoa.UNome
           local = data.Local.nome
           datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
           descricao = data.Report.Descricao
+          idreport = data.Report.ID_Report
           break;
         }
         case 2:{
@@ -164,6 +172,7 @@ class reports extends React.Component{
           local = data.Local.nome
           datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
           descricao = data.Report.Descricao
+          idreport = data.Report.ID_Report
           break;
         }
         case 3:{
@@ -171,6 +180,7 @@ class reports extends React.Component{
           local = data.Local_Indoor.nome
           datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
           descricao = data.Report.Descricao
+          idreport = data.Report.ID_Report
           break;
         }
       }
@@ -208,7 +218,7 @@ class reports extends React.Component{
                 className="btn-simple btn-link p-1"
                 type="button"
                 variant="danger"
-                onClick={()=>this.onDelete()}
+                onClick={()=>this.onDelete(idreport)}
               >
                 <i className="fas fa-times"></i>
               </Button>
