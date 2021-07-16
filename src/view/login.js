@@ -5,6 +5,7 @@ import AuthService from "./auth.service";
 import logo from "./img/logo.png"; // import imagem
 //import './App.css';
 import '../index.css';
+import { Button } from "reactstrap";
 
 export default class Login extends Component {
     
@@ -57,8 +58,11 @@ export default class Login extends Component {
         return (
     <div className="App">
       <div className="outer">
+            
+
         <div className="inner">
             <form>
+            
             <div className="cor_form">
             <img src={logo} alt="logo" border="0" width="100" height="100" class="alinhar_centro"/>
                 <br/>
@@ -81,6 +85,8 @@ export default class Login extends Component {
                     </p>
                 <br/>
                     <button className="btn btn-dark btn-lg btn-block" to={'/admin/home'}  onClick={this.handleLogin}>Iniciar sessão</button>
+                    <Button className="btn btn-dark btn-lg btn-block" onClick={()=>window.open('https://estgv-my.sharepoint.com/:u:/g/personal/estgv18727_alunos_estgv_ipv_pt/ETBP_AGM0SBKkXsypom4pT0BekjwCMxJiGEPaLMpVwBR_A?e=hN2NMd')} >
+                        Download app</Button>
                 </div>
             </form>
             </div>
