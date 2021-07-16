@@ -110,20 +110,25 @@ class reports extends React.Component{
     let body = {tempo:this.state.temporeports, tipoTempo:"dd"}
 
     axios.put(url1,body).then(res=>{
-      console.log(res.data)
+      console.log(1,res.data)
       let array = new Array()
       for(let a of res.data.reports)
         if(a.hasOwnProperty('ID_Report_Indoor'))
           array.push(a)
       let locaisindoorpiechar={labels:[],series:[]}
       for(let a of array){
-        locaisindoorpiechar.labels.push(a.Local_Indoor.Nome)
-        let nreportsdesselocal = 0
-        for(let b of array)
-          if(b.Local_Indoor.ID_Local_Indoor === a.Local_Indoor.ID_Local_Indoor)
-            nreportsdesselocal++
-        locaisindoorpiechar.series.push(nreportsdesselocal)
+        if(locaisindoorpiechar.labels.findIndex(element => element === a.Local_Indoor.Nome ) === -1){
+          locaisindoorpiechar.labels.push(a.Local_Indoor.Nome)
+          locaisindoorpiechar.series.push(1)
+        }
+        else {
+          let index = locaisindoorpiechar.labels.findIndex(element => element === a.Local_Indoor.Nome )
+          locaisindoorpiechar.series[index] = locaisindoorpiechar.series[index] + 1
+        }
       }
+
+
+
       let max = -1, maxindex = 0
       for(let i = 0; i<locaisindoorpiechar.series.length;i++)
         if(max<=locaisindoorpiechar.series[i])
@@ -133,8 +138,9 @@ class reports extends React.Component{
         listareports:res.data.reports,
         numeroreportsnainstituicao:res.data.reports.length,
         locaisindoorereports:locaisindoorpiechar,
-        localindoorcommaisreports:[locaisindoorpiechar.labels[maxindex],locaisindoorpiechar.series[maxindex]]
+        localindoorcommaisreports:[locaisindoorpiechar.labels[maxindex],max]
       })
+      console.log(1,locaisindoorpiechar)
       
     }).catch(error => {
       alert(error)
