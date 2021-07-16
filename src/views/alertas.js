@@ -44,19 +44,21 @@ class alertas extends React.Component{
   }
 
   totais(){
-    return this.state.totais.map((data, index)=>{
-      return(
-        this.state.listalocais.push(data.NomeLocal),
-        this.state.listatotais.push(data.NumeroAlertas),
-        null
-      )
-      });
+    let returnjson = {
+      labels: [],
+      series: [[],],
+    }
+    for(let a of this.state.totais){
+      returnjson.labels.push(a.NomeLocal)
+      returnjson.series[0].push(a.NumeroAlertas)
+    }
+    return returnjson
   }
 
   componentDidMount(){
     const idinst=localStorage.getItem('idinstituicao');
 
-    const url = "http://localhost:3000/Alertas/listalertas/"+idinst;
+    const url = "http://pint2021.herokuapp.com/Alertas/listalertas/"+idinst;
     axios.get(url).then(res => {
       if(res.data){
         const data = res.data.Alertas;
@@ -72,7 +74,7 @@ class alertas extends React.Component{
     });
 
 
-    const url1 = "http://localhost:3000/Alertas/gettipoalerta";
+    const url1 = "http://pint2021.herokuapp.com/Alertas/gettipoalerta";
     axios.get(url1).then(res => {
       if(res.data){
         const data = res.data.ListipoAlertas;
@@ -88,7 +90,7 @@ class alertas extends React.Component{
     });
 
 
-    const url2 = "http://localhost:3000/Alertas/totalalertaslocais/"+idinst;
+    const url2 = "http://pint2021.herokuapp.com/Alertas/totalalertaslocais/"+idinst;
     axios.get(url2).then(res => {
       if(res.data){
         const data = res.data.alertas;
@@ -107,7 +109,7 @@ class alertas extends React.Component{
 
   gettIPO(ID)
     {
-        const url="http://localhost:3000/Alertas/getalerta/"+ID
+        const url="http://pint2021.herokuapp.com/Alertas/getalerta/"+ID
         axios.get(url)
           .then(res=>{
           if (res.data) {
@@ -167,7 +169,7 @@ class alertas extends React.Component{
       alert("Inserir dado!")
     else{
       
-    const url2 = "http://localhost:3000/Alertas/createTipoAlerta";
+    const url2 = "http://pint2021.herokuapp.com/Alertas/createTipoAlerta";
     const datpost={
       Tipo_Alerta:this.state.campotipo
     }
@@ -215,22 +217,9 @@ class alertas extends React.Component{
               </Card.Header>
               <Card.Body>
                 <div className="ct-chart" id="chartActivity">
-                  {this.totais()}
+                  
                   <ChartistGraph
-                    data={{
-                      labels: [
-                       this.state.listalocais[0],
-                       this.state.listalocais[1],
-                       this.state.listalocais[2]
-                      ],
-                      series: [
-                        [
-                          this.state.listatotais[0],
-                          this.state.listatotais[1],
-                          this.state.listatotais[2],
-                        ],
-                      ],
-                    }}
+                    data={this.totais()}
                     type="Bar"
                     options={{
                       seriesBarDistance: 10,
