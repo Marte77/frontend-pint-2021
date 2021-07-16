@@ -32,6 +32,7 @@ class reports extends React.Component{
       confirmButtonText: 'Sim, quero apagar !',
       cancelButtonText: 'Não, manter o report.'
     }).then((result) => {
+      console.log(id)
       if (result.value) {
         this.sendDelete(id)
       } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -41,12 +42,12 @@ class reports extends React.Component{
   }
   sendDelete(userId)
   {
-    const baseUrl = "http://localhost:3000/Filme/delete" 
-    axios.post(baseUrl,{id:userId})
+    const baseUrl = "http://pint2021.herokuapp.com/Report/apgar_report/"+userId 
+    axios.delete(baseUrl)
     .then(response =>{
       if (response.data.success) {
         Swal.fire('Apagado!','O pedido foi apagado com sucesso')
-        this.loadFilme()
+        this.obterDadosTabela()
       } 
     })
     .catch ( error => {
@@ -150,13 +151,14 @@ class reports extends React.Component{
       else if (data.hasOwnProperty('ID_Report_Out_Insti'))
         {tipoReport = 2; tipoReportstring="Report Outdoor Util Inst"}
       else {tipoReport = 3; tipoReportstring="Report Indoor"}
-      let nome, local, datarep, descricao 
+      let nome, local, datarep, descricao, idreport
       switch(tipoReport){
         case 1:{
           nome = data.Outros_Util.Pessoa.PNome + ' ' +data.Outros_Util.Pessoa.UNome
           local = data.Local.nome
           datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
           descricao = data.Report.Descricao
+          idreport = data.Report.ID_Report
           break;
         }
         case 2:{
@@ -164,6 +166,7 @@ class reports extends React.Component{
           local = data.Local.nome
           datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
           descricao = data.Report.Descricao
+          idreport = data.Report.ID_Report
           break;
         }
         case 3:{
@@ -171,6 +174,7 @@ class reports extends React.Component{
           local = data.Local_Indoor.nome
           datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
           descricao = data.Report.Descricao
+          idreport = data.Report.ID_Report
           break;
         }
       }
@@ -208,7 +212,7 @@ class reports extends React.Component{
                 className="btn-simple btn-link p-1"
                 type="button"
                 variant="danger"
-                onClick={()=>this.onDelete()}
+                onClick={()=>this.onDelete(idreport)}
               >
                 <i className="fas fa-times"></i>
               </Button>
