@@ -297,7 +297,6 @@ if(this.state.listaDiasNumeroReports.length !==0)
                 <div id="table-scroll">
                   <Table id="table-scroll">
                     <tbody id="table-scroll">
- <th/>
                         <th>
                           Tipo Utilizador  &nbsp;&nbsp;
                         </th>
@@ -313,6 +312,8 @@ if(this.state.listaDiasNumeroReports.length !==0)
                         <th>
                           Data Nascimento
                         </th>
+                       <th>Aceitar</th>
+                       <th>Recusar</th>
                        
                        {this.loadUtilsEspera()} 
 
@@ -377,14 +378,6 @@ if(this.state.listaDiasNumeroReports.length !==0)
     }
     return(
     <tr key={index}>
-    <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
     <td>{tipo}</td>
     <td>{data.Pessoa.PNome}</td>
     <td>{data.Pessoa.UNome}</td>
@@ -393,34 +386,16 @@ if(this.state.listaDiasNumeroReports.length !==0)
 
 
 <td className="td-actions text-right">
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-537440761">
-                                Aceitar
-                              </Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="info"
-                               onClick={()=>this.onAdd(data.id)}
-
-                            >
+                          <OverlayTrigger overlay={<Tooltip id="tooltip-537440761">      Aceitar</Tooltip>}>
+                            <Button className="btn-simple btn-link p-1" type="button" variant="info"  onClick={()=>this.onAdd(data.ID_Util)}>
                               <i className="fas fa-check"></i>
                             </Button>
+                            
                           </OverlayTrigger>
-                          <OverlayTrigger
-                            overlay={
-                              <Tooltip id="tooltip-21130535">Remover</Tooltip>
-                            }
-                          >
-                            <Button
-                              className="btn-simple btn-link p-1"
-                              type="button"
-                              variant="danger"
-                              onClick={()=>this.onDelete(data.id)}
-                            >
+                          </td>
+                          <td>
+                          <OverlayTrigger  overlay={ <Tooltip id="tooltip-21130535">Remover</Tooltip> }>
+                            <Button className="btn-simple btn-link p-1" type="button" variant="danger" onClick={()=>this.onDelete(data.id)}>
                               <i className="fas fa-times"></i>
                             </Button>
                           </OverlayTrigger>
@@ -464,6 +439,7 @@ if(this.state.listaDiasNumeroReports.length !==0)
     })    
   }   
   onAdd(id){
+    console.log("id",id)
     Swal.fire({
       title: 'Tem a certeza?',
       text: 'O pedido será aceite',
@@ -473,21 +449,22 @@ if(this.state.listaDiasNumeroReports.length !==0)
       cancelButtonText: 'Não, manter o pedido.'
     }).then(result => {
     if (result.value) {
-      this.sendDelete(id)
+      this.acepetutil(id)
     } else if (result.dismiss === Swal.DismissReason.cancel) {
       Swal.fire('Cancelado','O pedido continua seguro.')
     }
     })
   }
-  sendDelete(userId){
-    const baseUrl = "http://localhost:3000/Filme/delete" 
+  acepetutil(userId){
+    const baseUrl = "http://localhost:3000/Utilizadores/updateUtilVerify/"+userId
+    console.log(baseUrl)
     axios.post(baseUrl,{
-      id:userId
+      idutil:userId
     })
     .then(response =>{
       if (response.data.success) {
-      Swal.fire('Apagado!','O pedido foi apagado com sucesso')
-      this.loadFilme()
+      Swal.fire('Aceite com sucesso!')
+      
     }
     })
     .catch ( error => {
