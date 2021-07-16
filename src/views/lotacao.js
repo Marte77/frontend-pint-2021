@@ -87,7 +87,7 @@ class lotacao extends React.Component{
     return arraycomtodos.map((data,index)=>{
         if(data.hasOwnProperty('Local'))//é local outdoor
         {
-          let totreports = data.Nreports[0][0] +data.Nreports[1][1]+data.Nreports[2][1]
+          let totreports = data.Nreports[0][1] +data.Nreports[1][1]+data.Nreports[2][1]
           return (
             <tr key = {index}>
               <td>
@@ -111,7 +111,8 @@ class lotacao extends React.Component{
             </tr>
           )
         }else{
-          let totreports = data.Nreports[0][0] +data.Nreports[1][1]+data.Nreports[2][1]
+          let totreports = data.Nreports[0][1] +data.Nreports[1][1]+data.Nreports[2][1]
+          
           return (
             <tr key = {index}>
               <td>
