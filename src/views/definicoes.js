@@ -26,6 +26,7 @@ import {
   OverlayTrigger,
   Tooltip,
 } from "react-bootstrap";
+import { CardBody } from "reactstrap";
 
 class definicoes extends React.Component{
   constructor(props){
@@ -75,11 +76,17 @@ class definicoes extends React.Component{
      campodescricaoeditint:"",
      campopisoeditint:"",
      
+     //criar alerta
+     campodescricaoalertacriar:"",
+
+     //editar alerta
+     campoalertaeditar:"",
     }
   }
  
     componentDidMount(){
 
+      this.Loaddeletealerta()
       this.LoadLocaisDelete()
       this.LoadLocaisintDelete()
       const idlocal=localStorage.getItem('idinstituicao');
@@ -279,8 +286,8 @@ class definicoes extends React.Component{
                         <b style={{paddingRight:'5%', paddingTop:'1.5%'}}>Imagem:</b>
 
                           <div class="input-group-text"><i class="fas fa-file-image"></i></div>
-                          <button >
-                          <i class="fas fa-plus-circle" style={{color:'black'}}></i><b style={{color:'black', paddingLeft:'5%'}} >Adicionar</b></button>
+                          <button onClick={()=>this.importData()}>
+                          <i class="fas fa-plus-circle"  style={{color:'black'}}></i><b style={{color:'black', paddingLeft:'5%'}} >Adicionar</b></button>
 
                         </div>
                         </p>
@@ -425,7 +432,6 @@ class definicoes extends React.Component{
                       <th className="border-0">Local</th>
                       <th className="border-0">Admin</th>
                       <th className="border-0">Tipo de Alerta</th>
-                      <th className="border-0">Alterar</th>
                       <th className="border-0">Remover</th>
 
                     </tr>
@@ -439,7 +445,7 @@ class definicoes extends React.Component{
                 <br/>
                 </div>
                 <a class="button7" href="#popupalertaCriar"><i class="fas fa-plus-circle" ></i>Adicionar</a>
-
+               
 
 <div id="popup1" class="overlay">
   <div class="popup">
@@ -625,7 +631,7 @@ class definicoes extends React.Component{
                     <Col className="pr-1" md="10">
                       <Form.Group>
                         <label>Descrição</label>
-                        <Form.Control defaultValue=""  placeholder="Nome local exterior" type="text" ></Form.Control>
+                        <Form.Control defaultValue="" value={this.state.campodescricaoalertacriar} onChange={(value)=>this.setState({campodescricaoalertacriar:value.target.value})}  placeholder="Nome local exterior" type="text" ></Form.Control>
                       </Form.Group>
                     </Col>
                     
@@ -637,7 +643,7 @@ class definicoes extends React.Component{
                     <Form.Group>
                         <label>Local do alerta :</label>
                         <br/>
-                  <select id="optionlocalindoor">
+                  <select id="optionlocalalerta">
                   {this.loadFillDataalertaLocal_option()}
 
                   </select>
@@ -654,7 +660,7 @@ class definicoes extends React.Component{
                     <Form.Group>
                         <label>Tipo do alerta :</label>
                         <br/>
-                  <select id="optionlocalindoor">
+                  <select id="optiontioalerta">
                     {this.loadFillDatatipoalerta_option()}
 
                   </select>
@@ -666,7 +672,7 @@ class definicoes extends React.Component{
                     
                   </Row>
                <br/>
-                  <Button className="btn-fill pull-left"   type="submit"  variant="info" onClick={()=>this.sendSaveLocais()}>Guardar Alerta </Button>
+                  <Button className="btn-fill pull-left"   type="submit"  variant="info" onClick={()=>this.sendsavealertas()}>Guardar Alerta </Button>
                   
                   </Form>
   </div>
@@ -744,6 +750,41 @@ class definicoes extends React.Component{
   </div>
 </div>
 
+<div id="popupatualizaralerta" class="overlay">
+  <div class="popup">
+    <h2>Atualizar local exterior</h2>
+    <a class="close" href="#">&times;</a>
+    <div class="content">
+      <p>Atualizar dados do alerta :</p>
+    </div>
+    <Form>
+                  
+                  <Row>
+                    <Col className="pr-1" md="5">
+                      <Form.Group>
+                        <label>Descrição</label>
+                     <Form.Control defaultValue="" value={this.state.campolongitudeedit} onChange={(value)=>this.setState({campolongitudeedit:value.target.value})}  placeholder="Pequena Descrição"  type="text"  ></Form.Control>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                  <Form.Group>
+                        <label>Local do alerta :</label>
+                        <br/>
+                  <select id="optionlocalalerta">
+                  {this.loadFillDataalertaLocal_option()}
+
+                  </select>
+                 
+                
+                      </Form.Group>
+                  </Row>
+               <br/>
+                  <Button  className="btn-fill pull-left"    type="submit" variant="info" onClick={()=>this.saveAtualizarLocal()} >  Atualizar local exterior   </Button>
+                  
+                  </Form>
+  </div>
+</div>
 
 
 
@@ -795,7 +836,43 @@ saveInstituicao()
   
 }
 
+sendsavealertas()
+{
+  var a=document.getElementById("optionlocalalerta");
+  var idlocal=a.value;
 
+  var b=document.getElementById("optiontioalerta");
+  var idtipoalerta=b.value
+
+  var datetime=new Date();
+  if(this.state.campodescricaoalertacriar==="")
+  {
+    alert("Insira a descrição do alerta")
+  }
+  else{
+    const idad=localStorage.getItem('idadmin');
+    const url="https://pint2021.herokuapp.com/Alertas/createalertaweb"
+    const datapost={
+      Descricao:this.state.campodescricaoalertacriar,
+      dataalerta:datetime,
+      LocalIDLocal:idlocal,
+      AdminIDAdmin:idad,
+      TipoAlertaIDTipoAlerta:idtipoalerta
+    }
+    axios.post(url,datapost)
+      .then(response=>{
+      if (response.data.success===true) {
+      alert(response.data.message)
+      window.location.replace("http://localhost:3001/admin/definicoes")
+      }
+      else {
+      alert(response.data.message)
+      }
+      }).catch(error=>{
+      alert("Error 34 "+error)
+      })
+  }
+}
 sendSaveLocaisIndoor()
 {
   console.log("testebutton")
@@ -838,6 +915,8 @@ sendSaveLocaisIndoor()
       })
       }
 }
+
+
 
 sendSaveLocais()
 {
@@ -988,6 +1067,45 @@ loadFillDataLocaisExt()
               }
               })
     }
+    ondeleteAlerta(id)
+    {
+      Swal.fire({ title: 'Tem a certeza?',  text: 'Não poderá voltar a recuperar o ALERTA',  type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, Apagar !',
+        cancelButtonText: 'Não, Manter!'
+        }).then((result) => {
+          if (result.value) {
+          this.senddeletalerta(id)
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire(
+              'Cancelado',
+               'O Local não foi apagado',
+              'error'
+              )
+              }
+              })
+    }
+    senddeletalerta(userid)
+    {
+       // url do backend
+       const baseUrl = "https://pint2021.herokuapp.com/Alertas/deletalerta"
+       // network
+       axios.post(baseUrl,{id:userid })
+       .then(response =>{
+       if (response.data.success) {
+       Swal.fire(
+       'Apagado!',
+       'O alerta foi apagado com sucesso',
+       'success'
+       )
+       this.Loaddeletealerta();
+
+       }
+       })
+       .catch ( error => {
+       alert("Error 325 ")
+       })
+    }
     sendDeleteLocalint(userId)
     {
         // url do backend
@@ -1030,6 +1148,29 @@ loadFillDataLocaisExt()
           alert("Error 325 ")
           })
     }
+
+    Loaddeletealerta()
+    {
+      const idlocal=localStorage.getItem('idinstituicao');
+      const idad=localStorage.getItem('idadmin');
+      const idinst=localStorage.getItem('idinstituicao');
+      const url3="https://pint2021.herokuapp.com/Alertas/listalertas/"+idinst;
+
+      axios.get(url3).then(res => {
+        if(res.data.status==200){  
+        const data3=res.data.Alertas;
+        this.setState({ listaalertas:data3});
+      }else{
+      alert("Error Web Service!");
+      }
+      console.log(res)
+      })
+      .catch(error => {
+      alert(error)
+      });
+
+    }
+
     LoadLocaisintDelete()
     {
       const idlocal=localStorage.getItem('idinstituicao');
@@ -1216,12 +1357,22 @@ loadFillDataLocaisExt()
             <td>{data2.Local.Nome}</td>
             <td>{data2.AdminIDAdmin}</td>
             <td>{data2.Tipo_Alerta.Tipo_Alerta}</td>
-            <td><a class="" href=""  ><i class="fas fa-edit"></i></a></td>
-           <td><a class="" ><i class="far fa-trash-alt"></i></a></td>   
+           <td><a class="" onClick={()=>this.ondeleteAlerta(data2.ID_alerta)}><i class="far fa-trash-alt"></i></a></td>   
             
         </tr>
         )
         });
+      
+    }
+     importData() {
+      let input = document.createElement('input');
+      input.type = 'file';
+      input.onchange = _ => {
+        // you can use this method to get file and perform respective operations
+                let files =   Array.from(input.files);
+                console.log(files);
+            };
+      input.click();
       
     }
 }
