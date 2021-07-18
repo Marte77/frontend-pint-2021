@@ -162,7 +162,30 @@ class lotacao extends React.Component{
     
   }
   
-
+  loadPieChartLotacaoInterior(){
+    if(this.state.dadostabelas.length === 0)
+      return
+    let jsonreturn = {labels:[],series:[]}
+    let dadostabelas = this.state.dadostabelas
+    let arrayLocaisIndoor = new Array()
+    let nreportstotal = 0
+    for(let local of dadostabelas.ZonasCrowdZero[0].ZonasIndoor)
+      {
+        nreportstotal = nreportstotal + local.Nreports[0][1] +local.Nreports[1][1] + local.Nreports[2][1]
+        arrayLocaisIndoor.push([local.LocalIndoor.Nome,local.Nreports[0][1] +local.Nreports[1][1] + local.Nreports[2][1]])
+      }
+    for(let local of dadostabelas.ZonasNotCrowdZero.ZonasIndoor){
+        nreportstotal = nreportstotal + local.Nreports[0][1] +local.Nreports[1][1] + local.Nreports[2][1]
+        arrayLocaisIndoor.push([local.LocalIndoor.Nome,local.Nreports[0][1] +local.Nreports[1][1] + local.Nreports[2][1]])
+    }
+    for(let a of arrayLocaisIndoor){
+      if(a[1]>0){
+        jsonreturn.labels.push(a[0])
+        jsonreturn.series.push(a[1]/nreportstotal * 100)
+      }
+    }
+    return jsonreturn
+  }
 
   render(){
   return (
@@ -183,10 +206,7 @@ class lotacao extends React.Component{
                   id="chartPreferences"
                 >
                   <ChartistGraph
-                    data={{
-                      labels: ["30%", "5%","5%","30%","10%","20%"],
-                      series: [30, 5,5,30,10,20],
-                    }}
+                    data={this.loadPieChartLotacaoInterior()}
                     type="Pie"
                   />
                 </div>
