@@ -116,8 +116,7 @@ function Maps() {
         animation: google.maps.Animation.DROP,
         title: local.Nome,
       })
-      if(local.IDLocal ===4)
-        local.densidadeMedia = 2
+     
       if(local.densidadeMedia === 1)
       {
         const cityCircle = new google.maps.Circle({
