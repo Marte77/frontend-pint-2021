@@ -20,13 +20,12 @@ import { useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 
 import routes from "routes.js";
+import authService from "view/auth.service";
 
 
 function Header() {
 
- function logout() {
-  localStorage.clear();
- };
+  
   const location = useLocation();
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
@@ -70,7 +69,7 @@ function Header() {
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
                 <Dropdown.Item
                   href="#pablo"
-                  onClick={(e) => e.preventDefault()}
+                  
                 >
                   Definições
                 </Dropdown.Item>
@@ -78,7 +77,7 @@ function Header() {
                 <div className="divider"></div>
                 <Dropdown.Item
                   href="#pablo"
-                  onClick={logout()}
+                  onClick={()=>{localStorage.clear();window.open(window.location.origin+'/','_self')}}
                 >
                   Sair
                 </Dropdown.Item>
