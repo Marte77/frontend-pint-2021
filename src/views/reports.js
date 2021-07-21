@@ -157,11 +157,12 @@ class reports extends React.Component{
       else if (data.hasOwnProperty('ID_Report_Out_Insti'))
         {tipoReport = 2; tipoReportstring="Report Outdoor Util Inst"}
       else {tipoReport = 3; tipoReportstring="Report Indoor"}
+      console.log(data)
       let nome, local, datarep, descricao, idreport
       switch(tipoReport){
         case 1:{
           nome = data.Outros_Util.Pessoa.PNome + ' ' +data.Outros_Util.Pessoa.UNome
-          local = data.Local.nome
+          local = data.Local.Nome
           datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
           descricao = data.Report.Descricao
           idreport = data.Report.ID_Report
