@@ -24,6 +24,9 @@ import routes from "routes.js";
 
 function Header() {
 
+ function logout() {
+  localStorage.clear();
+ };
   const location = useLocation();
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
@@ -36,6 +39,7 @@ function Header() {
     };
     document.body.appendChild(node);
   };
+
 
   const getBrandText = () => {
     for (let i = 0; i < routes.length; i++) {
@@ -74,7 +78,7 @@ function Header() {
                 <div className="divider"></div>
                 <Dropdown.Item
                   href="#pablo"
-                  onClick={(e) => e.preventDefault()}
+                  onClick={logout()}
                 >
                   Sair
                 </Dropdown.Item>
