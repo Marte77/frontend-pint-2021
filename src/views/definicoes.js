@@ -823,7 +823,7 @@ saveInstituicao()
     .then(response=>{
     if (response.data.success===true) {
     alert(response.data.message)
-    window.location.replace("http://localhost:3001/admin/definicoes")
+    window.location.replace("http://pint2021frontend.herokuapp.com/admin/definicoes")
     }
     else {
     alert(response.data.message)
@@ -864,7 +864,7 @@ sendsavealertas()
       .then(response=>{
       if (response.data.success===true) {
       alert(response.data.message)
-      window.location.replace("http://localhost:3001/admin/definicoes")
+      window.location.replace("http://pint2021frontend.herokuapp.com/admin/definicoes")
       }
       else {
       alert(response.data.message)
@@ -906,7 +906,7 @@ sendSaveLocaisIndoor()
       .then(response=>{
       if (response.data.success===true) {
       alert(response.data.message)
-      window.location.replace("http://localhost:3001/admin/definicoes")
+      window.location.replace("http://pint2021frontend.herokuapp.com/admin/definicoes")
       }
       else {
       alert(response.data.message)
@@ -966,7 +966,7 @@ sendSaveLocais()
       .then(response=>{
       if (response.data.success===true) {
       alert(response.data.message)
-      window.location.replace("http://localhost:3001/admin/definicoes")
+      window.location.replace("http://pint2021frontend.herokuapp.com/admin/definicoes")
       }
       else {
       alert(response.data.message)
@@ -1234,7 +1234,7 @@ loadFillDataLocaisExt()
         .then(response=>{
           if (response.data.success===true) {
           alert(response.data.message)
-          window.location.replace("http://localhost:3001/admin/definicoes")
+          window.location.replace("http://pint2021frontend.herokuapp.com/admin/definicoes")
 
         }
         else {
@@ -1258,7 +1258,7 @@ loadFillDataLocaisExt()
         .then(response=>{
           if (response.data.success===true) {
           alert(response.data.message)
-          window.location.replace("http://localhost:3001/admin/definicoes")
+          window.location.replace("http://pint2021frontend.herokuapp.com/admin/definicoes")
 
         }
         else {
