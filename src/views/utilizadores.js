@@ -122,16 +122,7 @@ class utilizadores extends React.Component{
           <Col md="12">
             <Card  className="card-tasks">
               <Card.Header>
-                <p className="first_titulo_esquerda">Utilizadores da Instituição:
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-    Ordenar por
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Data Asc.</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Data Desc.</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown>    
+                <p className="first_titulo_esquerda">Utilizadores da Instituição:    
 </p>
  
                 <br/>

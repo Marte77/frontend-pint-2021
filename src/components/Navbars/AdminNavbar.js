@@ -67,12 +67,6 @@ function Header() {
                 <span className="no-icon">A minha conta</span>
               </Dropdown.Toggle>
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
-                <Dropdown.Item
-                  href="#pablo"
-                  
-                >
-                  Definições
-                </Dropdown.Item>
                 
                 <div className="divider"></div>
                 <Dropdown.Item

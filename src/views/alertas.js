@@ -107,27 +107,6 @@ class alertas extends React.Component{
   }
 
 
-  gettIPO(ID)
-    {
-        const url="http://pint2021.herokuapp.com/Alertas/getalerta/"+ID
-        axios.get(url)
-          .then(res=>{
-          if (res.data) {
-              const data = res.data.Tipo
-              this.state.campolocal= data[0].Local.Nome
-              this.state.campotipo= data[0].Tipo_Alerta.Tipo_Alerta
-            console.log('HEY', )
-            console.log(JSON.stringify(data))
-          }
-          else {
-            alert("Error web service")
-          }
-          })
-            .catch(error=>{
-            alert("Error server: "+error)
-          })
-    }
-
   loadFillAlerta(){
     var date= ""
     var mes=0
@@ -140,9 +119,6 @@ class alertas extends React.Component{
             <td>{date}</td>
             <td>{data.Local.Nome}</td>
             <td>{data.Tipo_Alerta.Tipo_Alerta}</td>  
-            <td>
-              <a class="" href="#popup2" onClick={()=>this.gettIPO(data.ID_alerta)} ><i class="fas fa-edit"></i></a>
-            </td>
         </tr>
         )
     });
@@ -177,6 +153,8 @@ class alertas extends React.Component{
     .then(res => {
       if(res.data){
         this.componentDidMount()
+        alert("Criado com sucesso")
+        window.location.reload()
       }
       else{
         alert("No data");
@@ -199,21 +177,7 @@ class alertas extends React.Component{
               <Card.Header>
 
               <p className="first_titulo_esquerda">&nbsp;&nbsp;&nbsp;&nbsp;Total de Desinfeções:
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style">
-    Periodo de Tempo
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Tempo real</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Hoje</Dropdown.Item>
-    <Dropdown.Item href="#/action-3">Esta semana</Dropdown.Item>
-    <Dropdown.Item href="#/action-3">Este mês</Dropdown.Item>
-    <Dropdown.Item href="#/action-3">Últimos 3 meses</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown></p>
-
-                
-                <p className="card-category">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Filtrar por intervalo de tempo)</p>
+              </p>
               </Card.Header>
               <Card.Body>
                 <div className="ct-chart" id="chartActivity">
@@ -301,134 +265,6 @@ class alertas extends React.Component{
                 </div>
                 
 
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-
-<Row>
-          <Col md="12">
-            <Card className="card-tasks">
-              <Card.Header>
-                <p className="first_titulo_esquerda">Alertar Locais existentes: 
-              <Dropdown>
-</Dropdown>    
-</p>
- 
-                <p className="card-category">Faça a emissão de alertas (densidade / desinfeção)</p>
-
-              </Card.Header>
-
-              <Card.Body>
-                <div id="table-scroll">
-                  <Table id="table-scroll">
-                    <tbody id="table-scroll">
-                    <tr>
-                        <th></th>
-                        <th>Local</th>
-                        <th>Total Alertas</th>
-                        <th>Pouco populado</th>
-                        <th>Muito populado</th>
-                        <th>Extemamente populado</th>
-                        <th>Data última desinfeção</th>
-                        <th></th>
-
-                    </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                        <td></td>
-                       <td></td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                       <td></td>
-                       <td></td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Form.Check className="mb-1 pl-0">
-                            <Form.Check.Label>
-                              <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                              <span className="form-check-sign"></span>
-                            </Form.Check.Label>
-                          </Form.Check>
-                        </td>
-                        <td>
-                          Palácio do gelo
-                        </td>
-                        <td>
-                          1234
-                        </td>
-                        <td>
-                          12
-                        </td>
-                        <td>
-                          3
-                        </td>
-                        <td>
-                          1
-                        </td>
-                         <td>
-                           23/03/2019
-                        </td>
-                       <td></td>
-                       <td></td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </div>
-                 <a class="button_adicionarv2" href="#popup3">Alertar zonas selecionadas</a>
-                <br/><br/>
 
 
       <div id="popup1" class="overlay">

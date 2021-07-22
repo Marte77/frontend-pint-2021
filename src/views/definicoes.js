@@ -309,15 +309,6 @@ class definicoes extends React.Component{
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
                 <Card.Title as="h4">Locais </Card.Title>
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-                    Ordenar &nbsp;
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Ascendente</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Descendente</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
                 
               </Card.Header>
               <Card.Body className="table-full-width table-responsive px-0">
@@ -326,7 +317,6 @@ class definicoes extends React.Component{
                
                   <thead>
                     <tr>
-                      <th className="border-0">Nº Local</th>
                       <th className="border-0">Local</th>
                       <th className="border-0">cod_postal</th>
                       <th className="border-0">Desc</th>
@@ -359,16 +349,7 @@ class definicoes extends React.Component{
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
                 <Card.Title as="h4">Locais Interior</Card.Title>
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-                    Ordenar &nbsp;
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Ascendente</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Descendente</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-                
+
               </Card.Header>
               <Card.Body className="table-full-width table-responsive px-0">
                 <div id="table-scroll">
@@ -376,8 +357,6 @@ class definicoes extends React.Component{
                
                   <thead>
                     <tr>
-                      
-                      <th className="border-0">Nº Local</th>
                       <th className="border-0">Nome</th>
                       <th className="border-0">Descrição</th>
                       <th className="border-0">Piso</th>
@@ -410,15 +389,7 @@ class definicoes extends React.Component{
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
                 <Card.Title as="h4">Lista de Alertas</Card.Title>
-                <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-                    Ordenar por:
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Data Asc.</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Data Desc.</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+
                 
               </Card.Header>
               <Card.Body className="table-full-width table-responsive px-0">
@@ -426,12 +397,9 @@ class definicoes extends React.Component{
                 <Table className="table-hover" id="table-scroll">
                   <thead>
                     <tr>
-                      
-                      <th className="border-0">ID Alerta</th>
                       <th className="border-0">Descrição</th>
                       <th className="border-0">Data</th>
                       <th className="border-0">Local</th>
-                      <th className="border-0">Admin</th>
                       <th className="border-0">Tipo de Alerta</th>
                       <th className="border-0">Remover</th>
 
@@ -1017,7 +985,6 @@ loadFillDataLocaisExt()
     return(
     <tr key={index}>
         
-        <th>{data.ID_Local}</th>
         <td>{data.Nome}</td>
         <td>{data.Codigo_Postal}</td>
         <td>{data.Descricao}</td>
@@ -1331,8 +1298,6 @@ loadFillDataLocaisExt()
       return this.state.listlocaisindoor.map((data2, index)=>{
         return(
         <tr key={index}>
-           
-            <th>{data2.ID_Local_Indoor}</th>
             <td>{data2.Nome}</td>
             <td>{data2.Descricao}</td>
             <td>{data2.Piso}</td>
@@ -1352,11 +1317,9 @@ loadFillDataLocaisExt()
       return this.state.listaalertas.map((data2, index)=>{
         return(
         <tr key={index}>
-            <th>{data2.ID_alerta}</th>
             <td>{data2.Descricao}</td>
             <td>{data2.Data}</td>
             <td>{data2.Local.Nome}</td>
-            <td>{data2.AdminIDAdmin}</td>
             <td>{data2.Tipo_Alerta.Tipo_Alerta}</td>
            <td><a class="" onClick={()=>this.ondeleteAlerta(data2.ID_alerta)}><i class="far fa-trash-alt"></i></a></td>   
             

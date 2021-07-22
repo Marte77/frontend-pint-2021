@@ -178,11 +178,6 @@ if(this.state.listaDiasNumeroReports.length !==0)
                        {this.obterReportshoje()}
                       </h3></Card.Title>    
                       <br/>
-                    <div class="container">
-<a href="http://www.stackoverflow.com/">
-   <button class="button" onclick="location.href='http://www.example.com'" type="submit">Ir para lotação</button>
-</a>
-     </div>
                 </div>
                 </Row>
               </Card.Body>  

@@ -209,13 +209,7 @@ class lotacao extends React.Component{
                     data={this.loadPieChartLotacaoInterior()}
                     type="Pie"
                   />
-                </div>
-                <div className="legend">
-                  
-                  <i className="fas fa-circle text-info"></i>Utilizadores Instituição  <br/>
-                  <i className="fas fa-circle text-info"></i> Registos Globais
-                  
-                </div>  
+                </div> 
               </Card.Body>
             </Card>
           </Col>
@@ -235,18 +229,12 @@ class lotacao extends React.Component{
                 >
                   <ChartistGraph
                     data={{
-                      labels: ["90%", "5%","5%"],
-                      series: [90, 5,5],
+                      labels: ["Palácio do gelo","Armazém Mundão"],
+                      series: [90 ,10],
                     }}
                     type="Pie"
                   />
-                </div>
-                <div className="legend">
-                  
-                  <i className="fas fa-circle text-danger"></i>Utilizadores Instituição  <br/>
-                  <i className="fas fa-circle text-info"></i> Registos Globais
-                  
-                </div>  
+                </div> 
               </Card.Body>
             </Card>
           </Col>
@@ -258,27 +246,7 @@ class lotacao extends React.Component{
             <Card className="card-tasks">
               <Card.Header>
               <br/>
-                <p className="first_titulo_esquerda">&nbsp;&nbsp;&nbsp;Zonas Indoor
-                <Dropdown>
-               <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_stylev2">
-                 Tipo
-               </Dropdown.Toggle>
-               <Dropdown.Menu>
-                 <Dropdown.Item href="#/action-1">Total</Dropdown.Item>
-                 <Dropdown.Item href="#/action-2">Pouco populado</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Muito populado</Dropdown.Item>
-                   <Dropdown.Item href="#/action-2">Extremante populado</Dropdown.Item>
-               </Dropdown.Menu>
-             </Dropdown>    
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-    Ordenar por
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Asc.</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Desc.</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown>    
+                <p className="first_titulo_esquerda">&nbsp;&nbsp;&nbsp;Zonas Indoor     
 </p>                
               </Card.Header>
 <br/>
@@ -308,27 +276,7 @@ class lotacao extends React.Component{
               <br/><br/>
               <Card.Header>
               <br/>
-                <p className="first_titulo_esquerda">&nbsp;&nbsp;&nbsp;Zonas CrowdZero
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_stylev2">
-                 Tipo
-               </Dropdown.Toggle>
-               <Dropdown.Menu>
-                 <Dropdown.Item href="#/action-1">Total</Dropdown.Item>
-                 <Dropdown.Item href="#/action-2">Pouco populado</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">Muito populado</Dropdown.Item>
-                   <Dropdown.Item href="#/action-2">Extremante populado</Dropdown.Item>
-               </Dropdown.Menu>
-             </Dropdown>    
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-    Ordenar por
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Asc.</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Desc.</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown>    
+                <p className="first_titulo_esquerda">&nbsp;&nbsp;&nbsp;Zonas CrowdZero    
 </p>                
               </Card.Header>
 <br/>

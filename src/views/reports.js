@@ -178,7 +178,7 @@ class reports extends React.Component{
         }
         case 3:{
           nome = data.Utils_Instituicao.Pessoa.PNome + ' ' +data.Utils_Instituicao.Pessoa.UNome
-          local = data.Local_Indoor.nome
+          local = data.Local_Indoor.Nome
           datarep = data.Report.Data.split('T')[0] +' ' +data.Report.Data.split('T')[1]
           descricao = data.Report.Descricao
           idreport = data.Report.ID_Report
@@ -187,14 +187,6 @@ class reports extends React.Component{
       }
       return(
         <tr key={index}>
-          <td>
-            <Form.Check className="mb-1 pl-0">
-              <Form.Check.Label>
-                <Form.Check.Input defaultValue="" type="checkbox"></Form.Check.Input>
-                <span className="form-check-sign"></span>
-              </Form.Check.Label>
-            </Form.Check>
-          </td>
           <td>
             {nome}
           </td>
@@ -268,9 +260,6 @@ class reports extends React.Component{
                       
                       <p className="secound_titulo">Nº total de  reportes na Instituição: </p>
                       <Card.Title><h3 className="aligncenter">{this.state.numeroreportsnainstituicao}</h3></Card.Title>    
-                    <div class="container">
-                     <a class="button6" href="#popup1">Alterar limites de lotação</a>
-                    </div>
                     <hr/>
                       <p className="first_titulo">Zona com mais reports: </p>
                       <p className="secound_titulo">{this.state.localindoorcommaisreports[0]} </p>
@@ -330,26 +319,8 @@ class reports extends React.Component{
             <Card className="card-tasks">
               <Card.Header>
                 <p className="first_titulo_esquerda">Lista de Reports:
-              <Dropdown>
-  <Dropdown.Toggle variant="success" id="dropdown-basic" className="dropdown_style_utilizadorespendentes">
-    Ordenar por
-  </Dropdown.Toggle>
-  <Dropdown.Menu>
-    <Dropdown.Item href="#/action-1">Data Asc.</Dropdown.Item>
-    <Dropdown.Item href="#/action-2">Data Desc.</Dropdown.Item>
-  </Dropdown.Menu>
-</Dropdown>    
+    
 </p>
- 
-                <br/>
-                <div class="input-group">
-                      <div class="form-outline">
-                        <input id="search-input" type="search" id="form1" class="form-control" placeholder="Search"></input>
-                     </div>
-                      <button id="search-button" type="button" class="btn btn-primary">
-                        <i class="fas fa-search"></i>
-                     </button>
-                    </div>
               </Card.Header>
 
               <Card.Body>
